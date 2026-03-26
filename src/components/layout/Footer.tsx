@@ -118,7 +118,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="justify-self-center space-y-8">
+            <div className="justify-self-center space-y-8 lg:-translate-x-8">
               <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
                 инфо-блок
               </h3>
@@ -138,9 +138,18 @@ export function Footer() {
 
             <div className="w-full max-w-[460px] justify-self-end space-y-8">
               <div className="space-y-5">
-                <ContactRow icon={<Phone size={18} strokeWidth={1.9} />} text={contacts.phoneDisplay} />
-                <ContactRow icon={<Mail size={18} strokeWidth={1.9} />} text={contacts.email} />
-                <ContactRow icon={<MapPin size={18} strokeWidth={1.9} />} text={contacts.address} />
+                <ContactRow
+                  icon={<Phone size={18} strokeWidth={1.9} />}
+                  text={contacts.phoneDisplay}
+                />
+                <ContactRow
+                  icon={<Mail size={18} strokeWidth={1.9} />}
+                  text={contacts.email}
+                />
+                <ContactRow
+                  icon={<MapPin size={18} strokeWidth={1.9} />}
+                  text={contacts.address}
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -160,9 +169,9 @@ export function Footer() {
 
           <div className="mt-auto pt-8">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
-              <div className="h-px flex-1 bg-[var(--footer-line)]" />
+              <div className="h-[2px] flex-1 bg-[var(--footer-line)] opacity-40" />
 
-              <div className="grid items-center gap-12 text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-muted)] md:grid-flow-col md:auto-cols-max">
+              <div className="grid items-center gap-12 text-[17px] leading-[1.15] tracking-[-0.01em] md:grid-flow-col md:auto-cols-max">
                 <div className="flex items-center gap-4 whitespace-nowrap">
                   <div className="flex h-[28px] w-[36px] items-center justify-center">
                     <AssetImage
@@ -171,11 +180,19 @@ export function Footer() {
                       className="h-[20px] w-auto object-contain"
                     />
                   </div>
-                  <span>Сайт разработан командой ЮНИ.ai</span>
+
+                  <span className="opacity-40 text-[var(--footer-muted)]">
+                    Сайт разработан командой ЮНИ.ai
+                  </span>
                 </div>
 
-                <span className="whitespace-nowrap">Telegram: @uni_smb</span>
-                <span className="whitespace-nowrap">MAX: +7(995)518-69-42</span>
+                <span className="whitespace-nowrap opacity-40 text-[var(--footer-muted)]">
+                  Telegram: @uni_smb
+                </span>
+
+                <span className="whitespace-nowrap opacity-40 text-[var(--footer-muted)]">
+                  MAX: +7(995)518-69-42
+                </span>
               </div>
             </div>
           </div>
@@ -190,9 +207,21 @@ function Road({ trucks }: { trucks: string[] }) {
     <div className="footer-road relative h-[56px]">
       <div className="footer-road-line absolute left-0 right-0 top-[70%] h-[2px] -translate-y-1/2 bg-[var(--footer-line)]" />
 
-      <Truck src={trucks[0]} alt="Фура 1" className="footer-truck footer-truck-1" />
-      <Truck src={trucks[1]} alt="Фура 2" className="footer-truck footer-truck-2" />
-      <Truck src={trucks[2]} alt="Фура 3" className="footer-truck footer-truck-3" />
+      <Truck
+        src={trucks[0]}
+        alt="Фура 1"
+        className="footer-truck footer-truck-1"
+      />
+      <Truck
+        src={trucks[1]}
+        alt="Фура 2"
+        className="footer-truck footer-truck-2"
+      />
+      <Truck
+        src={trucks[2]}
+        alt="Фура 3"
+        className="footer-truck footer-truck-3"
+      />
     </div>
   );
 }
@@ -214,11 +243,11 @@ function Truck({
         <img
           src={src}
           alt={alt}
-          className="h-[30px] w-auto object-contain"
+          className="h-[36px] w-auto object-contain"
           onError={() => setBroken(true)}
         />
       ) : (
-        <div className="h-[22px] w-[60px] rounded-[8px] bg-[var(--footer-accent)]/60" />
+        <div className="h-[24px] w-[72px] rounded-[8px] bg-[var(--footer-accent)]/60" />
       )}
     </div>
   );
