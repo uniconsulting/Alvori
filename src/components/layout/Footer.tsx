@@ -118,7 +118,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="justify-self-center space-y-8 lg:-translate-x-8">
+            <div className="justify-self-center space-y-8 lg:-translate-x-12">
               <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
                 инфо-блок
               </h3>
@@ -167,7 +167,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-auto pt-8">
+          <div className="mt-auto pt-6">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
               <div className="h-[2px] flex-1 bg-[var(--footer-line)] opacity-40" />
 
@@ -243,11 +243,11 @@ function Truck({
         <img
           src={src}
           alt={alt}
-          className="h-[36px] w-auto object-contain"
+          className="h-full w-full object-contain"
           onError={() => setBroken(true)}
         />
       ) : (
-        <div className="h-[24px] w-[72px] rounded-[8px] bg-[var(--footer-accent)]/60" />
+        <div className="h-full w-full rounded-[8px] bg-[var(--footer-accent)]/60" />
       )}
     </div>
   );
