@@ -121,3 +121,60 @@ img {
 .input-shell::placeholder {
   color: var(--muted);
 }
+
+.footer-road {
+  overflow: hidden;
+}
+
+.footer-truck {
+  top: 50%;
+  left: -72px;
+  transform: translateY(-50%);
+  opacity: 0;
+  animation-name: footerTruckDrive;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.footer-truck-1 {
+  animation-duration: 14s;
+  animation-delay: 0s;
+}
+
+.footer-truck-2 {
+  animation-duration: 18s;
+  animation-delay: -6s;
+}
+
+.footer-truck-3 {
+  animation-duration: 22s;
+  animation-delay: -11s;
+}
+
+@keyframes footerTruckDrive {
+  0% {
+    left: -72px;
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 1;
+  }
+
+  100% {
+    left: calc(100% + 72px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-truck {
+    animation: none;
+    opacity: 1;
+    left: 0;
+  }
+}
