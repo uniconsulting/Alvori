@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 
@@ -12,38 +12,52 @@ export function ThemeLogo({
   className?: string;
 }) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [src, setSrc] = useState('');
+
+  const logoMap = useMemo(
+    () =>
+      ({
+        header: {
+          light: `${sitePath}/brand/header/light/logo.svg`,
+          dark: `${sitePath}/brand/header/dark/logo.svg`,
+        },
+        footer: {
+          light: `${sitePath}/brand/footer/light/logo.svg`,
+          dark: `${sitePath}/brand/footer/dark/logo.svg`,
+        },
+      }) as const,
+    [],
+  );
 
   useEffect(() => {
     const root = document.documentElement;
-    const observer = new MutationObserver(() => {
-      setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
-    });
 
-    setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
+    const syncTheme = () => {
+      const nextTheme = root.dataset.theme === 'dark' ? 'dark' : 'light';
+      setTheme(nextTheme);
+      setSrc(logoMap[placement][nextTheme]);
+    };
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
     observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
     return () => observer.disconnect();
-  }, []);
-
-  const logoMap = {
-    header: {
-      light: `${sitePath}/brand/header/light/logo.svg`,
-      dark: `${sitePath}/brand/header/dark/logo.svg`,
-    },
-    footer: {
-      light: `${sitePath}/brand/footer/light/logo.svg`,
-      dark: `${sitePath}/brand/footer/dark/logo.svg`,
-    },
-  } as const;
+  }, [logoMap, placement]);
 
   return (
     <img
-      src={logoMap[placement][theme]}
+      src={src}
       alt="Алвори"
+      onError={() => {
+        setSrc(logoMap[placement].light);
+      }}
       className={cn(
         placement === 'header' ? 'h-6 w-auto' : 'h-7 w-auto',
         className,
       )}
+      data-theme={theme}
     />
   );
 }
