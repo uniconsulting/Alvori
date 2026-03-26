@@ -11,6 +11,11 @@ import { cn } from '@/lib/cn';
 
 type ThemeMode = 'light' | 'dark';
 
+const smoothColor =
+  'transition-[color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]';
+const microLift =
+  'transition-[transform,box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(38,41,46,0.08)]';
+
 export function Header() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -79,16 +84,25 @@ export function Header() {
                 onClick={handleThemeToggle}
                 aria-label="сменить тему"
                 className={cn(
-                  'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px] transition hover:opacity-85',
+                  'group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                  'transition-[transform,box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(38,41,46,0.08)]',
                   theme === 'light'
                     ? 'bg-[var(--surface)] text-[var(--text)]'
                     : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
                 )}
               >
                 {theme === 'light' ? (
-                  <Moon size={20} strokeWidth={1.8} />
+                  <Moon
+                    size={20}
+                    strokeWidth={1.8}
+                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
+                  />
                 ) : (
-                  <Sun size={20} strokeWidth={1.8} />
+                  <Sun
+                    size={20}
+                    strokeWidth={1.8}
+                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
+                  />
                 )}
               </button>
 
@@ -97,26 +111,42 @@ export function Header() {
                 onClick={() => setMenuOpen((prev) => !prev)}
                 aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
                 className={cn(
-                  'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px] transition hover:opacity-85',
+                  'group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                  'transition-[transform,box-shadow,background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_6px_14px_rgba(38,41,46,0.08)]',
                   theme === 'light'
                     ? 'bg-[var(--surface)] text-[var(--text)]'
                     : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
                 )}
               >
-                {menuOpen ? <X size={20} strokeWidth={1.8} /> : <Menu size={20} strokeWidth={1.8} />}
+                {menuOpen ? (
+                  <X
+                    size={20}
+                    strokeWidth={1.8}
+                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
+                  />
+                ) : (
+                  <Menu
+                    size={20}
+                    strokeWidth={1.8}
+                    className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
+                  />
+                )}
               </button>
             </div>
           </div>
 
           {menuOpen ? (
-            <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_24px_rgba(38,41,46,0.06)]">
+            <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
               <div className="flex flex-col gap-4">
                 {navigation.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className="text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)] transition hover:opacity-75"
+                    className={cn(
+                      'text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)] hover:text-[var(--accent-1)]',
+                      smoothColor,
+                    )}
                   >
                     {item.label}
                   </Link>
@@ -126,7 +156,10 @@ export function Header() {
 
                 <a
                   href={contacts.phoneHref}
-                  className="text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)] transition hover:opacity-80"
+                  className={cn(
+                    'text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)] hover:text-[var(--accent-1)]',
+                    smoothColor,
+                  )}
                 >
                   {contacts.phoneDisplay}
                 </a>
@@ -134,7 +167,7 @@ export function Header() {
                 <Link
                   href="#pricing"
                   onClick={() => setMenuOpen(false)}
-                  className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-85"
+                  className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
                 >
                   рассчитать стоимость
                 </Link>
@@ -162,7 +195,7 @@ function OuterDivider({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'block h-[60px] w-[2px] shrink-0 rounded-full bg-[var(--accent-2)]',
+        'block h-[50px] w-[2px] shrink-0 rounded-full bg-[var(--accent-2)]',
         className,
       )}
     />
@@ -173,7 +206,7 @@ function AnchorNav({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'flex h-[60px] shrink-0 items-center rounded-[24px] bg-[var(--surface)] px-[21px] shadow-[0_4px_12px_rgba(38,41,46,0.03)]',
+        'flex h-[60px] shrink-0 items-center rounded-[24px] bg-[var(--surface)] px-[24px] shadow-[0_4px_12px_rgba(38,41,46,0.025)]',
         className,
       )}
     >
@@ -181,7 +214,10 @@ function AnchorNav({ className }: { className?: string }) {
         <div key={item.href} className="flex shrink-0 items-center">
           <Link
             href={item.href}
-            className="text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)] transition hover:opacity-75"
+            className={cn(
+              'text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)] hover:text-[var(--accent-1)]',
+              smoothColor,
+            )}
           >
             {item.label}
           </Link>
@@ -199,7 +235,10 @@ function PhoneBlock() {
   return (
     <a
       href={contacts.phoneHref}
-      className="shrink-0 text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)] transition hover:opacity-80"
+      className={cn(
+        'shrink-0 text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)] hover:text-[var(--accent-1)]',
+        smoothColor,
+      )}
     >
       {contacts.phoneDisplay}
     </a>
@@ -218,7 +257,7 @@ function UtilityCluster({
   return (
     <div
       className={cn(
-        'flex h-[60px] w-[158px] shrink-0 items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[8px]',
+        'flex h-[60px] w-[158px] shrink-0 items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]',
         className,
       )}
     >
@@ -226,7 +265,12 @@ function UtilityCluster({
         <Calculator size={22} strokeWidth={1.8} />
       </UtilityLinkButton>
 
-      <UtilityLinkButton href="/request/" variant="neutral" ariaLabel="запрос кп" theme={theme}>
+      <UtilityLinkButton
+        href="/request/"
+        variant="neutral"
+        ariaLabel="запрос кп"
+        theme={theme}
+      >
         <FileText size={22} strokeWidth={1.8} />
       </UtilityLinkButton>
 
@@ -235,16 +279,25 @@ function UtilityCluster({
         onClick={onToggleTheme}
         aria-label="смена темы"
         className={cn(
-          'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px] transition hover:opacity-85',
+          'group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+          microLift,
           theme === 'light'
             ? 'bg-[var(--surface)] text-[var(--text)]'
             : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
         )}
       >
         {theme === 'light' ? (
-          <Moon size={22} strokeWidth={1.8} />
+          <Moon
+            size={22}
+            strokeWidth={1.8}
+            className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
+          />
         ) : (
-          <Sun size={22} strokeWidth={1.8} />
+          <Sun
+            size={22}
+            strokeWidth={1.8}
+            className="transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[var(--accent-1)]"
+          />
         )}
       </button>
     </div>
@@ -269,7 +322,8 @@ function UtilityLinkButton({
       href={href}
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px] transition hover:opacity-85',
+        'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+        microLift,
         variant === 'accent'
           ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
           : theme === 'light'
@@ -298,7 +352,8 @@ function CompactAction({
       href={href}
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px] transition hover:opacity-85',
+        'inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+        microLift,
         variant === 'accent'
           ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
           : 'bg-[var(--surface)] text-[var(--text)]',
