@@ -42,22 +42,17 @@ export function Header() {
   return (
     <header className="relative z-30 pt-4 md:pt-6 xl:pt-10">
       <Container>
-        <div className="hidden items-center justify-between xl:flex">
-          <div className="flex items-center">
-            <LogoBlock />
-            <OuterDivider className="ml-[41px]" />
-            <AnchorNav className="ml-[41px]" />
-          </div>
-
-          <div className="flex items-center">
-            <PhoneBlock />
-            <OuterDivider className="ml-[41px]" />
-            <UtilityCluster
-              className="ml-[41px]"
-              theme={theme}
-              onToggleTheme={handleThemeToggle}
-            />
-          </div>
+        <div className="hidden items-center xl:flex">
+          <LogoBlock />
+          <OuterDivider className="ml-[41px]" />
+          <AnchorNav className="ml-[41px]" />
+          <OuterDivider className="ml-[41px]" />
+          <PhoneBlock className="ml-[41px]" />
+          <UtilityCluster
+            className="ml-[41px]"
+            theme={theme}
+            onToggleTheme={handleThemeToggle}
+          />
         </div>
 
         <div className="xl:hidden">
@@ -187,7 +182,7 @@ function AnchorNav({ className }: { className?: string }) {
           </Link>
 
           {index < navigation.length - 1 ? (
-            <span className="mx-[21px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
+            <span className="mx-[16px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
           ) : null}
         </div>
       ))}
@@ -195,11 +190,14 @@ function AnchorNav({ className }: { className?: string }) {
   );
 }
 
-function PhoneBlock() {
+function PhoneBlock({ className }: { className?: string }) {
   return (
     <a
       href={contacts.phoneHref}
-      className="header-phone-hover shrink-0 text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
+      className={cn(
+        'header-phone-hover shrink-0 text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]',
+        className,
+      )}
     >
       {contacts.phoneDisplay}
     </a>
