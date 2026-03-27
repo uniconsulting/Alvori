@@ -39,7 +39,7 @@ export function Footer() {
         line: 'rgba(246,246,246,0.42)',
         buttonBg: '#f6f6f6',
         buttonText: '#26292e',
-        accent: '#ffc700',
+        accent: '#fab021',
       }
     : {
         bg: '#f6f6f6',
@@ -48,7 +48,7 @@ export function Footer() {
         line: 'rgba(38,41,46,0.34)',
         buttonBg: '#26292e',
         buttonText: '#f6f6f6',
-        accent: '#ffc700',
+        accent: '#fab021',
       };
 
   const assets = useMemo(
