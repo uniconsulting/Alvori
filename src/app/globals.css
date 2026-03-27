@@ -6,7 +6,7 @@
   --surface-soft: #e1e1e1;
   --text: #26292e;
   --muted: rgba(38, 41, 46, 0.72);
-  --accent-1: #ffc700;
+  --accent-1: #fab021;
   --accent-1-text: #26292e;
   --accent-2: #26292e;
   --accent-2-text: #ffffff;
@@ -24,7 +24,7 @@ html[data-theme='dark'] {
   --surface-soft: #222429;
   --text: #f6f6f6;
   --muted: rgba(246, 246, 246, 0.72);
-  --accent-1: #ffc700;
+  --accent-1: #fab021;
   --accent-1-text: #26292e;
   --accent-2: #f6f6f6;
   --accent-2-text: #26292e;
