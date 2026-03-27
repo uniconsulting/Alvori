@@ -189,11 +189,12 @@ export function Footer() {
               <div className="grid items-center gap-12 text-[17px] leading-[1.15] tracking-[-0.01em] md:grid-flow-col md:auto-cols-max">
                 <div className="flex items-center gap-4 whitespace-nowrap">
                   <div className="flex h-[28px] w-[36px] items-center justify-center">
-<AssetImage
-  src={assets.developerLogo}
-  alt="Юни"
-  className="h-[20px] w-auto object-contain"
-/>
+                    <AssetImage
+                      src={assets.developerLogo}
+                      alt="Юни"
+                      className="h-[20px] w-auto object-contain"
+                      />
+                    </div>
 
                   <span className="opacity-40 text-[var(--footer-muted)]">
                     Сайт разработан командой ЮНИ.ai
