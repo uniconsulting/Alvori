@@ -182,7 +182,7 @@ function AnchorNav({ className }: { className?: string }) {
           </Link>
 
           {index < navigation.length - 1 ? (
-            <span className="mx-[24px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
+            <span className="mx-[22px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
           ) : null}
         </div>
       ))}
