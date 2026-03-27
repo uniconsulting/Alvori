@@ -59,10 +59,8 @@ export function Footer() {
       ? `${sitePath}/brand/footer/dark/logo.svg`
       : `${sitePath}/brand/footer/light/logo.svg`,
 
-    developerLogo: isLightTheme
-      ? `${sitePath}/brand/developer/light/logo.svg`
-      : `${sitePath}/brand/developer/dark/logo.svg`,
-    developerLogoFallback: isLightTheme
+    developerLogo:
+      theme === 'dark'
       ? `${sitePath}/brand/developer/dark/logo.svg`
       : `${sitePath}/brand/developer/light/logo.svg`,
 
@@ -191,13 +189,11 @@ export function Footer() {
               <div className="grid items-center gap-12 text-[17px] leading-[1.15] tracking-[-0.01em] md:grid-flow-col md:auto-cols-max">
                 <div className="flex items-center gap-4 whitespace-nowrap">
                   <div className="flex h-[28px] w-[36px] items-center justify-center">
-                    <AssetImage
-                      src={assets.developerLogo}
-                      fallbackSrc={assets.developerLogoFallback}
-                      alt="Юни"
-                      className="h-[20px] w-auto object-contain"
-                    />
-                  </div>
+<AssetImage
+  src={assets.developerLogo}
+  alt="Юни"
+  className="h-[20px] w-auto object-contain"
+/>
 
                   <span className="opacity-40 text-[var(--footer-muted)]">
                     Сайт разработан командой ЮНИ.ai
