@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 import { Container } from '@/components/layout/Container';
@@ -42,6 +42,8 @@ const slides: HeroSlide[] = [
 export function Hero() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [activeSlide, setActiveSlide] = useState(0);
+  const [displayValue, setDisplayValue] = useState('>0');
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -72,6 +74,60 @@ export function Hero() {
   );
 
   const slide = slides[activeSlide];
+
+  useEffect(() => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+
+    const duration = 1800;
+    const start = performance.now();
+
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    const formatThousands = (value: number) =>
+      value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    const formatAti = (value: number) => {
+      const padded = value.toString().padStart(6, '0');
+      return `${padded.slice(0, 3)} ${padded.slice(3)}`;
+    };
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = easeOutCubic(progress);
+
+      if (activeSlide === 0) {
+        const value = Math.round(10000 * eased);
+        setDisplayValue(`>${formatThousands(value)}`);
+      } else if (activeSlide === 1) {
+        const value = Math.round(728149 * eased);
+        setDisplayValue(formatAti(value));
+      } else {
+        setDisplayValue('на 100%');
+      }
+
+      if (progress < 1 && activeSlide !== 2) {
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    if (activeSlide === 2) {
+      setDisplayValue('на 100%');
+    } else if (activeSlide === 1) {
+      setDisplayValue('000 000');
+      rafRef.current = requestAnimationFrame(tick);
+    } else {
+      setDisplayValue('>0');
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [activeSlide]);
 
   const goPrev = () => {
     setActiveSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
@@ -104,7 +160,7 @@ export function Hero() {
                       className="text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]"
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
-                      {slide.value}
+                      {displayValue}
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -284,20 +340,25 @@ function BentoCard({
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
 
-    const rx = (0.5 - py) * 8;
-    const ry = (px - 0.5) * 10;
+    const mx = px - 0.5;
+    const my = py - 0.5;
 
-    el.style.setProperty('--rx', `${rx}deg`);
-    el.style.setProperty('--ry', `${ry}deg`);
-    el.style.setProperty('--tz', '6px');
-    el.style.setProperty('--card-scale', '1.012');
+    const rotateX = -my * 12;
+    const rotateY = mx * 14;
+
+    el.style.setProperty('--rx', `${rotateX}deg`);
+    el.style.setProperty('--ry', `${rotateY}deg`);
+    el.style.setProperty('--mx', `${mx}`);
+    el.style.setProperty('--my', `${my}`);
+    el.style.setProperty('--card-scale', '1.015');
   };
 
   const handlePointerLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const el = e.currentTarget;
     el.style.setProperty('--rx', '0deg');
     el.style.setProperty('--ry', '0deg');
-    el.style.setProperty('--tz', '0px');
+    el.style.setProperty('--mx', '0');
+    el.style.setProperty('--my', '0');
     el.style.setProperty('--card-scale', '1');
   };
 
@@ -313,7 +374,7 @@ function BentoCard({
         revealClassName,
       )}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
+      <div className="hero-card-border-3d pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
 
       <div
         className={cn(
@@ -328,7 +389,7 @@ function BentoCard({
         <img
           src={imageSrc}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="hero-card-image-3d absolute inset-0 h-full w-full object-cover object-center"
         />
 
         <div className="hero-card-content-3d relative flex h-full flex-col justify-end p-5">
