@@ -168,7 +168,7 @@ function AnchorNav({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'flex h-[60px] shrink-0 items-center rounded-[24px] bg-[var(--surface)] px-[24px] shadow-[0_4px_12px_rgba(38,41,46,0.025)]',
+        'flex h-[60px] shrink-0 items-center rounded-[24px] bg-[var(--surface)] px-[22px] shadow-[0_4px_12px_rgba(38,41,46,0.025)]',
         className,
       )}
     >
