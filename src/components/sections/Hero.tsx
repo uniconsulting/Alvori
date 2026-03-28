@@ -301,7 +301,7 @@ timers.push(window.setTimeout(() => setCard3Ready(true), 9600));
   };
 
   return (
-    <section className="pt-8 md:pt-10 xl:pt-12">
+    <section className="pt-8 md:pt-12 xl:pt-16">
       <Container>
         <div className="grid gap-10 xl:grid-cols-[780px_540px] xl:items-start">
 <div className="relative xl:-ml-[60px]">
