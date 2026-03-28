@@ -135,52 +135,58 @@ export function Hero() {
           </div>
 
           <div className="mt-4 grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
-<BentoCard
-  title={
-    <>
-      единая форма
-      <br />
-      запроса и отправки кп
-    </>
-  }
-  href="/request/"
-  imageSrc={assets.request}
-  theme={theme}
-  variant="accent"
-  heightClassName="h-[236px]"
-/>
+            <BentoCard
+              title={
+                <>
+                  единая форма
+                  <br />
+                  запроса и отправки кп
+                </>
+              }
+              href="/request/"
+              imageSrc={assets.request}
+              theme={theme}
+              variant="accent"
+              heightClassName="h-[236px]"
+            />
 
-<BentoCard
-  title={
-    <>
-      ознакомиться
-      <br />
-      с нашими принципами
-    </>
-  }
-  href="#about"
-  imageSrc={assets.principles}
-  theme={theme}
-  variant="dark"
-  heightClassName="h-[496px]"
-  tall
-/>
+            <BentoCard
+              title={
+                <>
+                  ознакомиться
+                  <br />
+                  с нашими принципами
+                </>
+              }
+              href="#about"
+              imageSrc={assets.principles}
+              theme={theme}
+              variant="dark"
+              heightClassName="h-[496px]"
+              tall
+            />
 
-<BentoCard
-  title={
-    <>
-      сделать расчёт
-      <br />
-      вашей грузоперевозки
-    </>
-  }
-  href="#pricing"
-  imageSrc={assets.calc}
-  theme={theme}
-  variant="light"
-  heightClassName="h-[236px]"
-  specialButton
-/>
+            <BentoCard
+              title={
+                <>
+                  сделать расчёт
+                  <br />
+                  вашей грузоперевозки
+                </>
+              }
+              href="#pricing"
+              imageSrc={assets.calc}
+              theme={theme}
+              variant="light"
+              heightClassName="h-[236px]"
+              specialButton
+            />
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
 
 function HeroActionButton({
   label,
@@ -273,7 +279,7 @@ function BentoCard({
         tall && 'md:row-span-2',
       )}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.20)_22%,rgba(255,255,255,0.64)_48%,rgba(255,255,255,0.18)_76%,rgba(255,255,255,0.90)_100%)] opacity-85" />
+      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.70)_0%,rgba(255,255,255,0.10)_24%,rgba(255,255,255,0.52)_48%,rgba(255,255,255,0.10)_74%,rgba(255,255,255,0.68)_100%)] opacity-85" />
 
       <div
         className={cn(
