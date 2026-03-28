@@ -201,43 +201,49 @@ img {
 
 .hero-trailer-hidden {
   opacity: 0;
-  filter: blur(16px);
-  transform: translate3d(-72px, 0, 0);
+  filter: blur(14px);
+  transform: translate3d(-64px, 0, 0);
 }
 
 .hero-trailer-enter {
-  animation: heroTrailerEnter 1650ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: heroTrailerEnter 1850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes heroTrailerEnter {
   0% {
     opacity: 0;
-    filter: blur(16px);
-    transform: translate3d(-72px, 0, 0);
-  }
-
-  18% {
-    opacity: 0.24;
     filter: blur(14px);
-    transform: translate3d(-58px, 0, 0);
+    transform: translate3d(-64px, 0, 0);
   }
 
-  42% {
-    opacity: 0.58;
-    filter: blur(10px);
+  20% {
+    opacity: 0.22;
+    filter: blur(12px);
+    transform: translate3d(-50px, 0, 0);
+  }
+
+  40% {
+    opacity: 0.48;
+    filter: blur(9px);
     transform: translate3d(-34px, 0, 0);
   }
 
-  68% {
-    opacity: 0.82;
+  60% {
+    opacity: 0.72;
     filter: blur(6px);
-    transform: translate3d(-14px, 0, 0);
+    transform: translate3d(-18px, 0, 0);
   }
 
-  86% {
-    opacity: 0.94;
-    filter: blur(2px);
-    transform: translate3d(-4px, 0, 0);
+  78% {
+    opacity: 0.88;
+    filter: blur(3px);
+    transform: translate3d(-8px, 0, 0);
+  }
+
+  92% {
+    opacity: 0.96;
+    filter: blur(1px);
+    transform: translate3d(-2px, 0, 0);
   }
 
   100% {
