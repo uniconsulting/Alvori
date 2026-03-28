@@ -456,7 +456,7 @@ function BentoCard({
     });
   };
 
- return (
+return (
   <div
     className={cn(
       !visible && 'hero-card-hidden',
