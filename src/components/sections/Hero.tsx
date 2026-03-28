@@ -417,7 +417,7 @@ function BentoCard({
       ? 'bg-white text-[#26292e]'
       : 'bg-[#222429] text-white';
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 1024) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
@@ -441,7 +441,7 @@ function BentoCard({
     });
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (_event?: React.MouseEvent<HTMLDivElement>) => {
     setTilt({
       rotateX: 0,
       rotateY: 0,
