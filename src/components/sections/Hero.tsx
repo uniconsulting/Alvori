@@ -111,9 +111,9 @@ export function Hero() {
       }, 2680),
     );
 
-    timers.push(window.setTimeout(() => setCard1Ready(true), 6500));
-    timers.push(window.setTimeout(() => setCard2Ready(true), 7000));
-    timers.push(window.setTimeout(() => setCard3Ready(true), 7500));
+timers.push(window.setTimeout(() => setCard1Ready(true), 7600));
+timers.push(window.setTimeout(() => setCard2Ready(true), 8600));
+timers.push(window.setTimeout(() => setCard3Ready(true), 9600));
 
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
