@@ -168,7 +168,7 @@ function AnchorNav({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'flex h-[60px] shrink-0 items-center rounded-[24px] bg-[var(--surface)] px-[18px] shadow-[0_4px_12px_rgba(38,41,46,0.025)]',
+        'flex h-[60px] shrink-0 items-center rounded-[24px] bg-[var(--surface)] px-[24px] shadow-[0_4px_12px_rgba(38,41,46,0.025)]',
         className,
       )}
     >
@@ -182,7 +182,7 @@ function AnchorNav({ className }: { className?: string }) {
           </Link>
 
           {index < navigation.length - 1 ? (
-            <span className="mx-[22px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
+            <span className="mx-[18px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
           ) : null}
         </div>
       ))}
