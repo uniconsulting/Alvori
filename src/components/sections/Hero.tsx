@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';ф
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
@@ -252,45 +252,72 @@ function BentoCard({
   heightClassName: string;
   tall?: boolean;
 }) {
-  const overlayClass =
+  const localMaskClass =
     variant === 'light'
       ? theme === 'light'
-        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0.90)_100%)]'
-        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.04)_0%,rgba(38,41,46,0.84)_100%)]'
+        ? 'bg-[linear-gradient(180deg,rgba(246,246,246,0.20)_0%,rgba(246,246,246,0.92)_100%)]'
+        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.18)_0%,rgba(38,41,46,0.88)_100%)]'
       : theme === 'light'
-        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.22)_100%)]'
-        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.22)_100%)]';
+        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.24)_100%)]'
+        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.24)_100%)]';
+
+  const buttonClass =
+    variant === 'light'
+      ? theme === 'light'
+        ? 'bg-[#26292e] text-white'
+        : 'bg-white text-black'
+      : 'bg-[var(--surface)] text-[var(--text)]';
 
   return (
     <Link
       href={href}
       className={cn(
-        'group relative overflow-hidden rounded-[32px]',
-        variant === 'accent'
-          ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
-          : variant === 'light'
-            ? 'bg-[var(--surface)] text-[var(--text)]'
-            : 'bg-[var(--accent-2)] text-[var(--accent-2-text)]',
+        'group relative block overflow-hidden rounded-[32px] p-px',
         heightClassName,
         tall && 'md:row-span-2',
       )}
     >
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
+      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.70)_0%,rgba(255,255,255,0.10)_24%,rgba(255,255,255,0.52)_48%,rgba(255,255,255,0.10)_74%,rgba(255,255,255,0.68)_100%)] opacity-60" />
 
-      <div className={cn('absolute inset-0', overlayClass)} />
+      <div
+        className={cn(
+          'relative h-full overflow-hidden rounded-[31px]',
+          variant === 'accent'
+            ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
+            : variant === 'light'
+              ? 'bg-[var(--surface)] text-[var(--text)]'
+              : 'bg-[var(--accent-2)] text-[var(--accent-2-text)]',
+        )}
+      >
+        <img
+          src={imageSrc}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
 
-      <div className="relative flex h-full flex-col justify-end p-5">
-        <div className="flex items-end justify-between gap-3">
-          <div className="max-w-[150px] text-[13px] font-semibold leading-[1.12] tracking-[-0.02em]">
-            {title}
-          </div>
+        <div className="relative flex h-full flex-col justify-end p-5">
+          <div className="relative">
+            <div
+              className={cn(
+                'pointer-events-none absolute bottom-[-10px] left-[-12px] right-[52px] top-[-10px] rounded-[20px]',
+                localMaskClass,
+              )}
+            />
 
-          <div className="inline-flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[16px] bg-[var(--surface)] text-[var(--text)] transition group-hover:translate-x-[2px]">
-            <ArrowRight size={22} strokeWidth={2.1} />
+            <div className="relative flex items-center justify-between gap-3">
+              <div className="max-w-[146px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]">
+                {title}
+              </div>
+
+              <div
+                className={cn(
+                  'inline-flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-[16px] transition group-hover:translate-x-[2px]',
+                  buttonClass,
+                )}
+              >
+                <ArrowRight size={22} strokeWidth={2.1} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
