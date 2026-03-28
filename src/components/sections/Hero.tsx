@@ -168,7 +168,7 @@ export function Hero() {
         return;
       }
 
-      setDisplayValue('>10.000');
+      setDisplayValue('> 10.000');
       setMetricValueFinish(true);
 
       window.setTimeout(() => {
