@@ -63,9 +63,9 @@ export function Hero() {
         theme === 'light'
           ? `${sitePath}/hero/trailer/light.svg`
           : `${sitePath}/hero/trailer/dark.svg`,
-      request: `${sitePath}/hero/cards/request.png`,
-      calc: `${sitePath}/hero/cards/calc.png`,
-      principles: `${sitePath}/hero/cards/principles.png`,
+      request: `${sitePath}/hero/cards/request.webp`,
+      calc: `${sitePath}/hero/cards/calc.webp`,
+      principles: `${sitePath}/hero/cards/principles.webp`,
     }),
     [theme],
   );
@@ -82,7 +82,7 @@ export function Hero() {
 
   return (
     <section className="pt-8 md:pt-10 xl:pt-12">
-      <div className="grid gap-6 xl:grid-cols-[840px_560px] xl:items-start xl:justify-between">
+      <div className="grid gap-6 xl:grid-cols-[840px_520px] xl:items-start xl:justify-between">
         <div className="relative xl:-ml-[64px]">
           <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
             <img
@@ -92,13 +92,16 @@ export function Hero() {
             />
 
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-[34%] top-[17%] w-[420px] max-w-[48%]">
-                <div className="pointer-events-auto flex flex-col gap-8">
+              <div className="absolute left-[40%] top-[17%] w-[390px] max-w-[45%]">
+                <div className="pointer-events-auto flex flex-col gap-10">
                   <div className="font-heading text-[30px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[36px]">
                     {slide.title}
                   </div>
 
-                  <div className="text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]">
+                  <div
+                    className="text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
                     {slide.value}
                   </div>
 
@@ -129,7 +132,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="grid w-full max-w-[560px] justify-self-end gap-5 md:grid-cols-[270px_270px]">
+        <div className="mt-4 grid w-full max-w-[520px] justify-self-end gap-5 md:grid-cols-[250px_250px] xl:mt-[30px]">
           <BentoCard
             title={
               <>
@@ -142,7 +145,7 @@ export function Hero() {
             imageSrc={assets.request}
             theme={theme}
             variant="accent"
-            heightClassName="h-[228px]"
+            heightClassName="h-[220px]"
           />
 
           <BentoCard
@@ -157,7 +160,7 @@ export function Hero() {
             imageSrc={assets.principles}
             theme={theme}
             variant="dark"
-            heightClassName="h-[476px]"
+            heightClassName="h-[460px]"
             tall
           />
 
@@ -173,7 +176,7 @@ export function Hero() {
             imageSrc={assets.calc}
             theme={theme}
             variant="light"
-            heightClassName="h-[228px]"
+            heightClassName="h-[220px]"
           />
         </div>
       </div>
@@ -249,11 +252,11 @@ function BentoCard({
   const overlayClass =
     variant === 'light'
       ? theme === 'light'
-        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.88)_100%)]'
-        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.04)_0%,rgba(38,41,46,0.82)_100%)]'
+        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0.90)_100%)]'
+        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.04)_0%,rgba(38,41,46,0.84)_100%)]'
       : theme === 'light'
-        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.22)_100%)]'
-        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.06)_0%,rgba(38,41,46,0.20)_100%)]';
+        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.22)_100%)]'
+        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.22)_100%)]';
 
   return (
     <Link
@@ -279,7 +282,7 @@ function BentoCard({
 
       <div className="relative flex h-full flex-col justify-end p-6">
         <div className="flex items-end justify-between gap-4">
-          <div className="max-w-[190px] text-[18px] font-semibold leading-[1.12] tracking-[-0.02em]">
+          <div className="max-w-[176px] text-[16px] font-semibold leading-[1.12] tracking-[-0.02em]">
             {title}
           </div>
 
