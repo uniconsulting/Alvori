@@ -285,7 +285,7 @@ function BentoCard({
 
       <div className="relative flex h-full flex-col justify-end p-5">
         <div className="flex items-end justify-between gap-3">
-          <div className="max-w-[150px] text-[14px] font-semibold leading-[1.12] tracking-[-0.02em]">
+          <div className="max-w-[150px] text-[10px] font-semibold leading-[1.12] tracking-[-0.02em]">
             {title}
           </div>
 
