@@ -164,7 +164,7 @@ timers.push(window.setTimeout(() => setCard3Ready(true), 9600));
       return;
     }
 
-    setDisplayValue('>10.000');
+    setDisplayValue('> 10.000');
     setMetricValueFinish(true);
 
     window.setTimeout(() => {
