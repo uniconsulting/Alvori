@@ -17,6 +17,12 @@ type HeroSlide = {
   external?: boolean;
 };
 
+type AtiDigitState = {
+  char: string;
+  locked: boolean;
+  spinning: boolean;
+};
+
 const slides: HeroSlide[] = [
   {
     title: 'успешных перевозок',
@@ -43,6 +49,16 @@ export function Hero() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [activeSlide, setActiveSlide] = useState(0);
   const [displayValue, setDisplayValue] = useState('>0');
+  const [metricValueFinish, setMetricValueFinish] = useState(false);
+
+  const [atiDigits, setAtiDigits] = useState<AtiDigitState[]>([
+    { char: '0', locked: false, spinning: false },
+    { char: '0', locked: false, spinning: false },
+    { char: '0', locked: false, spinning: false },
+    { char: '0', locked: false, spinning: false },
+    { char: '0', locked: false, spinning: false },
+    { char: '0', locked: false, spinning: false },
+  ]);
 
   const [trailerReady, setTrailerReady] = useState(false);
   const [metricsReady, setMetricsReady] = useState(false);
@@ -87,16 +103,17 @@ export function Hero() {
     const timers: number[] = [];
 
     timers.push(window.setTimeout(() => setTrailerReady(true), 60));
-    timers.push(window.setTimeout(() => setMetricsReady(true), 980));
+    timers.push(window.setTimeout(() => setMetricsReady(true), 1380));
+
     timers.push(
       window.setTimeout(() => {
         animateSlideValue(0);
-      }, 1880),
+      }, 2680),
     );
 
-    timers.push(window.setTimeout(() => setCard1Ready(true), 4700));
-    timers.push(window.setTimeout(() => setCard2Ready(true), 5200));
-    timers.push(window.setTimeout(() => setCard3Ready(true), 5700));
+    timers.push(window.setTimeout(() => setCard1Ready(true), 6500));
+    timers.push(window.setTimeout(() => setCard2Ready(true), 7000));
+    timers.push(window.setTimeout(() => setCard3Ready(true), 7500));
 
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
@@ -115,10 +132,16 @@ export function Hero() {
     };
   }, [activeSlide, metricsReady]);
 
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+  const easeOutExpo = (t: number) =>
+    t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 
-  const animateCount = (target: number, duration = 2600) => {
+  const easeOutQuint = (t: number) =>
+    1 - Math.pow(1 - t, 5);
+
+  const animateCount = (target: number, duration = 3400) => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+
+    setMetricValueFinish(false);
 
     const start = performance.now();
 
@@ -127,13 +150,30 @@ export function Hero() {
 
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
-      const eased = easeOutCubic(progress);
+
+      let eased = 0;
+
+      if (progress < 0.72) {
+        eased = easeOutExpo(progress / 0.72) * 0.88;
+      } else {
+        const tail = (progress - 0.72) / 0.28;
+        eased = 0.88 + easeOutQuint(tail) * 0.12;
+      }
+
       const value = Math.round(target * eased);
-      setDisplayValue(`>${formatThousands(value)}`);
 
       if (progress < 1) {
+        setDisplayValue(`>${formatThousands(value)}`);
         animationFrameRef.current = requestAnimationFrame(tick);
+        return;
       }
+
+      setDisplayValue('>10.000');
+      setMetricValueFinish(true);
+
+      window.setTimeout(() => {
+        setMetricValueFinish(false);
+      }, 430);
     };
 
     setDisplayValue('>0');
@@ -143,44 +183,108 @@ export function Hero() {
   const animateAtiLock = (target = '728149') => {
     if (intervalRef.current) window.clearInterval(intervalRef.current);
 
-    const locked = ['0', '0', '0', '0', '0', '0'];
-    let lockIndex = 0;
-    let tickCount = 0;
+    const finalDigits = target.split('');
+    let activeIndex = 0;
+    let spinTick = 0;
 
-    const formatAti = (arr: string[]) => `${arr.slice(0, 3).join('')} ${arr.slice(3).join('')}`;
+    const spinFrames = [16, 15, 14, 13, 12, 12];
 
-    setDisplayValue('000 000');
+    setAtiDigits([
+      { char: '0', locked: false, spinning: false },
+      { char: '0', locked: false, spinning: false },
+      { char: '0', locked: false, spinning: false },
+      { char: '0', locked: false, spinning: false },
+      { char: '0', locked: false, spinning: false },
+      { char: '0', locked: false, spinning: false },
+    ]);
 
     intervalRef.current = window.setInterval(() => {
-      tickCount += 1;
+      setAtiDigits((prev) => {
+        const next = prev.map((digit, index) => {
+          if (index < activeIndex) {
+            return {
+              char: finalDigits[index],
+              locked: true,
+              spinning: false,
+            };
+          }
 
-      const next = [...locked];
+          if (index > activeIndex) {
+            return {
+              char: '0',
+              locked: false,
+              spinning: false,
+            };
+          }
 
-      for (let i = lockIndex; i < 6; i += 1) {
-        next[i] = String(Math.floor(Math.random() * 10));
+          const totalFrames = spinFrames[index] ?? 12;
+          const progress = Math.min(spinTick / totalFrames, 1);
+          const currentFinal = Number(finalDigits[index]);
+
+          let char = '0';
+
+          if (progress < 0.42) {
+            char = String(Math.floor(Math.random() * 10));
+          } else if (progress < 0.68) {
+            char = String((currentFinal + 5 + Math.floor(Math.random() * 3)) % 10);
+          } else if (progress < 0.86) {
+            char = String((currentFinal + 2 + Math.floor(Math.random() * 2)) % 10);
+          } else if (progress < 0.97) {
+            char = String((currentFinal + 1) % 10);
+          } else {
+            char = finalDigits[index];
+          }
+
+          return {
+            char,
+            locked: progress >= 0.97,
+            spinning: progress < 0.97,
+          };
+        });
+
+        return next;
+      });
+
+      spinTick += 1;
+
+      if (spinTick >= (spinFrames[activeIndex] ?? 12)) {
+        activeIndex += 1;
+        spinTick = 0;
       }
 
-      if (tickCount % 5 === 0 && lockIndex < 6) {
-        next[lockIndex] = target[lockIndex];
-        locked[lockIndex] = target[lockIndex];
-        lockIndex += 1;
-      }
-
-      setDisplayValue(formatAti(next));
-
-      if (lockIndex >= 6) {
+      if (activeIndex >= finalDigits.length) {
         if (intervalRef.current) window.clearInterval(intervalRef.current);
+
+        setAtiDigits(
+          finalDigits.map((char) => ({
+            char,
+            locked: true,
+            spinning: false,
+          })),
+        );
+
         setDisplayValue('728 149');
       }
-    }, 90);
+    }, 82);
   };
 
   const animateSlideValue = (index: number) => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     if (intervalRef.current) window.clearInterval(intervalRef.current);
 
+    if (index !== 1) {
+      setAtiDigits([
+        { char: '0', locked: false, spinning: false },
+        { char: '0', locked: false, spinning: false },
+        { char: '0', locked: false, spinning: false },
+        { char: '0', locked: false, spinning: false },
+        { char: '0', locked: false, spinning: false },
+        { char: '0', locked: false, spinning: false },
+      ]);
+    }
+
     if (index === 0) {
-      animateCount(10000, 2600);
+      animateCount(10000, 3400);
       return;
     }
 
@@ -234,10 +338,43 @@ export function Hero() {
                     </div>
 
                     <div
-                      className="text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]"
+                      className={cn(
+                        'text-[88px] font-semibold leading-[0.9] tracking-[-0.06em] text-[var(--text)] md:text-[88px]',
+                        activeSlide === 0 && metricValueFinish && 'hero-metric-value-finish',
+                      )}
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
-                      {displayValue}
+                      {activeSlide === 1 ? (
+                        <span className="hero-ati-code">
+                          {atiDigits.slice(0, 3).map((digit, index) => (
+                            <span
+                              key={`left-${index}`}
+                              className={cn(
+                                'hero-ati-digit',
+                                digit.spinning ? 'hero-ati-digit--spinning' : 'hero-ati-digit--locked',
+                              )}
+                            >
+                              {digit.char}
+                            </span>
+                          ))}
+
+                          <span className="hero-ati-gap" />
+
+                          {atiDigits.slice(3).map((digit, index) => (
+                            <span
+                              key={`right-${index}`}
+                              className={cn(
+                                'hero-ati-digit',
+                                digit.spinning ? 'hero-ati-digit--spinning' : 'hero-ati-digit--locked',
+                              )}
+                            >
+                              {digit.char}
+                            </span>
+                          ))}
+                        </span>
+                      ) : (
+                        displayValue
+                      )}
                     </div>
 
                     <div className="flex items-center gap-3">
