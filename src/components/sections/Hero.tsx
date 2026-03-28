@@ -135,57 +135,52 @@ export function Hero() {
           </div>
 
           <div className="mt-4 grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
-            <BentoCard
-              title={
-                <>
-                  единая форма
-                  <br />
-                  запроса и отправки кп
-                </>
-              }
-              href="/request/"
-              imageSrc={assets.request}
-              theme={theme}
-              variant="accent"
-              heightClassName="h-[236px]"
-            />
+<BentoCard
+  title={
+    <>
+      единая форма
+      <br />
+      запроса и отправки кп
+    </>
+  }
+  href="/request/"
+  imageSrc={assets.request}
+  theme={theme}
+  variant="accent"
+  heightClassName="h-[236px]"
+/>
 
-            <BentoCard
-              title={
-                <>
-                  ознакомиться
-                  <br />
-                  с нашими принципами
-                </>
-              }
-              href="#about"
-              imageSrc={assets.principles}
-              theme={theme}
-              variant="dark"
-              heightClassName="h-[496px]"
-              tall
-            />
+<BentoCard
+  title={
+    <>
+      ознакомиться
+      <br />
+      с нашими принципами
+    </>
+  }
+  href="#about"
+  imageSrc={assets.principles}
+  theme={theme}
+  variant="dark"
+  heightClassName="h-[496px]"
+  tall
+/>
 
-            <BentoCard
-              title={
-                <>
-                  сделать расчёт
-                  <br />
-                  вашей грузоперевозки
-                </>
-              }
-              href="#pricing"
-              imageSrc={assets.calc}
-              theme={theme}
-              variant="light"
-              heightClassName="h-[236px]"
-            />
-          </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
+<BentoCard
+  title={
+    <>
+      сделать расчёт
+      <br />
+      вашей грузоперевозки
+    </>
+  }
+  href="#pricing"
+  imageSrc={assets.calc}
+  theme={theme}
+  variant="light"
+  heightClassName="h-[236px]"
+  specialButton
+/>
 
 function HeroActionButton({
   label,
@@ -243,6 +238,7 @@ function BentoCard({
   variant,
   heightClassName,
   tall = false,
+  specialButton = false,
 }: {
   title: React.ReactNode;
   href: string;
@@ -251,37 +247,37 @@ function BentoCard({
   variant: 'accent' | 'light' | 'dark';
   heightClassName: string;
   tall?: boolean;
+  specialButton?: boolean;
 }) {
-  const localMaskClass =
+  const localShadowClass =
     variant === 'light'
       ? theme === 'light'
-        ? 'bg-[linear-gradient(180deg,rgba(246,246,246,0.20)_0%,rgba(246,246,246,0.92)_100%)]'
-        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.18)_0%,rgba(38,41,46,0.88)_100%)]'
+        ? 'bg-[radial-gradient(circle_at_24%_82%,rgba(246,246,246,0.92)_0%,rgba(246,246,246,0.72)_26%,rgba(246,246,246,0.24)_56%,transparent_82%)]'
+        : 'bg-[radial-gradient(circle_at_24%_82%,rgba(38,41,46,0.90)_0%,rgba(38,41,46,0.72)_28%,rgba(38,41,46,0.24)_58%,transparent_82%)]'
       : theme === 'light'
-        ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.24)_100%)]'
-        : 'bg-[linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.24)_100%)]';
+        ? 'bg-[radial-gradient(circle_at_24%_82%,rgba(255,255,255,0.38)_0%,rgba(255,255,255,0.20)_32%,rgba(255,255,255,0.08)_58%,transparent_82%)]'
+        : 'bg-[radial-gradient(circle_at_24%_82%,rgba(38,41,46,0.34)_0%,rgba(38,41,46,0.18)_30%,rgba(38,41,46,0.08)_56%,transparent_82%)]';
 
-  const buttonClass =
-    variant === 'light'
-      ? theme === 'light'
-        ? 'bg-[#26292e] text-white'
-        : 'bg-white text-black'
-      : 'bg-[var(--surface)] text-[var(--text)]';
+  const buttonClass = specialButton
+    ? theme === 'light'
+      ? 'bg-[#26292e] text-white'
+      : 'bg-white text-black'
+    : 'bg-[var(--surface)] text-[var(--text)]';
 
   return (
     <Link
       href={href}
       className={cn(
-        'group relative block overflow-hidden rounded-[32px] p-px',
+        'group relative block overflow-hidden rounded-[32px] p-[1.5px]',
         heightClassName,
         tall && 'md:row-span-2',
       )}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.70)_0%,rgba(255,255,255,0.10)_24%,rgba(255,255,255,0.52)_48%,rgba(255,255,255,0.10)_74%,rgba(255,255,255,0.68)_100%)] opacity-60" />
+      <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.20)_22%,rgba(255,255,255,0.64)_48%,rgba(255,255,255,0.18)_76%,rgba(255,255,255,0.90)_100%)] opacity-85" />
 
       <div
         className={cn(
-          'relative h-full overflow-hidden rounded-[31px]',
+          'relative h-full overflow-hidden rounded-[30.5px]',
           variant === 'accent'
             ? 'bg-[var(--accent-1)] text-[var(--accent-1-text)]'
             : variant === 'light'
@@ -299,8 +295,8 @@ function BentoCard({
           <div className="relative">
             <div
               className={cn(
-                'pointer-events-none absolute bottom-[-10px] left-[-12px] right-[52px] top-[-10px] rounded-[20px]',
-                localMaskClass,
+                'pointer-events-none absolute bottom-[-28px] left-[-28px] h-[132px] w-[230px] blur-[24px]',
+                localShadowClass,
               )}
             />
 
