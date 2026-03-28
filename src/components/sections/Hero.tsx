@@ -138,47 +138,49 @@ export function Hero() {
   const easeOutQuint = (t: number) =>
     1 - Math.pow(1 - t, 5);
 
-  const animateCount = (target: number, duration = 3400) => {
-    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+  const animateCount = (target: number, duration = 5200) => {
+  if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
 
-    setMetricValueFinish(false);
+  setMetricValueFinish(false);
 
-    const start = performance.now();
+  const start = performance.now();
 
-    const formatThousands = (value: number) =>
-      value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const formatThousands = (value: number) =>
+    value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
+  const tick = (now: number) => {
+    const progress = Math.min((now - start) / duration, 1);
 
-      let eased = 0;
+    let value = 0;
 
-      if (progress < 0.72) {
-        eased = easeOutExpo(progress / 0.72) * 0.88;
-      } else {
-        const tail = (progress - 0.72) / 0.28;
-        eased = 0.88 + easeOutQuint(tail) * 0.12;
-      }
+    if (progress < 0.26) {
+      const t = progress / 0.26;
+      value = Math.round(2000 * t * t * t);
+    } else if (progress < 0.74) {
+      const t = (progress - 0.26) / 0.48;
+      value = Math.round(2000 + (8000 - 2000) * (1 - Math.pow(1 - t, 2.4)));
+    } else {
+      const t = (progress - 0.74) / 0.26;
+      value = Math.round(8000 + (10000 - 8000) * (1 - Math.pow(1 - t, 3.2)));
+    }
 
-      const value = Math.round(target * eased);
+    if (progress < 1) {
+      setDisplayValue(`>${formatThousands(value)}`);
+      animationFrameRef.current = requestAnimationFrame(tick);
+      return;
+    }
 
-      if (progress < 1) {
-        setDisplayValue(`>${formatThousands(value)}`);
-        animationFrameRef.current = requestAnimationFrame(tick);
-        return;
-      }
+    setDisplayValue('>10.000');
+    setMetricValueFinish(true);
 
-      setDisplayValue('> 10.000');
-      setMetricValueFinish(true);
-
-      window.setTimeout(() => {
-        setMetricValueFinish(false);
-      }, 430);
-    };
-
-    setDisplayValue('>0');
-    animationFrameRef.current = requestAnimationFrame(tick);
+    window.setTimeout(() => {
+      setMetricValueFinish(false);
+    }, 760);
   };
+
+  setDisplayValue('>0');
+  animationFrameRef.current = requestAnimationFrame(tick);
+};
 
   const animateAtiLock = (target = '728149') => {
     if (intervalRef.current) window.clearInterval(intervalRef.current);
