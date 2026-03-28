@@ -85,7 +85,7 @@ export function Hero() {
     <section className="pt-8 md:pt-10 xl:pt-12">
       <Container>
         <div className="grid gap-10 xl:grid-cols-[780px_540px] xl:items-start">
-          <div className="relative xl:-ml-[60px]">
+          <div className="hero-reveal-left relative xl:-ml-[60px]">
             <div className="relative h-auto w-full xl:h-[550px] xl:w-[840px]">
               <img
                 src={assets.trailer}
@@ -95,7 +95,7 @@ export function Hero() {
 
               <div className="pointer-events-none absolute inset-0">
                 <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%]">
-                  <div className="pointer-events-auto flex flex-col gap-11">
+                  <div key={activeSlide} className="hero-slide-animate pointer-events-auto flex flex-col gap-11">
                     <div className="font-heading text-[24px] leading-[1] tracking-[-0.03em] text-[var(--text)] md:text-[30px]">
                       {slide.title}
                     </div>
@@ -148,6 +148,7 @@ export function Hero() {
               theme={theme}
               variant="accent"
               heightClassName="h-[236px]"
+              revealClassName="hero-card-delay-1"
             />
 
             <BentoCard
@@ -165,6 +166,7 @@ export function Hero() {
               heightClassName="h-[496px]"
               tall
               specialButton
+              revealClassName="hero-card-delay-3"
             />
 
             <BentoCard
@@ -180,6 +182,7 @@ export function Hero() {
               theme={theme}
               variant="light"
               heightClassName="h-[236px]"
+              revealClassName="hero-card-delay-2"
             />
           </div>
         </div>
@@ -198,7 +201,7 @@ function HeroActionButton({
   external?: boolean;
 }) {
   const className =
-    'inline-flex h-[48px] w-[284px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-8 text-[17px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90';
+    'hero-cta-lift inline-flex h-[48px] w-[284px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-8 text-[17px] font-medium lowercase text-[var(--accent-1-text)]';
 
   if (external) {
     return (
@@ -245,6 +248,7 @@ function BentoCard({
   heightClassName,
   tall = false,
   specialButton = false,
+  revealClassName,
 }: {
   title: React.ReactNode;
   href: string;
@@ -254,6 +258,7 @@ function BentoCard({
   heightClassName: string;
   tall?: boolean;
   specialButton?: boolean;
+  revealClassName?: string;
 }) {
   const localShadowClass =
     theme === 'light'
@@ -271,13 +276,41 @@ function BentoCard({
       ? 'bg-white text-[#26292e]'
       : 'bg-[#222429] text-white';
 
+  const handlePointerMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (window.innerWidth < 1024) return;
+
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+
+    const rx = (0.5 - py) * 8;
+    const ry = (px - 0.5) * 10;
+
+    el.style.setProperty('--rx', `${rx}deg`);
+    el.style.setProperty('--ry', `${ry}deg`);
+    el.style.setProperty('--tz', '6px');
+    el.style.setProperty('--card-scale', '1.012');
+  };
+
+  const handlePointerLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = e.currentTarget;
+    el.style.setProperty('--rx', '0deg');
+    el.style.setProperty('--ry', '0deg');
+    el.style.setProperty('--tz', '0px');
+    el.style.setProperty('--card-scale', '1');
+  };
+
   return (
     <Link
       href={href}
+      onMouseMove={handlePointerMove}
+      onMouseLeave={handlePointerLeave}
       className={cn(
-        'group relative block overflow-hidden rounded-[32px] p-[1.5px]',
+        'hero-card-reveal hero-card-tilt group relative block overflow-hidden rounded-[32px] p-[1.5px]',
         heightClassName,
         tall && 'md:row-span-2',
+        revealClassName,
       )}
     >
       <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
@@ -298,7 +331,7 @@ function BentoCard({
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
-        <div className="relative flex h-full flex-col justify-end p-5">
+        <div className="hero-card-content-3d relative flex h-full flex-col justify-end p-5">
           <div className="relative">
             <div
               className={cn(
