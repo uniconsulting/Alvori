@@ -105,12 +105,6 @@ export function Hero() {
     timers.push(window.setTimeout(() => setTrailerReady(true), 60));
     timers.push(window.setTimeout(() => setMetricsReady(true), 1380));
 
-    timers.push(
-      window.setTimeout(() => {
-        animateSlideValue(0);
-      }, 2680),
-    );
-
 timers.push(window.setTimeout(() => setCard1Ready(true), 7600));
 timers.push(window.setTimeout(() => setCard2Ready(true), 8600));
 timers.push(window.setTimeout(() => setCard3Ready(true), 9600));
