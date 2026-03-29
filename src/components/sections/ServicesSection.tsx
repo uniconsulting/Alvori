@@ -21,13 +21,44 @@ type TiltView = {
   scale: number;
 };
 
-export function ServicesSection() {
+type ServicesSectionProps = {
+  headerProgress?: number;
+  cardsProgress?: number;
+};
+
+function clamp(value: number, min = 0, max = 1) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function revealStyle(progress: number, delay = 0, distance = 18, blur = 10, scale = 0.988) {
+  const local = clamp((progress - delay) / (1 - delay), 0, 1);
+  const eased = easeOutCubic(local);
+
+  return {
+    opacity: eased,
+    transform: `translate3d(0, ${distance * (1 - eased)}px, 0) scale(${scale + (1 - scale) * eased})`,
+    filter: `blur(${blur * (1 - eased)}px)`,
+    transition: 'transform 120ms linear, filter 120ms linear, opacity 120ms linear',
+  } as const;
+}
+
+export function ServicesSection({
+  headerProgress = 1,
+  cardsProgress = 1,
+}: ServicesSectionProps) {
   return (
     <div className="h-full">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-12 xl:gap-14">
-            <div className="flex items-center justify-between gap-6">
+            <div
+              className="flex items-center justify-between gap-6"
+              style={revealStyle(headerProgress, 0, 14, 8, 0.992)}
+            >
               <h2 className="pl-[10px] font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 Услуги
               </h2>
@@ -38,82 +69,110 @@ export function ServicesSection() {
             </div>
 
             <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
-              <ServiceCard
-                icon={Truck}
-                title="Междугородние перевозки"
-                description={
-                  <>
-                    междугородние перевозки
-                    <br />
-                    регулярные b2b-перевозки по
-                    <br />
-                    ключевым направлениям по рф
-                  </>
-                }
-                ctaLabel="изучить географию"
-              />
+              <AnimatedCard progress={cardsProgress} delay={0.00}>
+                <ServiceCard
+                  icon={Truck}
+                  title="Междугородние перевозки"
+                  description={
+                    <>
+                      междугородние перевозки
+                      <br />
+                      регулярные b2b-перевозки по
+                      <br />
+                      ключевым направлениям по рф
+                    </>
+                  }
+                  ctaLabel="изучить географию"
+                />
+              </AnimatedCard>
 
-              <ServiceCard
-                icon={Warehouse}
-                title="Межтерминальные перевозки"
-                description={
-                  <>
-                    работа между терминалами,
-                    <br />
-                    складами и распределительными
-                    <br />
-                    узлами с гарантией доставки тс
-                  </>
-                }
-                ctaLabel="обсудить условия"
-              />
+              <AnimatedCard progress={cardsProgress} delay={0.12}>
+                <ServiceCard
+                  icon={Warehouse}
+                  title="Межтерминальные перевозки"
+                  description={
+                    <>
+                      работа между терминалами,
+                      <br />
+                      складами и распределительными
+                      <br />
+                      узлами с гарантией доставки тс
+                    </>
+                  }
+                  ctaLabel="обсудить условия"
+                />
+              </AnimatedCard>
 
-              <ServiceTallCard
-                icon={Network}
-                title="Экспедиционное направление"
-                description={
-                  <>
-                    подбор и сопровождение
-                    <br />
-                    перевозки под конкретную
-                    <br />
-                    логистическую задачу
-                  </>
-                }
-                ctaLabel="связаться с нами"
-              />
+              <AnimatedCard progress={cardsProgress} delay={0.24} className="row-span-2">
+                <ServiceTallCard
+                  icon={Network}
+                  title="Экспедиционное направление"
+                  description={
+                    <>
+                      подбор и сопровождение
+                      <br />
+                      перевозки под конкретную
+                      <br />
+                      логистическую задачу
+                    </>
+                  }
+                  ctaLabel="связаться с нами"
+                />
+              </AnimatedCard>
 
-              <ServiceCard
-                icon={Route}
-                title="Проектные перевозки"
-                description={
-                  <>
-                    перевозки под нестандартные
-                    <br />
-                    задачи и согласованные маршруты
-                  </>
-                }
-                ctaLabel="описать задачу"
-              />
+              <AnimatedCard progress={cardsProgress} delay={0.36}>
+                <ServiceCard
+                  icon={Route}
+                  title="Проектные перевозки"
+                  description={
+                    <>
+                      перевозки под нестандартные
+                      <br />
+                      задачи и согласованные маршруты
+                    </>
+                  }
+                  ctaLabel="описать задачу"
+                />
+              </AnimatedCard>
 
-              <ServiceCard
-                icon={ShieldAlert}
-                title="Опасные грузы"
-                description={
-                  <>
-                    перевозки ADR-грузов с соблюдением
-                    <br />
-                    требований и регламентов
-                  </>
-                }
-                ctaLabel="уточнить детали"
-                accentLabel="ADR"
-                isAdr
-              />
+              <AnimatedCard progress={cardsProgress} delay={0.48}>
+                <ServiceCard
+                  icon={ShieldAlert}
+                  title="Опасные грузы"
+                  description={
+                    <>
+                      перевозки ADR-грузов с соблюдением
+                      <br />
+                      требований и регламентов
+                    </>
+                  }
+                  ctaLabel="уточнить детали"
+                  accentLabel="ADR"
+                  isAdr
+                />
+              </AnimatedCard>
             </div>
           </div>
         </div>
       </Container>
+    </div>
+  );
+}
+
+function AnimatedCard({
+  children,
+  progress,
+  delay,
+  className,
+}: {
+  children: React.ReactNode;
+  progress: number;
+  delay: number;
+  className?: string;
+}) {
+  return (
+    <div className={className} style={revealStyle(progress, delay, 22, 12, 0.986)}>
+      {children}
     </div>
   );
 }
@@ -158,11 +217,11 @@ function ServiceCard({
   const inner = (
     <div className="relative h-[262px] overflow-hidden rounded-[26px] bg-[var(--surface)]">
       <div
-  className={cn(
-    'pointer-events-none absolute inset-0 rounded-[26px]',
-    isAdr ? 'border border-transparent' : 'border border-white/50',
-  )}
-/>
+        className={cn(
+          'pointer-events-none absolute inset-0 rounded-[26px]',
+          isAdr ? 'border border-transparent' : 'border border-white/50',
+        )}
+      />
 
       <div className="relative flex h-full flex-col px-8 py-8">
         <div className="flex items-start justify-between gap-4">
@@ -355,6 +414,7 @@ function TiltCardShell({
       <div
         style={{
           transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
+          transition: 'transform 80ms linear',
         }}
       >
         {children}
