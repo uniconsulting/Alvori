@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
 import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
 import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
@@ -66,7 +67,7 @@ export function ScrollStory() {
       ref={rootRef}
       className="relative left-1/2 h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
-      <div className="sticky top-[92px] md:top-[104px] xl:top-[116px] h-[calc(100vh-92px)] md:h-[calc(100vh-104px)] xl:h-[calc(100vh-116px)] overflow-hidden">
+      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
           <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
             <div className="absolute inset-0 z-10">
@@ -84,7 +85,7 @@ export function ScrollStory() {
 
               <Container className="relative h-full">
                 <div
-                  className="absolute top-[-6px] w-[540px]"
+                  className="absolute top-[10px] w-[540px]"
                   style={{
                     right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
                     transform: `translateX(${transforms.heroRightX})`,
@@ -99,7 +100,10 @@ export function ScrollStory() {
             </div>
 
             <div
-              className="absolute inset-0 z-20"
+              className={cn(
+                'absolute inset-0 z-20',
+                transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+              )}
               style={{
                 opacity: transforms.servicesOpacity,
                 transform: `translateY(${transforms.servicesY})`,
@@ -111,7 +115,10 @@ export function ScrollStory() {
             </div>
 
             <div
-              className="absolute inset-0 z-30"
+              className={cn(
+                'absolute inset-0 z-30',
+                transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+              )}
               style={{
                 opacity: transforms.aboutOpacity,
                 transform: `translateY(${transforms.aboutY})`,
