@@ -389,22 +389,3 @@ function AboutScene() {
     </div>
   );
 }
-
-function ServiceCard({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-[28px] bg-[var(--bg)] p-5 md:p-6">
-      <div className="font-heading text-[22px] leading-[1.02] tracking-[-0.02em] text-[var(--text)]">
-        {title}
-      </div>
-      <div className="mt-4 text-[16px] leading-[1.35] text-[var(--muted)]">
-        {text}
-      </div>
-    </div>
-  );
-}
