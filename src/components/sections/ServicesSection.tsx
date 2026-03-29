@@ -1,152 +1,16 @@
 'use client';
 
 import { ArrowRight } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
-import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
-import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
-import { SceneIndicator } from '@/components/scroll/SceneIndicator';
 
-function clamp(value: number, min = 0, max = 1) {
-  return Math.min(max, Math.max(min, value));
-}
+type ServicesSectionProps = {
+  className?: string;
+};
 
-export function ScrollStory() {
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const root = rootRef.current;
-      if (!root) return;
-
-      const rect = root.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const total = rect.height - viewportHeight;
-      const passed = clamp(-rect.top, 0, total);
-      const nextProgress = total <= 0 ? 0 : passed / total;
-
-      setProgress(clamp(nextProgress, 0, 1));
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, []);
-
-  const transforms = useMemo(() => {
-    const heroToServices = clamp(progress / 0.35, 0, 1);
-    const servicesToAbout = clamp((progress - 0.68) / 0.32, 0, 1);
-
-    return {
-      heroLeftX: `${-120 * heroToServices}vw`,
-      heroLeftBlur: `${12 * heroToServices}px`,
-      heroLeftOpacity: 1 - 0.55 * heroToServices,
-
-      heroRightX: `${120 * heroToServices}vw`,
-      heroRightBlur: `${12 * heroToServices}px`,
-      heroRightOpacity: 1 - 0.55 * heroToServices,
-
-      servicesOpacity: clamp(heroToServices * 1.15, 0, 1),
-      servicesY: `${18 - 18 * heroToServices}px`,
-      servicesBlur: `${10 - 10 * heroToServices}px`,
-
-      aboutOpacity: clamp(servicesToAbout * 1.15, 0, 1),
-      aboutY: `${24 - 24 * servicesToAbout}px`,
-      aboutBlur: `${12 - 12 * servicesToAbout}px`,
-    };
-  }, [progress]);
-
+export function ServicesSection({ className }: ServicesSectionProps) {
   return (
-    <section
-      ref={rootRef}
-      className="relative left-1/2 h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
-    >
-      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
-        <div className="relative h-full w-full">
-          {/* HERO AREA */}
-          <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
-            <div className="pointer-events-none absolute inset-0 z-10">
-              <div
-                className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
-                style={{
-                  transform: `translateX(${transforms.heroLeftX})`,
-                  filter: `blur(${transforms.heroLeftBlur})`,
-                  opacity: transforms.heroLeftOpacity,
-                  transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                }}
-              >
-                <HeroLeftScene />
-              </div>
-
-              <Container className="pointer-events-none relative h-full">
-                <div
-                  className="pointer-events-auto absolute top-[10px] w-[540px]"
-                  style={{
-                    right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
-                    transform: `translateX(${transforms.heroRightX})`,
-                    filter: `blur(${transforms.heroRightBlur})`,
-                    opacity: transforms.heroRightOpacity,
-                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                  }}
-                >
-                  <HeroRightScene />
-                </div>
-              </Container>
-            </div>
-          </div>
-
-          {/* SERVICES AREA */}
-          <div
-            className={cn(
-              'absolute inset-x-0 top-[-32px] bottom-[96px] z-20 md:top-[-36px] md:bottom-[104px] xl:top-[-40px] xl:bottom-[112px]',
-              transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
-            )}
-            style={{
-              opacity: transforms.servicesOpacity,
-              transform: `translateY(${transforms.servicesY})`,
-              filter: `blur(${transforms.servicesBlur})`,
-              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-            }}
-          >
-            <ServicesScene />
-          </div>
-
-          {/* ABOUT AREA */}
-          <div
-            className={cn(
-              'absolute inset-x-0 top-[36px] bottom-[96px] z-30 md:top-[40px] md:bottom-[104px] xl:top-[44px] xl:bottom-[112px]',
-              transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
-            )}
-            style={{
-              opacity: transforms.aboutOpacity,
-              transform: `translateY(${transforms.aboutY})`,
-              filter: `blur(${transforms.aboutBlur})`,
-              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-            }}
-          >
-            <AboutScene />
-          </div>
-
-          {/* PROGRESS */}
-          <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
-            <SceneIndicator progress={progress} />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ServicesScene() {
-  return (
-    <div className="h-full">
+    <section className={cn('w-full', className)}>
       <Container>
         <div className="flex flex-col gap-6 xl:gap-7">
           <div className="flex items-start justify-between gap-6">
@@ -230,7 +94,7 @@ function ServicesScene() {
           </div>
         </div>
       </Container>
-    </div>
+    </section>
   );
 }
 
@@ -350,11 +214,11 @@ function CardCTA({
   darkButton: boolean;
 }) {
   return (
-    <div className="flex h-[52px] items-center justify-between rounded-[14px] bg-[var(--bg)] px-5">
+    <div className={cn('flex h-[52px] items-center justify-between rounded-[14px] px-5', darkButton ? 'bg-white/90' : 'bg-[var(--bg)]')}>
       <span
         className={cn(
           'text-[13px] font-semibold lowercase leading-none tracking-[-0.02em]',
-          darkButton ? 'text-white' : 'text-[var(--text)]',
+          darkButton ? 'text-[var(--accent-2)]' : 'text-[var(--text)]',
         )}
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
@@ -364,32 +228,11 @@ function CardCTA({
       <div
         className={cn(
           'inline-flex h-[40px] w-[56px] items-center justify-center rounded-[10px]',
-          darkButton ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
+          darkButton ? 'bg-[rgba(38,41,46,0.08)] text-[var(--accent-2)]' : 'bg-[var(--surface)] text-[var(--text)]',
         )}
       >
         <ArrowRight size={22} strokeWidth={2.1} />
       </div>
-    </div>
-  );
-}
-
-function AboutScene() {
-  return (
-    <div className="h-full">
-      <Container>
-        <div className="rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)] md:p-10 xl:p-12">
-          <div className="font-heading text-[32px] leading-none tracking-[-0.03em] text-[var(--text)] md:text-[44px]">
-            о компании
-          </div>
-
-          <div className="mt-6 max-w-[920px] text-[18px] leading-[1.4] text-[var(--muted)]">
-            алвори — логистический партнёр для b2b-клиентов по рф. работаем в формате
-            собственного автопарка и экспедиционного направления, выстраивая понятный,
-            прозрачный и управляемый цикл взаимодействия: заявка, расчёт, согласование,
-            перевозка, документы.
-          </div>
-        </div>
-      </Container>
     </div>
   );
 }
