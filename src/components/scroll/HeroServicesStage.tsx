@@ -47,11 +47,10 @@ export function HeroServicesStage() {
 
   const transforms = useMemo(() => {
     const heroToServices = remap(progress, 0, 0.28);
-    const servicesHold = remap(progress, 0.28, 0.72);
     const servicesToAbout = remap(progress, 0.72, 1);
 
-    const servicesHeaderProgress = remap(progress, 0.20, 0.36);
-    const servicesCardsProgress = remap(progress, 0.30, 0.58);
+    const servicesHeaderProgress = remap(progress, 0.18, 0.34);
+    const servicesCardsProgress = remap(progress, 0.32, 0.78);
 
     return {
       heroLeftX: `${-120 * heroToServices}vw`,
@@ -62,18 +61,16 @@ export function HeroServicesStage() {
       heroRightBlur: `${12 * heroToServices}px`,
       heroRightOpacity: 1 - 0.55 * heroToServices,
 
-      servicesOpacity: clamp(heroToServices * 1.12, 0, 1) * (1 - 0.22 * servicesToAbout),
-      servicesY: `${18 - 18 * heroToServices - 24 * servicesToAbout}px`,
-      servicesBlur: `${10 * (1 - heroToServices) + 8 * servicesToAbout}px`,
+      servicesOpacity: clamp(heroToServices * 1.12, 0, 1) * (1 - 0.95 * servicesToAbout),
+      servicesY: `${18 - 18 * heroToServices - 72 * servicesToAbout}px`,
+      servicesBlur: `${10 * (1 - heroToServices) + 14 * servicesToAbout}px`,
 
       servicesHeaderProgress,
       servicesCardsProgress,
 
-      aboutOpacity: clamp(servicesToAbout * 1.15, 0, 1),
-      aboutY: `${32 - 32 * servicesToAbout}px`,
-      aboutBlur: `${12 - 12 * servicesToAbout}px`,
-
-      servicesHold,
+      aboutOpacity: clamp(servicesToAbout * 1.18, 0, 1),
+      aboutY: `${40 - 40 * servicesToAbout}px`,
+      aboutBlur: `${14 - 14 * servicesToAbout}px`,
     };
   }, [progress]);
 
