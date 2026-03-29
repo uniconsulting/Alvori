@@ -64,11 +64,11 @@ export function ScrollStory() {
   return (
     <section
       ref={rootRef}
-      className="relative left-1/2 h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
+      className="relative left-1/2 -mt-[8px] h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full w-full">
-          <div className="absolute inset-x-0 top-[96px] bottom-[96px] md:top-[104px] md:bottom-[104px] xl:top-[108px] xl:bottom-[108px]">
+          <div className="absolute inset-x-0 top-[78px] bottom-[96px] md:top-[84px] md:bottom-[104px] xl:top-[88px] xl:bottom-[108px]">
             <div className="absolute inset-0 z-10">
               <div
                 className="absolute left-0 top-[-18px] w-[56vw] min-w-[780px]"
@@ -84,7 +84,7 @@ export function ScrollStory() {
 
               <Container className="relative h-full">
                 <div
-                  className="absolute right-0 top-[18px] w-[540px]"
+                  className="absolute right-[20px] top-[0px] w-[540px] md:right-[24px] xl:right-0"
                   style={{
                     transform: `translateX(${transforms.heroRightX})`,
                     filter: `blur(${transforms.heroRightBlur})`,
