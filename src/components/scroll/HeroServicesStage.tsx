@@ -147,7 +147,7 @@ export function HeroServicesStage() {
               transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
             }}
           >
-            <AboutSection />
+            <About />
           </div>
 
           <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
