@@ -21,55 +21,89 @@ export function GeographyGlobe() {
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
 
   useEffect(() => {
-  const canvas = canvasRef.current;
-  if (!canvas) return;
+    const interval = window.setInterval(() => {
+      setActiveRouteIndex((prev) => (prev + 1) % GEO_ROUTES.length);
+    }, 4200);
 
-  let phi = 0;
-  let frame = 0;
+    return () => window.clearInterval(interval);
+  }, []);
 
-  const globe = createGlobe(canvas, {
-    devicePixelRatio: 2,
-    width: 720 * 2,
-    height: 720 * 2,
-    phi: 0,
-    theta: 0.32,
-    dark: 1,
-    diffuse: 1.35,
-    mapSamples: 20000,
-    mapBrightness: 4.8,
-    mapBaseBrightness: 0.08,
-    baseColor: rgb('#26292e'),
-    glowColor: rgb('#26292e'),
-    markerColor: rgb('#b7bcc7'),
-    arcColor: rgb('#fab021'),
-    arcWidth: 0.6,
-    arcHeight: 0.16,
-    markerElevation: 0.02,
-    scale: 0.96,
-    offset: [40, 10],
-    markers,
-    arcs,
-  });
+  const activeRoute = GEO_ROUTES[activeRouteIndex];
 
-  const animate = () => {
-    phi += 0.0022;
+  const cityMap = useMemo(
+    () => new Map(GEO_CITIES.map((city) => [city.id, city])),
+    [],
+  );
 
-    globe.update({
-      phi,
+  const markers = useMemo(
+    () =>
+      GEO_CITIES.map((city) => ({
+        location: city.location,
+        size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.07 : 0.045,
+      })),
+    [activeRoute],
+  );
+
+  const arcs = useMemo(
+    () =>
+      GEO_ROUTES.map((route, index) => ({
+        from: cityMap.get(route.from)!.location,
+        to: cityMap.get(route.to)!.location,
+        color: index === activeRouteIndex ? rgb('#fab021') : rgb('#8c93a0'),
+      })),
+    [activeRouteIndex, cityMap],
+  );
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let phi = 0;
+    let frame = 0;
+
+    const globe = createGlobe(canvas, {
+      devicePixelRatio: 2,
+      width: 720 * 2,
+      height: 720 * 2,
+      phi: 0,
+      theta: 0.32,
+      dark: 1,
+      diffuse: 1.35,
+      mapSamples: 20000,
+      mapBrightness: 4.8,
+      mapBaseBrightness: 0.08,
+      baseColor: rgb('#26292e'),
+      glowColor: rgb('#26292e'),
+      markerColor: rgb('#b7bcc7'),
+      arcColor: rgb('#fab021'),
+      arcWidth: 0.6,
+      arcHeight: 0.16,
+      markerElevation: 0.02,
+      scale: 0.96,
+      offset: [40, 10],
       markers,
       arcs,
     });
 
+    const animate = () => {
+      phi += 0.0022;
+
+      globe.update({
+        phi,
+        markers,
+        arcs,
+      });
+
+      frame = requestAnimationFrame(animate);
+    };
+
     frame = requestAnimationFrame(animate);
-  };
 
-  frame = requestAnimationFrame(animate);
-
-  return () => {
-    cancelAnimationFrame(frame);
-    globe.destroy();
-  };
-}, [markers, arcs]);
+    return () => {
+      cancelAnimationFrame(frame);
+      globe.destroy();
+    };
+  }, [markers, arcs]);
 
   const from = cityMap.get(activeRoute.from)!;
   const to = cityMap.get(activeRoute.to)!;
