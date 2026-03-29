@@ -54,12 +54,12 @@ export function ScrollStory() {
       heroRightOpacity: 1 - 0.55 * heroToServices,
 
       servicesOpacity: clamp(heroToServices * 1.15, 0, 1),
-      servicesY: `${28 - 28 * heroToServices}px`,
-      servicesBlur: `${14 - 14 * heroToServices}px`,
+      servicesY: `${18 - 18 * heroToServices}px`,
+      servicesBlur: `${10 - 10 * heroToServices}px`,
 
       aboutOpacity: clamp(servicesToAbout * 1.15, 0, 1),
-      aboutY: `${28 - 28 * servicesToAbout}px`,
-      aboutBlur: `${14 - 14 * servicesToAbout}px`,
+      aboutY: `${24 - 24 * servicesToAbout}px`,
+      aboutBlur: `${12 - 12 * servicesToAbout}px`,
     };
   }, [progress]);
 
@@ -70,6 +70,7 @@ export function ScrollStory() {
     >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
+          {/* HERO AREA */}
           <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
             <div className="pointer-events-none absolute inset-0 z-10">
               <div
@@ -99,38 +100,41 @@ export function ScrollStory() {
                 </div>
               </Container>
             </div>
-
-            <div
-              className={cn(
-                'absolute inset-0 z-20',
-                transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
-              )}
-              style={{
-                opacity: transforms.servicesOpacity,
-                transform: `translateY(${transforms.servicesY})`,
-                filter: `blur(${transforms.servicesBlur})`,
-                transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-              }}
-            >
-              <ServicesScene />
-            </div>
-
-            <div
-              className={cn(
-                'absolute inset-0 z-30',
-                transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
-              )}
-              style={{
-                opacity: transforms.aboutOpacity,
-                transform: `translateY(${transforms.aboutY})`,
-                filter: `blur(${transforms.aboutBlur})`,
-                transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-              }}
-            >
-              <AboutScene />
-            </div>
           </div>
 
+          {/* SERVICES AREA — отдельная верхняя зона, как на макете */}
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[18px] bottom-[96px] z-20 md:top-[20px] md:bottom-[104px] xl:top-[24px] xl:bottom-[112px]',
+              transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.servicesOpacity,
+              transform: `translateY(${transforms.servicesY})`,
+              filter: `blur(${transforms.servicesBlur})`,
+              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+            }}
+          >
+            <ServicesScene />
+          </div>
+
+          {/* ABOUT AREA */}
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[36px] bottom-[96px] z-30 md:top-[40px] md:bottom-[104px] xl:top-[44px] xl:bottom-[112px]',
+              transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.aboutOpacity,
+              transform: `translateY(${transforms.aboutY})`,
+              filter: `blur(${transforms.aboutBlur})`,
+              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+            }}
+          >
+            <AboutScene />
+          </div>
+
+          {/* PROGRESS */}
           <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
             <SceneIndicator progress={progress} />
           </div>
@@ -142,10 +146,10 @@ export function ScrollStory() {
 
 function ServicesScene() {
   return (
-    <div className="flex h-full items-start">
+    <div className="h-full">
       <Container>
-        <div className="pt-[12px] md:pt-[16px] xl:pt-[20px]">
-          <div className="flex flex-col gap-6 xl:gap-7">
+        <div className="flex flex-col gap-6 xl:gap-7">
+          <div className="flex items-start justify-between gap-6">
             <h2 className="font-heading text-[64px] leading-[0.92] tracking-[-0.05em] text-[var(--text)]">
               Услуги
             </h2>
@@ -371,9 +375,9 @@ function CardCTA({
 
 function AboutScene() {
   return (
-    <div className="flex h-full items-center">
+    <div className="h-full">
       <Container>
-        <div className="w-full rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)] md:p-10 xl:p-12">
+        <div className="rounded-[40px] bg-[var(--surface)] p-8 shadow-[0_16px_40px_rgba(38,41,46,0.06)] md:p-10 xl:p-12">
           <div className="font-heading text-[32px] leading-none tracking-[-0.03em] text-[var(--text)] md:text-[44px]">
             о компании
           </div>
