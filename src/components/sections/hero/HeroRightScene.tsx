@@ -1,0 +1,329 @@
+'use client';
+
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { cn } from '@/lib/cn';
+import { sitePath } from '@/lib/site-path';
+
+type ThemeMode = 'light' | 'dark';
+
+export function HeroRightScene() {
+  const [theme, setTheme] = useState<ThemeMode>('light');
+  const [card1Ready, setCard1Ready] = useState(false);
+  const [card2Ready, setCard2Ready] = useState(false);
+  const [card3Ready, setCard3Ready] = useState(false);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    const syncTheme = () => {
+      setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
+    };
+
+    syncTheme();
+
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const timers: number[] = [];
+    timers.push(window.setTimeout(() => setCard1Ready(true), 6500));
+    timers.push(window.setTimeout(() => setCard2Ready(true), 7500));
+    timers.push(window.setTimeout(() => setCard3Ready(true), 8500));
+
+    return () => {
+      timers.forEach((id) => window.clearTimeout(id));
+    };
+  }, []);
+
+  const assets = useMemo(
+    () => ({
+      request: `${sitePath}/hero/cards/request.webp`,
+      calc: `${sitePath}/hero/cards/calc.webp`,
+      principles: `${sitePath}/hero/cards/principles.webp`,
+    }),
+    [],
+  );
+
+  return (
+    <div className="mt-4 grid w-full max-w-[540px] justify-self-end self-center gap-6 md:grid-cols-[258px_258px] xl:mt-0">
+      <BentoCard
+        title={
+          <>
+            единая форма
+            <br />
+            запроса и отправки кп
+          </>
+        }
+        href="/request/"
+        imageSrc={assets.request}
+        theme={theme}
+        variant="accent"
+        heightClassName="h-[236px]"
+        visible={card1Ready}
+      />
+
+      <BentoCard
+        title={
+          <>
+            ознакомиться
+            <br />
+            с нашими принципами
+          </>
+        }
+        href="#about"
+        imageSrc={assets.principles}
+        theme={theme}
+        variant="dark"
+        heightClassName="h-[496px]"
+        tall
+        specialButton
+        visible={card3Ready}
+      />
+
+      <BentoCard
+        title={
+          <>
+            сделать расчёт
+            <br />
+            вашей грузоперевозки
+          </>
+        }
+        href="#pricing"
+        imageSrc={assets.calc}
+        theme={theme}
+        variant="light"
+        heightClassName="h-[236px]"
+        visible={card2Ready}
+      />
+    </div>
+  );
+}
+
+function BentoCard({
+  title,
+  href,
+  imageSrc,
+  theme,
+  variant,
+  heightClassName,
+  tall = false,
+  specialButton = false,
+  visible,
+}: {
+  title: React.ReactNode;
+  href: string;
+  imageSrc: string;
+  theme: ThemeMode;
+  variant: 'accent' | 'light' | 'dark';
+  heightClassName: string;
+  tall?: boolean;
+  specialButton?: boolean;
+  visible: boolean;
+}) {
+  const currentRef = useRef({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 1,
+    glowX: 50,
+    glowY: 50,
+    glowOpacity: 0,
+  });
+
+  const targetRef = useRef({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 1,
+    glowX: 50,
+    glowY: 50,
+    glowOpacity: 0,
+  });
+
+  const velocityRef = useRef({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 0,
+    glowX: 0,
+    glowY: 0,
+    glowOpacity: 0,
+  });
+
+  const frameRef = useRef<number | null>(null);
+
+  const [view, setView] = useState({
+    rotateX: 0,
+    rotateY: 0,
+    y: 0,
+    scale: 1,
+    glowX: 50,
+    glowY: 50,
+    glowOpacity: 0,
+  });
+
+  useEffect(() => {
+    const stiffness = 0.14;
+    const damping = 0.78;
+
+    const step = () => {
+      const current = currentRef.current;
+      const target = targetRef.current;
+      const velocity = velocityRef.current;
+
+      (Object.keys(current) as Array<keyof typeof current>).forEach((key) => {
+        const force = (target[key] - current[key]) * stiffness;
+        velocity[key] = (velocity[key] + force) * damping;
+        current[key] = current[key] + velocity[key];
+      });
+
+      setView({ ...currentRef.current });
+      frameRef.current = requestAnimationFrame(step);
+    };
+
+    frameRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
+
+  const textClass =
+    theme === 'light' ? 'text-[#26292e]' : 'text-[#f6f6f6]';
+
+  const buttonClass = specialButton
+    ? theme === 'light'
+      ? 'bg-[#26292e] text-white'
+      : 'bg-white text-black'
+    : theme === 'light'
+      ? 'bg-white text-[#26292e]'
+      : 'bg-[#222429] text-white';
+
+  const bottomMaskClass =
+    theme === 'light'
+      ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.14)_18%,rgba(255,255,255,0.42)_38%,rgba(255,255,255,0.74)_62%,rgba(255,255,255,0.94)_100%)]'
+      : 'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.16)_18%,rgba(38,41,46,0.44)_38%,rgba(38,41,46,0.74)_62%,rgba(38,41,46,0.96)_100%)]';
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (window.innerWidth < 1024) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width;
+    const py = (event.clientY - rect.top) / rect.height;
+
+    const rotateY = (px - 0.5) * 8;
+    const rotateX = (0.5 - py) * 8;
+
+    targetRef.current = {
+      rotateX,
+      rotateY,
+      y: -4,
+      scale: 1.01,
+      glowX: px * 100,
+      glowY: py * 100,
+      glowOpacity: 1,
+    };
+  };
+
+  const handleMouseLeave = () => {
+    targetRef.current = {
+      rotateX: 0,
+      rotateY: 0,
+      y: 0,
+      scale: 1,
+      glowX: 50,
+      glowY: 50,
+      glowOpacity: 0,
+    };
+  };
+
+  return (
+    <div
+      className={cn(
+        !visible && 'hero-card-hidden',
+        visible && 'hero-card-enter',
+        heightClassName,
+        tall && 'md:row-span-2',
+      )}
+    >
+      <div
+        className="hero-card-shell h-full"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Link
+          href={href}
+          className="hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[1.5px]"
+          style={{
+            transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
+          }}
+        >
+          <div className="hero-card-border-3d pointer-events-none absolute inset-0 rounded-[32px] bg-[linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.26)_24%,rgba(255,255,255,0.66)_48%,rgba(255,255,255,0.22)_74%,rgba(255,255,255,0.90)_100%)] opacity-90" />
+
+          <div
+            className={cn(
+              'relative h-full overflow-hidden rounded-[30.5px]',
+              variant === 'accent'
+                ? 'bg-[var(--accent-1)]'
+                : variant === 'light'
+                  ? 'bg-[var(--surface)]'
+                  : 'bg-[var(--accent-2)]',
+            )}
+          >
+            <img
+              src={imageSrc}
+              alt=""
+              className="hero-card-image-3d absolute inset-0 h-full w-full object-cover object-center"
+              style={{
+                transform: `translate3d(${(view.glowX - 50) * -0.12}px, ${(view.glowY - 50) * -0.12}px, 18px) scale(1.05)`,
+              }}
+            />
+
+            <div
+              className="hero-card-glow pointer-events-none absolute inset-0"
+              style={{
+                opacity: view.glowOpacity,
+                background: `radial-gradient(320px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.18), transparent 60%)`,
+              }}
+            />
+
+            <div className={cn('pointer-events-none absolute bottom-0 left-0 right-0 h-[132px]', bottomMaskClass)} />
+
+            <div
+              className="hero-card-content-3d relative flex h-full flex-col justify-end p-5"
+              style={{
+                transform: `translate3d(${(view.glowX - 50) * 0.08}px, ${(view.glowY - 50) * 0.08}px, 26px)`,
+              }}
+            >
+              <div className="relative flex items-center justify-between gap-2">
+                <div
+                  className={cn(
+                    'max-w-[152px] text-[12px] font-semibold leading-[1.15] tracking-[-0.01em]',
+                    textClass,
+                  )}
+                >
+                  {title}
+                </div>
+
+                <div
+                  className={cn(
+                    'hero-card-arrow inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[14px]',
+                    buttonClass,
+                  )}
+                  style={{ transform: 'translateZ(32px)' }}
+                >
+                  <ArrowRight size={19} strokeWidth={2.1} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </div>
+    </div>
+  );
+}
