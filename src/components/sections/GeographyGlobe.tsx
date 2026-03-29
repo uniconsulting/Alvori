@@ -21,7 +21,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-const ZOOM_STEPS = [0.86, 0.94, 1.02, 1.10];
+const ZOOM_STEPS = [0.78, 0.84, 0.9, 0.96, 1.02, 1.08, 1.14, 1.2, 1.26, 1.32];
 const SCALE_MARKS = Array.from({ length: 16 }, (_, index) => index);
 
 export function GeographyGlobe() {
@@ -40,7 +40,7 @@ export function GeographyGlobe() {
 
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
-  const [zoomIndex, setZoomIndex] = useState(2);
+  const [zoomIndex, setZoomIndex] = useState(4);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -88,15 +88,15 @@ export function GeographyGlobe() {
     [],
   );
 
-  const markers = useMemo(
-    () =>
-      GEO_CITIES.map((city) => ({
-        location: city.location,
-        size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.082 : 0.05,
-        id: city.id,
-      })),
-    [activeRoute],
-  );
+  const markers = useMemo(() => {
+    const activeIds = new Set([activeRoute.from, activeRoute.to]);
+
+    return GEO_CITIES.filter((city) => activeIds.has(city.id)).map((city) => ({
+      location: city.location,
+      size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.034 : 0.022,
+      id: city.id,
+    }));
+  }, [activeRoute]);
 
   const activeArc = useMemo(
     () => [
@@ -124,15 +124,15 @@ export function GeographyGlobe() {
       dark: isDark ? 1 : 0,
       diffuse: isDark ? 1.18 : 1.34,
       mapSamples: 24000,
-      mapBrightness: isDark ? 3.8 : 5.2,
-      mapBaseBrightness: isDark ? 0.02 : 0.02,
+      mapBrightness: isDark ? 3.4 : 4.8,
+      mapBaseBrightness: isDark ? 0.0 : 0.0,
       baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
       glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
-      markerColor: isDark ? rgb('#dce2ea') : rgb('#55606f'),
+      markerColor: rgb('#ffffff'),
       arcColor: rgb('#fab021'),
-      arcWidth: 0.65,
-      arcHeight: 0.1,
-      markerElevation: 0.022,
+      arcWidth: 1.2,
+      arcHeight: 0.14,
+      markerElevation: 0.04,
       scale: scaleRef.current,
       offset: [0, -10],
       markers,
@@ -150,11 +150,11 @@ export function GeographyGlobe() {
         scale: scaleRef.current,
         dark: isDark ? 1 : 0,
         diffuse: isDark ? 1.18 : 1.34,
-        mapBrightness: isDark ? 3.8 : 5.2,
-        mapBaseBrightness: isDark ? 0.02 : 0.02,
+        mapBrightness: isDark ? 3.4 : 4.8,
+        mapBaseBrightness: isDark ? 0.0 : 0.0,
         baseColor: isDark ? rgb('#1f2227') : rgb('#eef1f5'),
         glowColor: isDark ? rgb('#1f2227') : rgb('#ffffff'),
-        markerColor: isDark ? rgb('#dce2ea') : rgb('#55606f'),
+        markerColor: rgb('#ffffff'),
         markers,
         arcs: activeArc,
       });
@@ -191,7 +191,7 @@ export function GeographyGlobe() {
     const deltaY = clientY - start.y;
 
     phiRef.current = start.phi - deltaX / 220;
-    thetaRef.current = clamp(start.theta - deltaY / 260, -0.55, 0.55);
+    thetaRef.current = clamp(start.theta + deltaY / 260, -0.55, 0.55);
   };
 
   const endDrag = () => {
@@ -208,14 +208,14 @@ export function GeographyGlobe() {
   const handleWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
     event.preventDefault();
     if (event.deltaY > 0) {
-      changeZoom(zoomIndex - 1);
-    } else {
       changeZoom(zoomIndex + 1);
+    } else {
+      changeZoom(zoomIndex - 1);
     }
   };
 
   const isMajorMark = (index: number) => index % 5 === 0;
-  const activeMarkIndex = zoomIndex * 5;
+  const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
 
   return (
     <div className="flex h-full flex-col items-center justify-start">
@@ -242,7 +242,7 @@ export function GeographyGlobe() {
           onWheel={handleWheel}
         />
 
-        <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-3">
+        <div className="absolute right-0 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
@@ -262,7 +262,8 @@ export function GeographyGlobe() {
                   key={markIndex}
                   type="button"
                   onClick={() => {
-                    const snapped = Math.round(markIndex / 5);
+                    const normalized = 1 - markIndex / 15;
+                    const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
                     changeZoom(snapped);
                   }}
                   className="flex h-[20px] items-center justify-center"
