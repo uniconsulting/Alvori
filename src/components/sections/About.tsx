@@ -93,16 +93,16 @@ export function About() {
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
-              <h2 className="pl-[10px] font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+              <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 О компании
               </h2>
 
-              <div className="pr-[10px]">
+              <div>
                 <AboutBreadcrumb />
               </div>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="mt-2 flex flex-col gap-6">
               <p
                 className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
@@ -185,7 +185,7 @@ function ProcessFlowNodes() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [displayedIndex, setDisplayedIndex] = useState(0);
-  const [textPhase, setTextPhase] = useState<'visible' | 'hiding' | 'showing'>('visible');
+  const [textVisible, setTextVisible] = useState(true);
 
   const currentIndex = hoveredIndex ?? activeIndex;
   const ActiveIcon = PROCESS_STEPS[displayedIndex].icon;
@@ -203,21 +203,14 @@ function ProcessFlowNodes() {
   useEffect(() => {
     if (currentIndex === displayedIndex) return;
 
-    setTextPhase('hiding');
+    setTextVisible(false);
 
-    const hideTimer = window.setTimeout(() => {
+    const swapTimer = window.setTimeout(() => {
       setDisplayedIndex(currentIndex);
-      setTextPhase('showing');
+      requestAnimationFrame(() => setTextVisible(true));
     }, 260);
 
-    const showTimer = window.setTimeout(() => {
-      setTextPhase('visible');
-    }, 620);
-
-    return () => {
-      window.clearTimeout(hideTimer);
-      window.clearTimeout(showTimer);
-    };
+    return () => window.clearTimeout(swapTimer);
   }, [currentIndex, displayedIndex]);
 
   return (
@@ -268,10 +261,8 @@ function ProcessFlowNodes() {
       <div className="w-full rounded-[22px] bg-[var(--surface)] px-6 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
         <div
           className={cn(
-            'flex items-center gap-4 transition-[opacity,transform,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform',
-            textPhase === 'visible' && 'translate-y-0 opacity-100 blur-0',
-            textPhase === 'hiding' && 'translate-y-[10px] opacity-0 blur-[10px]',
-            textPhase === 'showing' && 'translate-y-[4px] opacity-100 blur-[3px]',
+            'about-process-description flex items-center gap-4',
+            textVisible ? 'is-visible' : 'is-hidden',
           )}
         >
           <ActiveIcon
