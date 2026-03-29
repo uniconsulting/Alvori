@@ -30,18 +30,17 @@ export function SceneIndicator({ progress }: SceneIndicatorProps) {
   if (p <= 0.5) {
     line1 = lerp(longWidth, shortWidth, segment1);
     line2 = lerp(shortWidth, longWidth, segment1);
-    line3 = shortWidth;
   } else {
-    line1 = shortWidth;
     line2 = lerp(longWidth, shortWidth, segment2);
     line3 = lerp(shortWidth, longWidth, segment2);
+    line1 = shortWidth;
   }
 
   const activeIndex = p < 0.25 ? 0 : p < 0.75 ? 1 : 2;
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 flex justify-center">
-      <div className="flex items-center gap-3 rounded-full px-3 py-2 backdrop-blur-[2px]">
+    <div className="pointer-events-none absolute inset-x-0 bottom-[40px] z-40 flex justify-center md:bottom-[48px] xl:bottom-[56px]">
+      <div className="flex items-center gap-3 rounded-full px-3 py-2">
         <IndicatorLine width={line1} active={activeIndex === 0} />
         <IndicatorLine width={line2} active={activeIndex === 1} />
         <IndicatorLine width={line3} active={activeIndex === 2} />
