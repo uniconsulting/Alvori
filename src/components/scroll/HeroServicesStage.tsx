@@ -134,7 +134,7 @@ export function HeroServicesStage() {
               transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
             }}
           >
-            <AboutSection />
+            <About />
           </div>
 
           {/* PROGRESS */}
