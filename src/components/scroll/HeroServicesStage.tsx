@@ -99,7 +99,7 @@ export function HeroServicesStage() {
 
           <div
             className={cn(
-              'absolute inset-x-0 top-[24px] bottom-[96px] z-20 md:top-[28px] md:bottom-[104px] xl:top-[32px] xl:bottom-[112px]',
+              'absolute inset-x-0 top-[-8px] bottom-[96px] z-20 md:top-[-12px] md:bottom-[104px] xl:top-[-16px] xl:bottom-[112px]',
               transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
