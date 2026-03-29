@@ -17,23 +17,7 @@ export function GeographySection() {
                 </h2>
 
                 <div>
-                  <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-                    <span
-                      className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
-                      style={{ fontFamily: 'var(--font-body-text)' }}
-                    >
-                      главная
-                    </span>
-
-                    <Dot size={18} className="mx-[2px] text-[var(--accent-1)]" />
-
-                    <span
-                      className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)]"
-                      style={{ fontFamily: 'var(--font-body-text)' }}
-                    >
-                      география
-                    </span>
-                  </div>
+                  <GeographyBreadcrumb />
                 </div>
               </div>
 
@@ -79,6 +63,28 @@ export function GeographySection() {
   );
 }
 
+function GeographyBreadcrumb() {
+  return (
+    <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+      <span
+        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        главная
+      </span>
+
+      <Dot size={18} className="mx-[2px] text-[var(--accent-1)]" />
+
+      <span
+        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)]"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        география
+      </span>
+    </div>
+  );
+}
+
 function FeatureRow({
   icon: Icon,
   text,
@@ -88,7 +94,11 @@ function FeatureRow({
 }) {
   return (
     <div className="flex items-start gap-3 rounded-[18px] bg-[var(--surface)] px-4 py-4 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-      <Icon size={18} strokeWidth={2.1} className="mt-[2px] shrink-0 text-[var(--accent-1)]" />
+      <Icon
+        size={18}
+        strokeWidth={2.1}
+        className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+      />
       <p
         className="text-[16px] font-medium leading-[1.34] tracking-[-0.014em] text-[var(--text)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
