@@ -5,6 +5,12 @@ import { Minus, Plus } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
 
+type LabelPosition = {
+  x: number;
+  y: number;
+  visible: boolean;
+};
+
 function rgb(hex: string): [number, number, number] {
   const clean = hex.replace('#', '');
   const normalized =
@@ -23,8 +29,48 @@ function clamp(value: number, min: number, max: number) {
 
 const ZOOM_STEPS = [0.78, 0.84, 0.9, 0.96, 1.02, 1.08, 1.14, 1.2, 1.26, 1.32];
 const SCALE_MARKS = Array.from({ length: 16 }, (_, index) => index);
+const DISPLAY_SIZE = 540;
 
-export function GeographyGlobe() {
+function projectLocation(
+  location: [number, number],
+  phi: number,
+  theta: number,
+  scale: number,
+): LabelPosition {
+  const [lat, lon] = location;
+  const latRad = (lat * Math.PI) / 180;
+  const lonRad = (lon * Math.PI) / 180;
+
+  const x = Math.cos(latRad) * Math.sin(lonRad);
+  const y = Math.sin(latRad);
+  const z = Math.cos(latRad) * Math.cos(lonRad);
+
+  const cosPhi = Math.cos(phi);
+  const sinPhi = Math.sin(phi);
+  const x1 = x * cosPhi - z * sinPhi;
+  const z1 = x * sinPhi + z * cosPhi;
+
+  const cosTheta = Math.cos(theta);
+  const sinTheta = Math.sin(theta);
+  const y2 = y * cosTheta - z1 * sinTheta;
+  const z2 = y * sinTheta + z1 * cosTheta;
+
+  const radius = DISPLAY_SIZE * 0.315 * scale;
+  const centerX = DISPLAY_SIZE / 2;
+  const centerY = DISPLAY_SIZE / 2 - 10;
+
+  return {
+    x: centerX + x1 * radius,
+    y: centerY - y2 * radius,
+    visible: z2 > 0,
+  };
+}
+
+export function GeographyGlobe({
+  activeRouteIndex,
+}: {
+  activeRouteIndex: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const phiRef = useRef(0.35);
@@ -38,9 +84,9 @@ export function GeographyGlobe() {
     theta: number;
   } | null>(null);
 
-  const [activeRouteIndex, setActiveRouteIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(4);
+  const [labelPositions, setLabelPositions] = useState<Record<string, LabelPosition>>({});
 
   useEffect(() => {
     const root = document.documentElement;
@@ -70,14 +116,6 @@ export function GeographyGlobe() {
   }, []);
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      setActiveRouteIndex((prev) => (prev + 1) % GEO_ROUTES.length);
-    }, 4200);
-
-    return () => window.clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     scaleRef.current = ZOOM_STEPS[zoomIndex];
   }, [zoomIndex]);
 
@@ -88,15 +126,23 @@ export function GeographyGlobe() {
     [],
   );
 
-  const markers = useMemo(() => {
-    const activeIds = new Set([activeRoute.from, activeRoute.to]);
+  const activeCities = useMemo(
+    () => [
+      cityMap.get(activeRoute.from)!,
+      cityMap.get(activeRoute.to)!,
+    ],
+    [activeRoute, cityMap],
+  );
 
-    return GEO_CITIES.filter((city) => activeIds.has(city.id)).map((city) => ({
-      location: city.location,
-      size: 0.022,
-      id: city.id,
-    }));
-  }, [activeRoute]);
+  const markers = useMemo(
+    () =>
+      activeCities.map((city) => ({
+        location: city.location,
+        size: 0.022,
+        id: city.id,
+      })),
+    [activeCities],
+  );
 
   const activeArc = useMemo(
     () => [
@@ -159,6 +205,17 @@ export function GeographyGlobe() {
         arcs: activeArc,
       });
 
+      const nextPositions: Record<string, LabelPosition> = {};
+      for (const city of activeCities) {
+        nextPositions[city.id] = projectLocation(
+          city.location,
+          phiRef.current,
+          thetaRef.current,
+          scaleRef.current,
+        );
+      }
+      setLabelPositions(nextPositions);
+
       frame = requestAnimationFrame(animate);
     };
 
@@ -168,7 +225,7 @@ export function GeographyGlobe() {
       cancelAnimationFrame(frame);
       globe.destroy();
     };
-  }, [markers, activeArc, isDark]);
+  }, [markers, activeArc, isDark, activeCities]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
@@ -242,11 +299,36 @@ export function GeographyGlobe() {
           onWheel={handleWheel}
         />
 
+        {activeCities.map((city) => {
+          const pos = labelPositions[city.id];
+          if (!pos) return null;
+
+          return (
+            <div
+              key={city.id}
+              className="pointer-events-none absolute transition-[opacity,transform] duration-300"
+              style={{
+                left: `${pos.x}px`,
+                top: `${pos.y}px`,
+                opacity: pos.visible ? 1 : 0,
+                transform: 'translate(-50%, -130%)',
+              }}
+            >
+              <div className="rounded-[10px] bg-[rgba(38,41,46,0.78)] px-2.5 py-1 text-[12px] font-medium tracking-[-0.01em] text-white backdrop-blur-md">
+                {city.label}
+              </div>
+            </div>
+          );
+        })}
+
         <div className="absolute right-0 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+            className={`
+              inline-flex h-8 w-8 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(38,41,46,0.06)]
+              ${isDark ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]'}
+            `}
             aria-label="увеличить"
           >
             <Plus size={14} />
@@ -270,21 +352,21 @@ export function GeographyGlobe() {
                   aria-label={`шаг масштаба ${markIndex + 1}`}
                 >
                   <span
-className={`
-  block rounded-full transition-all duration-300
-  ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
-  ${
-    isActive
-      ? 'bg-[var(--accent-1)]'
-      : major
-        ? isDark
-          ? 'bg-white/72'
-          : 'bg-[rgba(38,41,46,0.72)]'
-        : isDark
-          ? 'bg-white/18'
-          : 'bg-[rgba(38,41,46,0.16)]'
-  }
-`}
+                    className={`
+                      block rounded-full transition-all duration-300
+                      ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
+                      ${
+                        isActive
+                          ? 'bg-[var(--accent-1)]'
+                          : major
+                            ? isDark
+                              ? 'bg-white/72'
+                              : 'bg-[rgba(38,41,46,0.72)]'
+                            : isDark
+                              ? 'bg-white/18'
+                              : 'bg-[rgba(38,41,46,0.16)]'
+                      }
+                    `}
                   />
                 </button>
               );
@@ -294,7 +376,10 @@ className={`
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex - 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+            className={`
+              inline-flex h-8 w-8 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(38,41,46,0.06)]
+              ${isDark ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]'}
+            `}
             aria-label="уменьшить"
           >
             <Minus size={14} />
