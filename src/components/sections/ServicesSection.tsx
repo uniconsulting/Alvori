@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
+import { sitePath } from '@/lib/site-path';
 
 type TiltView = {
   rotateX: number;
@@ -223,7 +224,7 @@ function ServiceTallCard({
     <TiltCardShell className="row-span-2">
       <div className="relative h-[548px] overflow-hidden rounded-[28px] bg-[var(--accent-2)]">
         <img
-          src="/services/expedition-bg.webp"
+          src={`${sitePath}/services/expedition-bg.webp`}
           alt=""
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
