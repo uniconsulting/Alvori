@@ -68,7 +68,7 @@ export function ScrollStory() {
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full w-full">
-          <div className="absolute inset-x-0 top-[96px] bottom-[96px] md:top-[104px] md:bottom-[104px] xl:top-[108px] xl:bottom-[108px]790
+          <div className="absolute inset-x-0 top-[96px] bottom-[96px] md:top-[104px] md:bottom-[104px] xl:top-[108px] xl:bottom-[108px]">
             <div className="absolute inset-0 z-10">
               <div
                 className="absolute left-0 top-[-18px] w-[56vw] min-w-[780px]"
