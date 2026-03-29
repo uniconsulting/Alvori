@@ -93,7 +93,7 @@ export function GeographyGlobe() {
 
     return GEO_CITIES.filter((city) => activeIds.has(city.id)).map((city) => ({
       location: city.location,
-      size: city.id === activeRoute.from || city.id === activeRoute.to ? 0.034 : 0.022,
+      size: 0.022,
       id: city.id,
     }));
   }, [activeRoute]);
@@ -246,51 +246,51 @@ export function GeographyGlobe() {
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
             aria-label="увеличить"
           >
             <Plus size={14} />
           </button>
 
           <div className="flex h-[360px] flex-col items-center justify-between py-1">
-{SCALE_MARKS.map((markIndex) => {
-  const major = isMajorMark(markIndex);
-  const isActive = markIndex === activeMarkIndex;
+            {SCALE_MARKS.map((markIndex) => {
+              const major = isMajorMark(markIndex);
+              const isActive = markIndex === activeMarkIndex;
 
-  return (
-    <button
-      key={markIndex}
-      type="button"
-      onClick={() => {
-        const normalized = 1 - markIndex / 15;
-        const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
-        changeZoom(snapped);
-      }}
-      className="flex h-[20px] items-center justify-center"
-      aria-label={`шаг масштаба ${markIndex + 1}`}
-    >
-      <span
-        className={`
-          block rounded-full transition-all duration-300
-          ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
-          ${
-            isActive
-              ? 'bg-[var(--accent-1)]'
-              : major
-                ? 'bg-[rgba(38,41,46,0.72)] dark:bg-white/72'
-                : 'bg-[rgba(38,41,46,0.16)] dark:bg-white/18'
-          }
-        `}
-      />
-    </button>
-  );
-})}
+              return (
+                <button
+                  key={markIndex}
+                  type="button"
+                  onClick={() => {
+                    const normalized = 1 - markIndex / 15;
+                    const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
+                    changeZoom(snapped);
+                  }}
+                  className="flex h-[20px] items-center justify-center"
+                  aria-label={`шаг масштаба ${markIndex + 1}`}
+                >
+                  <span
+                    className={`
+                      block rounded-full transition-all duration-300
+                      ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
+                      ${
+                        isActive
+                          ? 'bg-[var(--accent-1)]'
+                          : major
+                            ? 'bg-[rgba(38,41,46,0.72)] dark:bg-white/72'
+                            : 'bg-[rgba(38,41,46,0.16)] dark:bg-white/18'
+                      }
+                    `}
+                  />
+                </button>
+              );
+            })}
           </div>
 
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex - 1)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
             aria-label="уменьшить"
           >
             <Minus size={14} />
