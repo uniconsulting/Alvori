@@ -497,3 +497,47 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     background-position: 0% 50%;
   }
 }
+
+.about-segment-activate {
+  animation: aboutSegmentActivate 420ms ease-out forwards;
+}
+
+@keyframes aboutSegmentActivate {
+  0% {
+    opacity: 0.22;
+    background-color: rgba(250, 176, 33, 0.18);
+    transform: scaleX(0.72);
+  }
+
+  100% {
+    opacity: 1;
+    background-color: var(--accent-1);
+    transform: scaleX(1);
+  }
+}
+
+.about-quote-text {
+  min-height: 2.44em;
+}
+
+.about-quote-caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 1em;
+  margin-left: 0.08em;
+  background: var(--accent-1);
+  vertical-align: -0.08em;
+  animation: aboutQuoteCaretBlink 1s step-end infinite;
+}
+
+@keyframes aboutQuoteCaretBlink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
