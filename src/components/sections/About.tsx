@@ -51,7 +51,7 @@ export function About() {
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
-              <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+              <h2 className="pl-[10px] font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 О компании
               </h2>
 
@@ -78,37 +78,41 @@ export function About() {
               </p>
             </div>
 
-            <div className="h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
+            <div className="pt-3">
+              <div className="h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
+            </div>
 
-            <div className="grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
-              <div className="flex items-start gap-5">
-                <Quote
-                  size={58}
-                  strokeWidth={2.15}
-                  className="mt-[2px] shrink-0 text-[var(--accent-1)]"
-                />
+            <div className="pt-3">
+              <div className="grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
+                <div className="flex items-start gap-5">
+                  <Quote
+                    size={46}
+                    strokeWidth={2.15}
+                    className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+                  />
 
-                <p
-                  className="max-w-[720px] text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  «Стабильный бизнес – это ответственность,
-                  <br />
-                  предсказуемость и уважение к клиенту»
-                </p>
-              </div>
+                  <p
+                    className="max-w-[720px] text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    «Стабильный бизнес – это ответственность,
+                    <br />
+                    предсказуемость и уважение к клиенту»
+                  </p>
+                </div>
 
-              <div className="flex justify-end">
-                <p
-                  className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  — Алик, руководитель АЛВОРИ
-                </p>
+                <div className="flex justify-end">
+                  <p
+                    className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    — Алик, руководитель АЛВОРИ
+                  </p>
+                </div>
               </div>
             </div>
 
-            <ProcessFlow />
+            <ProcessRoute />
           </div>
         </div>
       </Container>
@@ -138,11 +142,12 @@ function AboutBreadcrumb() {
   );
 }
 
-function ProcessFlow() {
+function ProcessRoute() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const currentIndex = hoveredIndex ?? activeIndex;
+  const stepsCount = PROCESS_STEPS.length;
 
   useEffect(() => {
     if (hoveredIndex !== null) return;
@@ -154,69 +159,81 @@ function ProcessFlow() {
     return () => window.clearInterval(interval);
   }, [hoveredIndex]);
 
-  const progressWidth = useMemo(() => {
-    if (PROCESS_STEPS.length <= 1) return '0%';
-    return `${(currentIndex / (PROCESS_STEPS.length - 1)) * 100}%`;
-  }, [currentIndex]);
+  const markerPosition = useMemo(() => {
+    if (stepsCount <= 1) return '0%';
+    return `${(currentIndex / (stepsCount - 1)) * 100}%`;
+  }, [currentIndex, stepsCount]);
 
   return (
-    <div className="pt-2">
-      <div className="rounded-[28px] bg-[var(--surface)] px-8 py-7 shadow-[0_12px_30px_rgba(38,41,46,0.04)]">
-        <div className="flex items-center justify-between gap-6">
-          {PROCESS_STEPS.map((step, index) => {
-            const isActive = index === currentIndex;
-            const isPassed = index < currentIndex;
+    <div className="pt-4">
+      <div className="relative">
+        <div className="mx-auto max-w-[1320px]">
+          <div className="relative pb-[110px] pt-[18px]">
+            <div className="absolute left-0 right-0 top-[30px] h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
 
-            return (
-              <button
-                key={step.id}
-                type="button"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="group relative flex flex-1 flex-col items-center text-center"
-              >
-                <span
-                  className={cn(
-                    'relative z-[2] inline-flex h-[16px] w-[16px] items-center justify-center rounded-full border transition-all duration-300',
-                    isActive
-                      ? 'border-[var(--accent-1)] bg-[var(--accent-1)] shadow-[0_0_18px_rgba(250,176,33,0.28)]'
-                      : isPassed
-                        ? 'border-[var(--accent-1)] bg-[rgba(250,176,33,0.18)]'
-                        : 'border-[rgba(38,41,46,0.18)] bg-[var(--bg)]',
-                  )}
-                />
+            <div
+              className="absolute top-[30px] h-[2px] rounded-full bg-[var(--accent-1)] transition-[width] duration-500 ease-out"
+              style={{ width: markerPosition }}
+            />
 
-                <span
-                  className={cn(
-                    'mt-4 text-[15px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
-                    isActive
-                      ? 'text-[var(--text)]'
-                      : 'text-[var(--text-muted)] group-hover:text-[var(--text)]',
-                  )}
+            <div
+              className="absolute top-[22px] z-[3] h-[18px] w-[18px] -translate-x-1/2 rounded-full border border-[var(--accent-1)] bg-[var(--accent-1)] shadow-[0_0_18px_rgba(250,176,33,0.30)] transition-[left] duration-500 ease-out"
+              style={{ left: markerPosition }}
+            >
+              <span className="absolute inset-[4px] rounded-full bg-white/45" />
+            </div>
+
+            <div className="relative grid grid-cols-5 gap-4">
+              {PROCESS_STEPS.map((step, index) => {
+                const isActive = index === currentIndex;
+                const isPassed = index < currentIndex;
+
+                return (
+                  <button
+                    key={step.id}
+                    type="button"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                    className="group relative flex flex-col items-center text-center"
+                  >
+                    <span
+                      className={cn(
+                        'relative z-[2] inline-flex h-[18px] w-[18px] items-center justify-center rounded-full border transition-all duration-300',
+                        isActive
+                          ? 'border-[var(--accent-1)] bg-[var(--accent-1)]'
+                          : isPassed
+                            ? 'border-[var(--accent-1)] bg-[rgba(250,176,33,0.18)]'
+                            : 'border-[rgba(38,41,46,0.18)] bg-[var(--bg)]',
+                      )}
+                    />
+
+                    <span
+                      className={cn(
+                        'mt-[22px] text-[15px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
+                        isActive
+                          ? 'text-[var(--text)]'
+                          : 'text-[var(--text-muted)] group-hover:text-[var(--text)]',
+                      )}
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      {step.title}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="pointer-events-none absolute bottom-0 left-1/2 w-full max-w-[760px] -translate-x-1/2">
+              <div className="rounded-[22px] border border-white/60 bg-[var(--surface)] px-7 py-5 shadow-[0_14px_32px_rgba(38,41,46,0.05)]">
+                <p
+                  className="text-center text-[17px] font-normal leading-[1.38] tracking-[-0.016em] text-[var(--text-muted)] transition-all duration-300"
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
-                  {step.title}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="relative mt-[-30px] h-[2px]">
-          <div className="absolute inset-x-0 top-0 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
-          <div
-            className="absolute left-0 top-0 h-[2px] rounded-full bg-[var(--accent-1)] transition-[width] duration-500 ease-out"
-            style={{ width: progressWidth }}
-          />
-        </div>
-
-        <div className="mt-10 min-h-[66px]">
-          <p
-            className="max-w-[860px] text-[18px] font-normal leading-[1.38] tracking-[-0.016em] text-[var(--text-muted)] transition-all duration-300"
-            style={{ fontFamily: 'var(--font-body-text)' }}
-          >
-            {PROCESS_STEPS[currentIndex].description}
-          </p>
+                  {PROCESS_STEPS[currentIndex].description}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
