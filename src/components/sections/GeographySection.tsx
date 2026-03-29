@@ -1,7 +1,7 @@
 'use client';
 
 import { Dot, Route } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { GeographyGlobe } from '@/components/sections/GeographyGlobe';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
@@ -26,8 +26,14 @@ export function GeographySection() {
   }, []);
 
   const activeRoute = GEO_ROUTES[activeRouteIndex];
-  const from = GEO_CITIES.find((city) => city.id === activeRoute.from)!;
-  const to = GEO_CITIES.find((city) => city.id === activeRoute.to)!;
+
+  const cityMap = useMemo(
+    () => new Map(GEO_CITIES.map((city) => [city.id, city])),
+    [],
+  );
+
+  const from = cityMap.get(activeRoute.from)!;
+  const to = cityMap.get(activeRoute.to)!;
 
   return (
     <div className="h-full">
@@ -59,7 +65,7 @@ export function GeographySection() {
                   </p>
                 </div>
 
-                <div className="mt-1 flex flex-col gap-3">
+                <div className="mt-5 flex flex-col gap-3">
                   {DISTRICTS.map((district, index) => (
                     <DistrictPill
                       key={district}
@@ -70,7 +76,7 @@ export function GeographySection() {
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-10">
                 <div className="w-full rounded-[18px] bg-[#26292e] px-5 py-4 backdrop-blur-md">
                   <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                     активное направление
@@ -91,7 +97,7 @@ export function GeographySection() {
               </div>
             </div>
 
-            <GeographyGlobe />
+            <GeographyGlobe activeRouteIndex={activeRouteIndex} />
           </div>
         </div>
       </Container>
