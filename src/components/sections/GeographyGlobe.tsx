@@ -270,17 +270,21 @@ export function GeographyGlobe() {
                   aria-label={`шаг масштаба ${markIndex + 1}`}
                 >
                   <span
-                    className={`
-                      block rounded-full transition-all duration-300
-                      ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
-                      ${
-                        isActive
-                          ? 'bg-[var(--accent-1)]'
-                          : major
-                            ? 'bg-[rgba(38,41,46,0.72)] dark:bg-white/72'
-                            : 'bg-[rgba(38,41,46,0.16)] dark:bg-white/18'
-                      }
-                    `}
+className={`
+  block rounded-full transition-all duration-300
+  ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
+  ${
+    isActive
+      ? 'bg-[var(--accent-1)]'
+      : major
+        ? isDark
+          ? 'bg-white/72'
+          : 'bg-[rgba(38,41,46,0.72)]'
+        : isDark
+          ? 'bg-white/18'
+          : 'bg-[rgba(38,41,46,0.16)]'
+  }
+`}
                   />
                 </button>
               );
