@@ -195,7 +195,7 @@ function ProcessFlowNodes() {
 
     const interval = window.setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % PROCESS_STEPS.length);
-    }, 6200);
+    }, 7600);
 
     return () => window.clearInterval(interval);
   }, [hoveredIndex]);
@@ -208,14 +208,14 @@ function ProcessFlowNodes() {
     const swapTimer = window.setTimeout(() => {
       setDisplayedIndex(currentIndex);
       requestAnimationFrame(() => setTextVisible(true));
-    }, 260);
+    }, 320);
 
     return () => window.clearTimeout(swapTimer);
   }, [currentIndex, displayedIndex]);
 
   return (
-    <div className="flex flex-col gap-16 xl:gap-[72px]">
-      <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] items-center gap-x-5">
+    <div className="flex flex-col gap-[84px] xl:gap-[96px]">
+      <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] items-center gap-x-6">
         {PROCESS_STEPS.map((step, index) => {
           const isActive = index === currentIndex;
           const isPassed = index < currentIndex;
@@ -230,7 +230,7 @@ function ProcessFlowNodes() {
               >
                 <span
                   className={cn(
-                    'text-[17px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
+                    'text-[17px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-500',
                     isActive
                       ? 'text-[var(--text)]'
                       : isPassed
@@ -291,16 +291,16 @@ function SegmentConnector({
   animateNow: boolean;
 }) {
   return (
-    <div className="flex w-[96px] items-center justify-center gap-[6px]">
+    <div className="flex w-[104px] items-center justify-center gap-[7px]">
       {[0, 1, 2, 3].map((item) => (
         <span
           key={item}
           className={cn(
-            'h-[2px] w-[16px] rounded-full',
+            'h-[2px] w-[18px] rounded-full transition-colors duration-500',
             active ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.12)]',
             animateNow && 'about-segment-activate',
           )}
-          style={animateNow ? ({ animationDelay: `${item * 90}ms` } as React.CSSProperties) : undefined}
+          style={animateNow ? ({ animationDelay: `${item * 120}ms` } as React.CSSProperties) : undefined}
         />
       ))}
     </div>
