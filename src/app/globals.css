@@ -563,11 +563,11 @@ html[data-theme='dark'] .hero-card-tilt:hover {
 }
 
 .geography-pill {
-  border: 1px solid rgba(38, 41, 46, 0.08);
-  animation: geographyPillBorder 7s ease-in-out infinite;
+  border: 1.5px solid rgba(38, 41, 46, 0.08);
+  animation: geographyPillBorderPulse 5s ease-in-out infinite;
 }
 
-@keyframes geographyPillBorder {
+@keyframes geographyPillBorderPulse {
   0%,
   100% {
     border-color: rgba(38, 41, 46, 0.08);
@@ -575,7 +575,7 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   }
 
   50% {
-    border-color: rgba(250, 176, 33, 0.42);
-    box-shadow: 0 0 0 1px rgba(250, 176, 33, 0.08);
+    border-color: rgba(250, 176, 33, 0.58);
+    box-shadow: 0 0 0 1px rgba(250, 176, 33, 0.1);
   }
 }
