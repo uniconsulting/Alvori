@@ -46,12 +46,14 @@ export function HeroServicesStage() {
   }, []);
 
   const transforms = useMemo(() => {
-    const heroToServices = remap(progress, 0, 0.18);
-    const servicesExit = remap(progress, 0.78, 0.92);
-    const aboutEnter = remap(progress, 0.90, 1);
+    const heroToServices = remap(progress, 0, 0.16);
+    const servicesExit = remap(progress, 0.72, 0.84);
+    const aboutEnter = remap(progress, 0.82, 0.94);
 
-    const servicesHeaderProgress = remap(progress, 0.12, 0.24);
-    const servicesCardsProgress = remap(progress, 0.22, 0.80);
+    const servicesHeaderProgress = remap(progress, 0.10, 0.22);
+    const servicesCardsProgress = remap(progress, 0.20, 0.70);
+
+    const aboutReveal = remap(progress, 0.82, 0.96);
 
     return {
       heroLeftX: `${-120 * heroToServices}vw`,
@@ -65,23 +67,24 @@ export function HeroServicesStage() {
       servicesOpacity:
         clamp(heroToServices * 1.12, 0, 1) *
         (1 - Math.pow(servicesExit, 1.35)),
-      servicesY: `${18 - 18 * heroToServices - 220 * servicesExit}px`,
+      servicesY: `${18 - 18 * heroToServices - 240 * servicesExit}px`,
       servicesBlur: `${10 * (1 - heroToServices) + 18 * servicesExit}px`,
 
       servicesHeaderProgress,
       servicesCardsProgress,
       servicesExit,
 
-      aboutOpacity: clamp(aboutEnter * 1.18, 0, 1),
-      aboutY: `${46 - 46 * aboutEnter}px`,
-      aboutBlur: `${14 - 14 * aboutEnter}px`,
+      aboutOpacity: clamp(aboutEnter * 1.12, 0, 1),
+      aboutY: `${54 - 54 * aboutEnter}px`,
+      aboutBlur: `${16 - 16 * aboutEnter}px`,
+      aboutReveal,
     };
   }, [progress]);
 
   return (
     <section
       ref={rootRef}
-      className="relative left-1/2 h-[520vh] w-screen -translate-x-1/2 overflow-x-clip"
+      className="relative left-1/2 h-[620vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
@@ -148,7 +151,7 @@ export function HeroServicesStage() {
               opacity: transforms.aboutOpacity,
               transform: `translateY(${transforms.aboutY})`,
               filter: `blur(${transforms.aboutBlur})`,
-              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
             }}
           >
             <About />
