@@ -64,14 +64,14 @@ export function ScrollStory() {
   return (
     <section
       ref={rootRef}
-      className="relative left-1/2 -mt-[16px] h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
+      className="relative left-1/2 h-[300vh] w-screen -translate-x-1/2 overflow-x-clip"
     >
       <div className="sticky top-[92px] md:top-[104px] xl:top-[116px] h-[calc(100vh-92px)] md:h-[calc(100vh-104px)] xl:h-[calc(100vh-116px)] overflow-hidden">
         <div className="relative h-full w-full">
-          <div className="absolute inset-x-0 top-[78px] bottom-[96px] md:top-[84px] md:bottom-[104px] xl:top-[88px] xl:bottom-[108px]">
+          <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
             <div className="absolute inset-0 z-10">
               <div
-                className="absolute left-0 top-[-16px] w-[56vw] min-w-[780px]"
+                className="absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
                 style={{
                   transform: `translateX(${transforms.heroLeftX})`,
                   filter: `blur(${transforms.heroLeftBlur})`,
@@ -83,21 +83,19 @@ export function ScrollStory() {
               </div>
 
               <Container className="relative h-full">
-<div
-  className="absolute top-[-6px] w-[540px]"
-  style={{
-    right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
-    transform: `translateX(${transforms.heroRightX})`,
-    filter: `blur(${transforms.heroRightBlur})`,
-    opacity: transforms.heroRightOpacity,
-    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-  }}
->
-  <HeroRightScene />
-</div>
+                <div
+                  className="absolute top-[-6px] w-[540px]"
+                  style={{
+                    right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+                    transform: `translateX(${transforms.heroRightX})`,
+                    filter: `blur(${transforms.heroRightBlur})`,
+                    opacity: transforms.heroRightOpacity,
+                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                  }}
+                >
+                  <HeroRightScene />
+                </div>
               </Container>
-
-              <SceneIndicator progress={progress} />
             </div>
 
             <div
@@ -123,6 +121,10 @@ export function ScrollStory() {
             >
               <AboutScene />
             </div>
+          </div>
+
+          <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
+            <SceneIndicator progress={progress} />
           </div>
         </div>
       </div>
