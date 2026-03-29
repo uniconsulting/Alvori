@@ -4,15 +4,13 @@ import { ArrowRight, Dot } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
 
-const CARD_GAP = 'gap-[22px]';
-
 export function ServicesSection() {
   return (
     <div className="h-full">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-10 xl:gap-12">
-            <div className="flex items-start justify-between gap-6">
+            <div className="flex items-center justify-between gap-6">
               <h2 className="pl-[6px] font-heading text-[56px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 Услуги
               </h2>
@@ -133,8 +131,8 @@ function ServiceCard({
   accentLabel?: string;
   isAdr?: boolean;
 }) {
-  const inner = (
-    <div className={cn('relative flex h-[262px] flex-col px-8 py-8', CARD_GAP)}>
+  const content = (
+    <div className="relative flex h-[262px] flex-col rounded-[26px] px-8 py-8">
       <div className="flex items-start justify-between gap-4">
         <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.025em] text-[var(--text)]">
           {title}
@@ -148,13 +146,13 @@ function ServiceCard({
       </div>
 
       <div
-        className="text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
+        className="mt-[22px] text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {description}
       </div>
 
-      <div>
+      <div className="mt-auto pt-[22px]">
         <CardCTA label={ctaLabel} darkButton={false} />
       </div>
     </div>
@@ -164,12 +162,12 @@ function ServiceCard({
     return (
       <div className="relative rounded-[28px] p-[2px]">
         <div className="service-adr-border pointer-events-none absolute inset-0 rounded-[28px]" />
-        <div className="relative rounded-[26px] bg-[var(--surface)]">{inner}</div>
+        <div className="relative rounded-[26px] bg-[var(--surface)]">{content}</div>
       </div>
     );
   }
 
-  return <div className="rounded-[28px] bg-[var(--surface)]">{inner}</div>;
+  return <div className="rounded-[28px] bg-[var(--surface)]">{content}</div>;
 }
 
 function ServiceTallCard({
@@ -191,20 +189,22 @@ function ServiceTallCard({
 
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.14)_28%,rgba(38,41,46,0.46)_62%,rgba(38,41,46,0.90)_100%)]" />
 
-      <div className={cn('relative flex h-full flex-col px-8 py-8', CARD_GAP)}>
-        <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.025em] text-white">
-          {title}
-        </h3>
+      <div className="relative flex h-full flex-col px-8 py-8">
+        <div className="mt-auto">
+          <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.025em] text-white">
+            {title}
+          </h3>
 
-        <div
-          className="text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-white/88"
-          style={{ fontFamily: 'var(--font-body-text)' }}
-        >
-          {description}
-        </div>
+          <div
+            className="mt-[22px] text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-white/88"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            {description}
+          </div>
 
-        <div>
-          <CardCTA label={ctaLabel} darkButton />
+          <div className="pt-[22px]">
+            <CardCTA label={ctaLabel} darkButton />
+          </div>
         </div>
       </div>
     </div>
@@ -232,7 +232,7 @@ function CardCTA({
 
       <div
         className={cn(
-          'inline-flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-[10px]',
+          'inline-flex h-[40px] w-[58px] shrink-0 items-center justify-center rounded-[10px]',
           darkButton ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
         )}
       >
