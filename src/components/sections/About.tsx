@@ -51,7 +51,7 @@ export function About() {
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
-              <h2 className="pl-[10px] font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+              <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 О компании
               </h2>
 
