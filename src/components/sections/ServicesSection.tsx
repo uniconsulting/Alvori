@@ -88,88 +88,88 @@ export function ServicesSection({
             </div>
 
             <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
-              <AnimatedCard progress={cardsProgress} delay={0.00}>
-                <ServiceCard
-                  icon={Truck}
-                  title="Междугородние перевозки"
-                  description={
-                    <>
-                      междугородние перевозки
-                      <br />
-                      регулярные b2b-перевозки по
-                      <br />
-                      ключевым направлениям по рф
-                    </>
-                  }
-                  ctaLabel="изучить географию"
-                />
-              </AnimatedCard>
+<AnimatedCard progress={cardsProgress} delay={0.00}>
+  <ServiceCard
+    icon={Truck}
+    title="Междугородние перевозки"
+    description={
+      <>
+        междугородние перевозки
+        <br />
+        регулярные b2b-перевозки по
+        <br />
+        ключевым направлениям по рф
+      </>
+    }
+    ctaLabel="изучить географию"
+  />
+</AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.20}>
-                <ServiceCard
-                  icon={Warehouse}
-                  title="Межтерминальные перевозки"
-                  description={
-                    <>
-                      работа между терминалами,
-                      <br />
-                      складами и распределительными
-                      <br />
-                      узлами с гарантией доставки тс
-                    </>
-                  }
-                  ctaLabel="обсудить условия"
-                />
-              </AnimatedCard>
+<AnimatedCard progress={cardsProgress} delay={0.18}>
+  <ServiceCard
+    icon={Warehouse}
+    title="Межтерминальные перевозки"
+    description={
+      <>
+        работа между терминалами,
+        <br />
+        складами и распределительными
+        <br />
+        узлами с гарантией доставки тс
+      </>
+    }
+    ctaLabel="обсудить условия"
+  />
+</AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.40} className="row-span-2">
-                <ServiceTallCard
-                  icon={Network}
-                  title="Экспедиционное направление"
-                  description={
-                    <>
-                      подбор и сопровождение
-                      <br />
-                      перевозки под конкретную
-                      <br />
-                      логистическую задачу
-                    </>
-                  }
-                  ctaLabel="связаться с нами"
-                />
-              </AnimatedCard>
+<AnimatedCard progress={cardsProgress} delay={0.36}>
+  <ServiceCard
+    icon={Route}
+    title="Проектные перевозки"
+    description={
+      <>
+        перевозки под нестандартные
+        <br />
+        задачи и согласованные маршруты
+      </>
+    }
+    ctaLabel="описать задачу"
+  />
+</AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.60}>
-                <ServiceCard
-                  icon={Route}
-                  title="Проектные перевозки"
-                  description={
-                    <>
-                      перевозки под нестандартные
-                      <br />
-                      задачи и согласованные маршруты
-                    </>
-                  }
-                  ctaLabel="описать задачу"
-                />
-              </AnimatedCard>
+<AnimatedCard progress={cardsProgress} delay={0.54}>
+  <ServiceCard
+    icon={ShieldAlert}
+    title="Опасные грузы"
+    description={
+      <>
+        перевозки ADR-грузов с соблюдением
+        <br />
+        требований и регламентов
+      </>
+    }
+    ctaLabel="уточнить детали"
+    accentLabel="ADR"
+    isAdr
+  />
+</AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.80}>
-                <ServiceCard
-                  icon={ShieldAlert}
-                  title="Опасные грузы"
-                  description={
-                    <>
-                      перевозки ADR-грузов с соблюдением
-                      <br />
-                      требований и регламентов
-                    </>
-                  }
-                  ctaLabel="уточнить детали"
-                  accentLabel="ADR"
-                  isAdr
-                />
-              </AnimatedCard>
+<AnimatedCard progress={cardsProgress} delay={0.72} className="row-span-2">
+  <ServiceTallCard
+    icon={Network}
+    title="Экспедиционное направление"
+    description={
+      <>
+        подбор и сопровождение
+        <br />
+        перевозки под конкретную
+        <br />
+        логистическую задачу
+      </>
+    }
+    ctaLabel="связаться с нами"
+  />
+</AnimatedCard>
             </div>
           </div>
         </div>
@@ -192,7 +192,7 @@ function AnimatedCard({
   return (
     <div
       className={className}
-      style={revealStyle(progress, delay, 0.18, 20, 6, 0.992)}
+      style={revealStyle(progress, delay, 0.22, 20, 5, 0.994)}
     >
       {children}
     </div>
