@@ -1,6 +1,15 @@
 'use client';
 
-import { Dot, Quote } from 'lucide-react';
+import {
+  Calculator,
+  CheckCheck,
+  CircleDashed,
+  Dot,
+  FileText,
+  Quote,
+  Send,
+  Truck,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
@@ -9,6 +18,7 @@ type ProcessStep = {
   id: string;
   title: string;
   description: string;
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
 };
 
 const PROCESS_STEPS: ProcessStep[] = [
@@ -17,30 +27,35 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: 'запрос',
     description:
       'Фиксируем задачу, маршрут, сроки, требования к транспорту и документы по заявке.',
+    icon: Send,
   },
   {
     id: 'estimate',
     title: 'расчёт',
     description:
       'Подбираем формат перевозки, считаем стоимость, сроки и оптимальный сценарий исполнения.',
+    icon: Calculator,
   },
   {
     id: 'approval',
     title: 'согласование',
     description:
       'Подтверждаем условия, детали маршрута, формат работы и запускаем перевозку в работу.',
+    icon: CheckCheck,
   },
   {
     id: 'delivery',
     title: 'перевозка',
     description:
       'Организуем исполнение, сопровождаем процесс и контролируем движение на каждом этапе.',
+    icon: Truck,
   },
   {
     id: 'docs',
     title: 'документы',
     description:
       'Формируем закрывающий контур: подтверждение исполнения, комплект документов и завершение сделки.',
+    icon: FileText,
   },
 ];
 
@@ -108,7 +123,9 @@ export function About() {
               </div>
             </div>
 
-            <ProcessFlowNodes />
+            <div className="pt-8 xl:pt-10">
+              <ProcessFlowNodes />
+            </div>
           </div>
         </div>
       </Container>
@@ -143,100 +160,103 @@ function ProcessFlowNodes() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const currentIndex = hoveredIndex ?? activeIndex;
+  const ActiveIcon = PROCESS_STEPS[currentIndex].icon;
 
   useEffect(() => {
     if (hoveredIndex !== null) return;
 
     const interval = window.setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % PROCESS_STEPS.length);
-    }, 2200);
+    }, 3200);
 
     return () => window.clearInterval(interval);
   }, [hoveredIndex]);
 
-  const activeLeft = useMemo(() => {
-    if (PROCESS_STEPS.length <= 1) return '0%';
-    return `${(currentIndex / (PROCESS_STEPS.length - 1)) * 100}%`;
+  const segmentStates = useMemo(() => {
+    return Array.from({ length: PROCESS_STEPS.length - 1 }, (_, index) => ({
+      active: index < currentIndex,
+      current: index === currentIndex,
+    }));
   }, [currentIndex]);
 
   return (
-    <div className="pt-6">
-      <div className="relative min-h-[220px]">
-        <div className="absolute left-0 right-0 top-[42px] h-[2px] rounded-full bg-[rgba(38,41,46,0.10)]" />
+    <div className="flex flex-col gap-10 xl:gap-12">
+      <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] items-center gap-x-5">
+        {PROCESS_STEPS.map((step, index) => {
+          const isActive = index === currentIndex;
+          const isPassed = index < currentIndex;
 
-        <div
-          className="absolute top-[42px] h-[2px] -translate-y-1/2 rounded-full bg-[var(--accent-1)] transition-[width] duration-500 ease-out"
-          style={{ left: 0, width: activeLeft }}
-        />
-
-        <div className="relative grid grid-cols-5 gap-6">
-          {PROCESS_STEPS.map((step, index) => {
-            const isActive = index === currentIndex;
-            const isPassed = index < currentIndex;
-
-            return (
+          return (
+            <div key={step.id} className="flex items-center justify-center">
               <button
-                key={step.id}
                 type="button"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="group flex flex-col items-center text-center"
+                className="group flex items-center justify-center"
               >
                 <span
                   className={cn(
-                    'relative z-[2] inline-flex h-[18px] w-[18px] items-center justify-center rounded-full border transition-all duration-300',
-                    isActive
-                      ? 'border-[var(--accent-1)] bg-[var(--accent-1)] shadow-[0_0_18px_rgba(250,176,33,0.28)]'
-                      : isPassed
-                        ? 'border-[var(--accent-1)] bg-[rgba(250,176,33,0.14)]'
-                        : 'border-[rgba(38,41,46,0.16)] bg-[var(--bg)]',
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'h-[6px] w-[6px] rounded-full transition-all duration-300',
-                      isActive ? 'bg-white' : isPassed ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.18)]',
-                    )}
-                  />
-                </span>
-
-                <span
-                  className={cn(
-                    'mt-5 text-[15px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
+                    'text-[15px] font-semibold lowercase tracking-[-0.02em] transition-colors duration-300',
                     isActive
                       ? 'text-[var(--text)]'
-                      : 'text-[var(--text-muted)] group-hover:text-[var(--text)]',
+                      : isPassed
+                        ? 'text-[var(--text)]'
+                        : 'text-[var(--text-muted)] group-hover:text-[var(--text)]',
                   )}
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
                   {step.title}
                 </span>
-
-                <span
-                  className={cn(
-                    'mt-2 text-[12px] font-medium uppercase tracking-[0.08em] transition-colors duration-300',
-                    isActive ? 'text-[var(--accent-1)]' : 'text-[rgba(38,41,46,0.28)]',
-                  )}
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  {String(index + 1).padStart(2, '0')}
-                </span>
               </button>
-            );
-          })}
-        </div>
+            </div>
+          );
+        }).flatMap((node, index) => {
+          if (index === PROCESS_STEPS.length - 1) return [node];
 
-        <div className="mt-14 flex justify-center">
-          <div className="min-h-[72px] max-w-[860px] rounded-[22px] bg-[var(--surface)] px-6 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-            <p
-              className="text-center text-[18px] font-normal leading-[1.38] tracking-[-0.016em] text-[var(--text-muted)] transition-all duration-300"
-              style={{ fontFamily: 'var(--font-body-text)' }}
-            >
-              {PROCESS_STEPS[currentIndex].description}
-            </p>
-          </div>
+          const state = segmentStates[index];
+
+          return [
+            node,
+            <SegmentConnector
+              key={`connector-${PROCESS_STEPS[index].id}`}
+              active={state.active}
+            />,
+          ];
+        })}
+      </div>
+
+      <div className="w-full rounded-[22px] bg-[var(--surface)] px-6 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+        <div className="flex items-center gap-4">
+          <ActiveIcon
+            size={22}
+            strokeWidth={2.05}
+            className="shrink-0 text-[var(--accent-1)]"
+          />
+
+          <p
+            className="whitespace-nowrap text-[18px] font-normal leading-[1.36] tracking-[-0.016em] text-[var(--text-muted)] transition-all duration-300"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            {PROCESS_STEPS[currentIndex].description}
+          </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+function SegmentConnector({ active }: { active: boolean }) {
+  return (
+    <div className="flex w-[88px] items-center justify-center gap-[6px]">
+      {[0, 1, 2, 3].map((item) => (
+        <span
+          key={item}
+          className={cn(
+            'h-[2px] w-[16px] rounded-full transition-colors duration-300',
+            active ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.12)]',
+          )}
+        />
+      ))}
     </div>
   );
 }
