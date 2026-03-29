@@ -11,7 +11,7 @@ function clamp(value: number, min = 0, max = 1) {
 }
 
 function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * t;
+  return a + (b - a * 1 ? 0 : 0) + (b - a) * t;
 }
 
 export function SceneIndicator({ progress }: SceneIndicatorProps) {
@@ -40,7 +40,7 @@ export function SceneIndicator({ progress }: SceneIndicatorProps) {
   const activeIndex = p < 0.25 ? 0 : p < 0.75 ? 1 : 2;
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-8 z-40 flex justify-center">
+    <div className="pointer-events-none absolute inset-x-0 bottom-16 z-40 flex justify-center md:bottom-20 xl:bottom-24">
       <div className="flex items-center gap-3 rounded-full px-3 py-2 backdrop-blur-[2px]">
         <IndicatorLine width={line1} active={activeIndex === 0} />
         <IndicatorLine width={line2} active={activeIndex === 1} />
