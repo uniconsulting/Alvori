@@ -34,14 +34,33 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-function revealStyle(progress: number, delay = 0, distance = 18, blur = 10, scale = 0.988) {
-  const local = clamp((progress - delay) / (1 - delay), 0, 1);
+function revealStyle(
+  progress: number,
+  delay = 0,
+  span = 0.18,
+  distance = 18,
+  blur = 10,
+  scale = 0.988,
+) {
+  const local = clamp((progress - delay) / span, 0, 1);
   const eased = easeOutCubic(local);
 
   return {
     opacity: eased,
     transform: `translate3d(0, ${distance * (1 - eased)}px, 0) scale(${scale + (1 - scale) * eased})`,
     filter: `blur(${blur * (1 - eased)}px)`,
+    transition: 'transform 120ms linear, filter 120ms linear, opacity 120ms linear',
+  } as const;
+}
+
+function headerRevealStyle(progress: number) {
+  const local = clamp(progress / 0.22, 0, 1);
+  const eased = easeOutCubic(local);
+
+  return {
+    opacity: eased,
+    transform: `translate3d(0, ${26 * (1 - eased)}px, 0)`,
+    filter: `blur(${8 * (1 - eased)}px)`,
     transition: 'transform 120ms linear, filter 120ms linear, opacity 120ms linear',
   } as const;
 }
@@ -57,7 +76,7 @@ export function ServicesSection({
           <div className="flex flex-col gap-12 xl:gap-14">
             <div
               className="flex items-center justify-between gap-6"
-              style={revealStyle(headerProgress, 0, 14, 8, 0.992)}
+              style={headerRevealStyle(headerProgress)}
             >
               <h2 className="pl-[10px] font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 Услуги
@@ -86,7 +105,7 @@ export function ServicesSection({
                 />
               </AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.12}>
+              <AnimatedCard progress={cardsProgress} delay={0.20}>
                 <ServiceCard
                   icon={Warehouse}
                   title="Межтерминальные перевозки"
@@ -103,7 +122,7 @@ export function ServicesSection({
                 />
               </AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.24} className="row-span-2">
+              <AnimatedCard progress={cardsProgress} delay={0.40} className="row-span-2">
                 <ServiceTallCard
                   icon={Network}
                   title="Экспедиционное направление"
@@ -120,7 +139,7 @@ export function ServicesSection({
                 />
               </AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.36}>
+              <AnimatedCard progress={cardsProgress} delay={0.60}>
                 <ServiceCard
                   icon={Route}
                   title="Проектные перевозки"
@@ -135,7 +154,7 @@ export function ServicesSection({
                 />
               </AnimatedCard>
 
-              <AnimatedCard progress={cardsProgress} delay={0.48}>
+              <AnimatedCard progress={cardsProgress} delay={0.80}>
                 <ServiceCard
                   icon={ShieldAlert}
                   title="Опасные грузы"
@@ -171,7 +190,10 @@ function AnimatedCard({
   className?: string;
 }) {
   return (
-    <div className={className} style={revealStyle(progress, delay, 22, 12, 0.986)}>
+    <div
+      className={className}
+      style={revealStyle(progress, delay, 0.18, 20, 6, 0.992)}
+    >
       {children}
     </div>
   );
