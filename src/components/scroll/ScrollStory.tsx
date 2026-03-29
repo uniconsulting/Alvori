@@ -70,34 +70,34 @@ export function ScrollStory() {
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
           <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
-            <div className="absolute inset-0 z-10">
-              <div
-                className="absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
-                style={{
-                  transform: `translateX(${transforms.heroLeftX})`,
-                  filter: `blur(${transforms.heroLeftBlur})`,
-                  opacity: transforms.heroLeftOpacity,
-                  transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                }}
-              >
-                <HeroLeftScene />
-              </div>
+<div className="pointer-events-none absolute inset-0 z-10">
+  <div
+    className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
+    style={{
+      transform: `translateX(${transforms.heroLeftX})`,
+      filter: `blur(${transforms.heroLeftBlur})`,
+      opacity: transforms.heroLeftOpacity,
+      transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+    }}
+  >
+    <HeroLeftScene />
+  </div>
 
-              <Container className="relative h-full">
-                <div
-                  className="absolute top-[10px] w-[540px]"
-                  style={{
-                    right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
-                    transform: `translateX(${transforms.heroRightX})`,
-                    filter: `blur(${transforms.heroRightBlur})`,
-                    opacity: transforms.heroRightOpacity,
-                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                  }}
-                >
-                  <HeroRightScene />
-                </div>
-              </Container>
-            </div>
+  <Container className="pointer-events-none relative h-full">
+    <div
+      className="pointer-events-auto absolute top-[10px] w-[540px]"
+      style={{
+        right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+        transform: `translateX(${transforms.heroRightX})`,
+        filter: `blur(${transforms.heroRightBlur})`,
+        opacity: transforms.heroRightOpacity,
+        transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+      }}
+    >
+      <HeroRightScene />
+    </div>
+  </Container>
+</div>
 
             <div
               className={cn(
