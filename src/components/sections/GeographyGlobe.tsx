@@ -21,14 +21,15 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-const ZOOM_STEPS = [0.86, 0.92, 0.98, 1.04, 1.1, 1.16, 1.22];
+const ZOOM_STEPS = [0.86, 0.94, 1.02, 1.10];
+const SCALE_MARKS = Array.from({ length: 16 }, (_, index) => index);
 
 export function GeographyGlobe() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const phiRef = useRef(0.35);
   const thetaRef = useRef(0.24);
-  const scaleRef = useRef(1.04);
+  const scaleRef = useRef(1.02);
 
   const dragStartRef = useRef<{
     x: number;
@@ -39,7 +40,7 @@ export function GeographyGlobe() {
 
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
   const [isDark, setIsDark] = useState(false);
-  const [zoomIndex, setZoomIndex] = useState(3);
+  const [zoomIndex, setZoomIndex] = useState(2);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -213,11 +214,11 @@ export function GeographyGlobe() {
     }
   };
 
-  const from = cityMap.get(activeRoute.from)!;
-  const to = cityMap.get(activeRoute.to)!;
+  const isMajorMark = (index: number) => index % 5 === 0;
+  const activeMarkIndex = zoomIndex * 5;
 
   return (
-    <div className="flex h-full flex-col items-center justify-between">
+    <div className="flex h-full flex-col items-center justify-start">
       <div className="relative flex h-[560px] w-full items-start justify-center">
         <canvas
           ref={canvasRef}
@@ -252,23 +253,32 @@ export function GeographyGlobe() {
           </button>
 
           <div className="flex h-[360px] flex-col items-center justify-between py-1">
-            {ZOOM_STEPS.map((_, index) => {
-              const isActive = index <= zoomIndex;
-              const isCurrent = index === zoomIndex;
+            {SCALE_MARKS.map((markIndex) => {
+              const major = isMajorMark(markIndex);
+              const isActive = markIndex === activeMarkIndex;
 
               return (
                 <button
-                  key={index}
+                  key={markIndex}
                   type="button"
-                  onClick={() => changeZoom(index)}
-                  className="flex h-[36px] items-center justify-center"
-                  aria-label={`масштаб ${index + 1}`}
+                  onClick={() => {
+                    const snapped = Math.round(markIndex / 5);
+                    changeZoom(snapped);
+                  }}
+                  className="flex h-[20px] items-center justify-center"
+                  aria-label={`шаг масштаба ${markIndex + 1}`}
                 >
                   <span
                     className={`
                       block rounded-full transition-all duration-300
-                      ${isCurrent ? 'h-[3px] w-[34px]' : 'h-[2px] w-[24px]'}
-                      ${isActive ? 'bg-[var(--accent-1)]' : 'bg-[rgba(38,41,46,0.16)] dark:bg-white/16'}
+                      ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
+                      ${
+                        isActive
+                          ? 'bg-[var(--accent-1)]'
+                          : major
+                            ? 'bg-[var(--text)] dark:bg-white/72'
+                            : 'bg-[rgba(38,41,46,0.18)] dark:bg-white/18'
+                      }
                     `}
                   />
                 </button>
@@ -285,15 +295,6 @@ export function GeographyGlobe() {
             <Minus size={14} />
           </button>
         </div>
-      </div>
-
-      <div className="w-full rounded-[18px] bg-[rgba(38,41,46,0.78)] px-5 py-4 backdrop-blur-md dark:bg-[rgba(38,41,46,0.78)]">
-        <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-          активное направление
-        </p>
-        <p className="mt-2 text-[18px] font-semibold tracking-[-0.02em] text-white">
-          {from.label} — {to.label}
-        </p>
       </div>
     </div>
   );
