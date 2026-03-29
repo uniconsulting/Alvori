@@ -142,9 +142,9 @@ export function ScrollStory() {
 
 function ServicesScene() {
   return (
-    <div className="flex h-full items-start pt-[36px] md:pt-[40px] xl:pt-[44px]">
+    <div className="flex h-full items-start pt-[0px]">
       <Container>
-        <div className="flex flex-col gap-7 xl:gap-8">
+        <div className="flex flex-col gap-6 xl:gap-7">
           <div className="flex items-start justify-between gap-6">
             <h2 className="font-heading text-[64px] leading-[0.92] tracking-[-0.05em] text-[var(--text)]">
               Услуги
@@ -247,7 +247,7 @@ function ServiceCard({
     return (
       <div className="relative rounded-[28px] p-[2px]">
         <div className="service-adr-border pointer-events-none absolute inset-0 rounded-[28px]" />
-        <div className="relative flex h-[272px] flex-col rounded-[26px] bg-[var(--surface)] px-8 py-8">
+        <div className="relative flex h-[262px] flex-col rounded-[26px] bg-[var(--surface)] px-8 py-8">
           <div className="flex items-start justify-between gap-4">
             <h3 className="font-heading text-[15px] leading-[1.12] tracking-[-0.02em] text-[var(--text)]">
               {title}
@@ -276,7 +276,7 @@ function ServiceCard({
   }
 
   return (
-    <div className="flex h-[272px] flex-col rounded-[28px] bg-[var(--surface)] px-8 py-8">
+    <div className="flex h-[262px] flex-col rounded-[28px] bg-[var(--surface)] px-8 py-8">
       <div className="flex items-start justify-between gap-4">
         <h3 className="font-heading text-[15px] leading-[1.12] tracking-[-0.02em] text-[var(--text)]">
           {title}
@@ -307,17 +307,17 @@ function ServiceTallCard({
   ctaLabel: string;
 }) {
   return (
-    <div className="relative row-span-2 h-[564px] overflow-hidden rounded-[28px] bg-[var(--accent-2)]">
+    <div className="relative row-span-2 h-[548px] overflow-hidden rounded-[28px] bg-[var(--accent-2)]">
       <img
         src="/services/expedition-bg.webp"
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.16)_30%,rgba(38,41,46,0.48)_66%,rgba(38,41,46,0.88)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.08)_0%,rgba(38,41,46,0.14)_28%,rgba(38,41,46,0.46)_62%,rgba(38,41,46,0.90)_100%)]" />
 
       <div className="relative flex h-full flex-col px-8 py-8">
-        <div className="mt-auto">
+        <div className="mt-auto pb-6">
           <h3 className="font-heading text-[15px] leading-[1.14] tracking-[-0.02em] text-white">
             {title}
           </h3>
