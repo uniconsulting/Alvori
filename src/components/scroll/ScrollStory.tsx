@@ -1,12 +1,12 @@
 'use client';
 
+import { ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
 import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
 import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
 import { SceneIndicator } from '@/components/scroll/SceneIndicator';
-import { ArrowRight } from 'lucide-react';
 
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
@@ -41,25 +41,25 @@ export function ScrollStory() {
   }, []);
 
   const transforms = useMemo(() => {
-    const stage1 = clamp(progress / 0.5, 0, 1);
-    const stage2 = clamp((progress - 0.5) / 0.5, 0, 1);
+    const heroToServices = clamp(progress / 0.35, 0, 1);
+    const servicesToAbout = clamp((progress - 0.68) / 0.32, 0, 1);
 
     return {
-      heroLeftX: `${-120 * stage1}vw`,
-      heroLeftBlur: `${12 * stage1}px`,
-      heroLeftOpacity: 1 - 0.55 * stage1,
+      heroLeftX: `${-120 * heroToServices}vw`,
+      heroLeftBlur: `${12 * heroToServices}px`,
+      heroLeftOpacity: 1 - 0.55 * heroToServices,
 
-      heroRightX: `${120 * stage1}vw`,
-      heroRightBlur: `${12 * stage1}px`,
-      heroRightOpacity: 1 - 0.55 * stage1,
+      heroRightX: `${120 * heroToServices}vw`,
+      heroRightBlur: `${12 * heroToServices}px`,
+      heroRightOpacity: 1 - 0.55 * heroToServices,
 
-      servicesOpacity: clamp(stage1 * 1.15, 0, 1),
-      servicesY: `${28 - 28 * stage1}px`,
-      servicesBlur: `${14 - 14 * stage1}px`,
+      servicesOpacity: clamp(heroToServices * 1.15, 0, 1),
+      servicesY: `${28 - 28 * heroToServices}px`,
+      servicesBlur: `${14 - 14 * heroToServices}px`,
 
-      aboutOpacity: clamp(stage2 * 1.15, 0, 1),
-      aboutY: `${28 - 28 * stage2}px`,
-      aboutBlur: `${14 - 14 * stage2}px`,
+      aboutOpacity: clamp(servicesToAbout * 1.15, 0, 1),
+      aboutY: `${28 - 28 * servicesToAbout}px`,
+      aboutBlur: `${14 - 14 * servicesToAbout}px`,
     };
   }, [progress]);
 
@@ -71,34 +71,34 @@ export function ScrollStory() {
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
           <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
-<div className="pointer-events-none absolute inset-0 z-10">
-  <div
-    className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
-    style={{
-      transform: `translateX(${transforms.heroLeftX})`,
-      filter: `blur(${transforms.heroLeftBlur})`,
-      opacity: transforms.heroLeftOpacity,
-      transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-    }}
-  >
-    <HeroLeftScene />
-  </div>
+            <div className="pointer-events-none absolute inset-0 z-10">
+              <div
+                className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
+                style={{
+                  transform: `translateX(${transforms.heroLeftX})`,
+                  filter: `blur(${transforms.heroLeftBlur})`,
+                  opacity: transforms.heroLeftOpacity,
+                  transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                }}
+              >
+                <HeroLeftScene />
+              </div>
 
-  <Container className="pointer-events-none relative h-full">
-    <div
-      className="pointer-events-auto absolute top-[10px] w-[540px]"
-      style={{
-        right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
-        transform: `translateX(${transforms.heroRightX})`,
-        filter: `blur(${transforms.heroRightBlur})`,
-        opacity: transforms.heroRightOpacity,
-        transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-      }}
-    >
-      <HeroRightScene />
-    </div>
-  </Container>
-</div>
+              <Container className="pointer-events-none relative h-full">
+                <div
+                  className="pointer-events-auto absolute top-[10px] w-[540px]"
+                  style={{
+                    right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+                    transform: `translateX(${transforms.heroRightX})`,
+                    filter: `blur(${transforms.heroRightBlur})`,
+                    opacity: transforms.heroRightOpacity,
+                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                  }}
+                >
+                  <HeroRightScene />
+                </div>
+              </Container>
+            </div>
 
             <div
               className={cn(
@@ -142,9 +142,9 @@ export function ScrollStory() {
 
 function ServicesScene() {
   return (
-    <div className="flex h-full items-center">
+    <div className="flex h-full items-start pt-[36px] md:pt-[40px] xl:pt-[44px]">
       <Container>
-        <div className="flex flex-col gap-8 xl:gap-10">
+        <div className="flex flex-col gap-7 xl:gap-8">
           <div className="flex items-start justify-between gap-6">
             <h2 className="font-heading text-[64px] leading-[0.92] tracking-[-0.05em] text-[var(--text)]">
               Услуги
@@ -155,7 +155,7 @@ function ServicesScene() {
             </div>
           </div>
 
-          <div className="grid grid-cols-[1fr_1fr_1fr] gap-6">
+          <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
             <ServiceCard
               title="Междугородние перевозки"
               description={
@@ -245,23 +245,23 @@ function ServiceCard({
 }) {
   if (isAdr) {
     return (
-      <div className="relative rounded-[32px] p-[2px]">
-        <div className="service-adr-border pointer-events-none absolute inset-0 rounded-[32px]" />
-        <div className="relative flex h-[308px] flex-col rounded-[30px] bg-[var(--surface)] px-10 py-10">
+      <div className="relative rounded-[28px] p-[2px]">
+        <div className="service-adr-border pointer-events-none absolute inset-0 rounded-[28px]" />
+        <div className="relative flex h-[272px] flex-col rounded-[26px] bg-[var(--surface)] px-8 py-8">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="font-heading text-[28px] leading-[1.02] tracking-[-0.03em] text-[var(--text)]">
+            <h3 className="font-heading text-[15px] leading-[1.12] tracking-[-0.02em] text-[var(--text)]">
               {title}
             </h3>
 
             {accentLabel ? (
-              <div className="pt-[2px] text-[24px] font-semibold leading-none tracking-[-0.03em] text-[var(--accent-1)]">
+              <div className="pt-[2px] text-[15px] font-semibold leading-none tracking-[-0.02em] text-[var(--accent-1)]">
                 {accentLabel}
               </div>
             ) : null}
           </div>
 
           <div
-            className="mt-10 text-[18px] font-normal leading-[1.32] tracking-[-0.02em] text-[var(--text-muted)]"
+            className="mt-8 text-[13px] font-normal leading-[1.34] tracking-[-0.01em] text-[var(--text-muted)]"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
@@ -276,15 +276,15 @@ function ServiceCard({
   }
 
   return (
-    <div className="flex h-[308px] flex-col rounded-[32px] bg-[var(--surface)] px-10 py-10">
+    <div className="flex h-[272px] flex-col rounded-[28px] bg-[var(--surface)] px-8 py-8">
       <div className="flex items-start justify-between gap-4">
-        <h3 className="font-heading text-[28px] leading-[1.02] tracking-[-0.03em] text-[var(--text)]">
+        <h3 className="font-heading text-[15px] leading-[1.12] tracking-[-0.02em] text-[var(--text)]">
           {title}
         </h3>
       </div>
 
       <div
-        className="mt-10 text-[18px] font-normal leading-[1.32] tracking-[-0.02em] text-[var(--text-muted)]"
+        className="mt-8 text-[13px] font-normal leading-[1.34] tracking-[-0.01em] text-[var(--text-muted)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {description}
@@ -307,7 +307,7 @@ function ServiceTallCard({
   ctaLabel: string;
 }) {
   return (
-    <div className="relative row-span-2 h-[640px] overflow-hidden rounded-[32px] bg-[var(--accent-2)]">
+    <div className="relative row-span-2 h-[564px] overflow-hidden rounded-[28px] bg-[var(--accent-2)]">
       <img
         src="/services/expedition-bg.webp"
         alt=""
@@ -316,20 +316,20 @@ function ServiceTallCard({
 
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.10)_0%,rgba(38,41,46,0.16)_30%,rgba(38,41,46,0.48)_66%,rgba(38,41,46,0.88)_100%)]" />
 
-      <div className="relative flex h-full flex-col px-10 py-10">
+      <div className="relative flex h-full flex-col px-8 py-8">
         <div className="mt-auto">
-          <h3 className="font-heading text-[28px] leading-[1.04] tracking-[-0.03em] text-white">
+          <h3 className="font-heading text-[15px] leading-[1.14] tracking-[-0.02em] text-white">
             {title}
           </h3>
 
           <div
-            className="mt-10 text-[18px] font-normal leading-[1.34] tracking-[-0.02em] text-white/88"
+            className="mt-8 text-[13px] font-normal leading-[1.34] tracking-[-0.01em] text-white/88"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
           </div>
 
-          <div className="mt-10">
+          <div className="mt-8">
             <CardCTA label={ctaLabel} darkButton />
           </div>
         </div>
@@ -346,10 +346,10 @@ function CardCTA({
   darkButton: boolean;
 }) {
   return (
-    <div className="flex h-[68px] items-center justify-between rounded-[16px] bg-[var(--bg)] px-7">
+    <div className="flex h-[52px] items-center justify-between rounded-[14px] bg-[var(--bg)] px-5">
       <span
         className={cn(
-          'text-[20px] font-semibold lowercase leading-none tracking-[-0.02em]',
+          'text-[13px] font-semibold lowercase leading-none tracking-[-0.02em]',
           darkButton ? 'text-white' : 'text-[var(--text)]',
         )}
         style={{ fontFamily: 'var(--font-body-text)' }}
@@ -359,11 +359,11 @@ function CardCTA({
 
       <div
         className={cn(
-          'inline-flex h-[52px] w-[78px] items-center justify-center rounded-[12px]',
+          'inline-flex h-[40px] w-[56px] items-center justify-center rounded-[10px]',
           darkButton ? 'bg-[rgba(255,255,255,0.06)] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
         )}
       >
-        <ArrowRight size={30} strokeWidth={2.2} />
+        <ArrowRight size={22} strokeWidth={2.1} />
       </div>
     </div>
   );
