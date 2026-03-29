@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
 import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
 import { ServicesSection } from '@/components/sections/ServicesSection';
-import { AboutSection } from '@/components/sections/About';
+import { About } from '@/components/sections/About';
 import { SceneIndicator } from '@/components/scroll/SceneIndicator';
 import { Container } from '@/components/layout/Container';
 
