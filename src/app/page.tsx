@@ -1,7 +1,7 @@
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { HeroServicesStage } from '@/components/scroll/HeroServicesStage';
-import { ServicesSection } from '@/components/sections/ServicesSection';
+import { GeographySection } from '@/components/sections/GeographySection';
 
 export default function Home() {
   return (
@@ -10,13 +10,13 @@ export default function Home() {
 
       <main>
         <HeroServicesStage />
-        <div className="-mt-[56px] pb-20 pt-0 md:-mt-[64px] md:pb-24 xl:-mt-[72px] xl:pb-28">
-          <ServicesSection />
-        </div>
+
+        <section className="pb-20 pt-8 md:pb-24 md:pt-10 xl:pb-28 xl:pt-12">
+          <GeographySection />
+        </section>
       </main>
 
       <Footer />
     </div>
   );
 }
-
