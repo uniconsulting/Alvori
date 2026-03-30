@@ -34,7 +34,7 @@ export function GeographyGlobe({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-  const phiRef = useRef(-1.75);
+  const phiRef = useRef(-2.05);
   const thetaRef = useRef(0.16);
   const scaleRef = useRef(1.18);
 
