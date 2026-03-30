@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { sitePath } from '@/lib/site-path';
 
 type GalleryItem = {
@@ -9,6 +9,12 @@ type GalleryItem = {
   alt: string;
   className: string;
   baseZ: number;
+  delayMs: number;
+};
+
+type ParallaxView = {
+  x: number;
+  y: number;
 };
 
 const GALLERY_ITEMS: GalleryItem[] = [
@@ -18,6 +24,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: 'Тягач в парке',
     className: 'left-[64px] top-[92px] h-[286px] w-[428px] rotate-[-3deg]',
     baseZ: 30,
+    delayMs: 120,
   },
   {
     id: 'top',
@@ -25,6 +32,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: 'Грузовой состав сверху справа',
     className: 'left-[258px] top-[20px] h-[188px] w-[282px] rotate-[8deg]',
     baseZ: 20,
+    delayMs: 240,
   },
   {
     id: 'bottom',
@@ -32,6 +40,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: 'Полуприцеп снизу слева',
     className: 'left-[0px] top-[232px] h-[178px] w-[262px] rotate-[-9deg]',
     baseZ: 10,
+    delayMs: 360,
   },
   {
     id: 'back',
@@ -39,33 +48,120 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: 'Логистика и парк на заднем плане',
     className: 'left-[308px] top-[232px] h-[154px] w-[224px] rotate-[10deg]',
     baseZ: 0,
+    delayMs: 480,
   },
 ];
 
 export function AutoParkGallery() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  const currentRef = useRef<ParallaxView>({ x: 0, y: 0 });
+  const targetRef = useRef<ParallaxView>({ x: 0, y: 0 });
+  const velocityRef = useRef<ParallaxView>({ x: 0, y: 0 });
+  const frameRef = useRef<number | null>(null);
+
+  const [view, setView] = useState<ParallaxView>({ x: 0, y: 0 });
   const items = useMemo(() => GALLERY_ITEMS, []);
 
-  return (
-    <div className="relative z-[40] h-[504px] overflow-visible">
-      {items.map((item) => {
-        const isActive = activeId === item.id;
-        const isDimmed = activeId !== null && activeId !== item.id;
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
 
-        return (
-          <GalleryCard
-            key={item.id}
-            src={item.src}
-            alt={item.alt}
-            className={item.className}
-            isActive={isActive}
-            isDimmed={isDimmed}
-            baseZ={item.baseZ}
-            onEnter={() => setActiveId(item.id)}
-            onLeave={() => setActiveId(null)}
-          />
-        );
-      })}
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRevealed(true);
+        }
+      },
+      {
+        threshold: 0.18,
+        rootMargin: '120px 0px 120px 0px',
+      },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const stiffness = 0.08;
+    const damping = 0.84;
+
+    const step = () => {
+      const current = currentRef.current;
+      const target = targetRef.current;
+      const velocity = velocityRef.current;
+
+      (Object.keys(current) as Array<keyof ParallaxView>).forEach((key) => {
+        const force = (target[key] - current[key]) * stiffness;
+        velocity[key] = (velocity[key] + force) * damping;
+        current[key] = current[key] + velocity[key];
+      });
+
+      setView({ ...current });
+      frameRef.current = requestAnimationFrame(step);
+    };
+
+    frameRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (window.innerWidth < 1024) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width;
+    const py = (event.clientY - rect.top) / rect.height;
+
+    targetRef.current = {
+      x: (px - 0.5) * 12,
+      y: (py - 0.5) * 10,
+    };
+  };
+
+  const handleMouseLeave = () => {
+    targetRef.current = { x: 0, y: 0 };
+    setActiveId(null);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative z-[40] h-[504px] overflow-visible"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div
+        className="relative h-full will-change-transform"
+        style={{
+          transform: `translate3d(${view.x}px, ${view.y}px, 0)`,
+        }}
+      >
+        {items.map((item) => {
+          const isActive = activeId === item.id;
+          const isDimmed = activeId !== null && activeId !== item.id;
+
+          return (
+            <GalleryCard
+              key={item.id}
+              src={item.src}
+              alt={item.alt}
+              className={item.className}
+              isActive={isActive}
+              isDimmed={isDimmed}
+              isRevealed={isRevealed}
+              delayMs={item.delayMs}
+              baseZ={item.baseZ}
+              onEnter={() => setActiveId(item.id)}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -76,40 +172,46 @@ function GalleryCard({
   className,
   isActive,
   isDimmed,
+  isRevealed,
+  delayMs,
   baseZ,
   onEnter,
-  onLeave,
 }: {
   src: string;
   alt: string;
   className: string;
   isActive: boolean;
   isDimmed: boolean;
+  isRevealed: boolean;
+  delayMs: number;
   baseZ: number;
   onEnter: () => void;
-  onLeave: () => void;
 }) {
   return (
     <div
       className={`group absolute overflow-hidden rounded-[26px] bg-[#26292e] ${className}`}
       onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
       style={{
         zIndex: isActive ? 80 : baseZ,
         transition:
           'transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms cubic-bezier(0.22, 1, 0.36, 1), filter 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 260ms cubic-bezier(0.22, 1, 0.36, 1)',
-        transform: isActive
-          ? 'translateY(-8px) rotate(0deg) scale(1.035)'
-          : undefined,
-        opacity: isDimmed ? 0.9 : 1,
-        filter: isActive
-          ? 'none'
-          : isDimmed
-            ? 'blur(1.2px) saturate(0.92) brightness(0.95)'
-            : 'blur(0.6px)',
+        transform: isRevealed
+          ? isActive
+            ? 'translateY(-8px) rotate(0deg) scale(1.035)'
+            : 'translateY(0) scale(1)'
+          : 'translateY(24px) scale(0.985)',
+        opacity: isRevealed ? (isDimmed ? 0.9 : 1) : 0,
+        filter: isRevealed
+          ? isActive
+            ? 'none'
+            : isDimmed
+              ? 'blur(1.2px) saturate(0.92) brightness(0.95)'
+              : 'blur(0.6px)'
+          : 'blur(10px)',
         boxShadow: isActive
           ? '0 26px 56px rgba(38,41,46,0.22)'
           : '0 18px 44px rgba(38,41,46,0.14)',
+        transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
       }}
     >
       <img
