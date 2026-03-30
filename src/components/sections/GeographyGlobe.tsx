@@ -34,9 +34,9 @@ export function GeographyGlobe({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-const phiRef = useRef(-1.45);
-const thetaRef = useRef(0.16);
-const scaleRef = useRef(1.18);
+  const phiRef = useRef(-1.75);
+  const thetaRef = useRef(0.16);
+  const scaleRef = useRef(1.18);
 
   const dragStartRef = useRef<{
     x: number;
@@ -157,7 +157,7 @@ const scaleRef = useRef(1.18);
 
     const animate = () => {
       if (isActive && !dragStartRef.current) {
-        phiRef.current += 0.00055;=
+        phiRef.current += 0.00055;
       }
 
       globe.update({
@@ -222,15 +222,6 @@ const scaleRef = useRef(1.18);
     setZoomIndex(clamp(nextIndex, 0, ZOOM_STEPS.length - 1));
   };
 
-  const handleWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
-    event.preventDefault();
-    if (event.deltaY > 0) {
-      changeZoom(zoomIndex + 1);
-    } else {
-      changeZoom(zoomIndex - 1);
-    }
-  };
-
   const isMajorMark = (index: number) => index % 5 === 0;
   const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
 
@@ -256,7 +247,6 @@ const scaleRef = useRef(1.18);
             }
           }}
           onTouchEnd={endDrag}
-          onWheel={handleWheel}
         />
 
         {activeCities.map((city) => (
