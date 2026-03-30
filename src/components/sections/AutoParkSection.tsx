@@ -40,21 +40,21 @@ export function AutoParkSection() {
                 <div className="flex items-start gap-5">
                   <CountCard value="15" />
 
-                  <div className="w-[430px] shrink-0">
+                  <div className="w-[552px] shrink-0">
                     <TitleCard label="тягачей" />
                   </div>
 
-                  <div className="w-[356px] shrink-0">
+                  <div className="w-[492px] shrink-0">
                     <TitleCard label="и полуприцепов" dark />
                   </div>
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-[546px] shrink-0">
+                  <div className="w-[552px] shrink-0">
                     <InfoCard brands={TRUCK_BRANDS} points={TRUCK_POINTS} />
                   </div>
 
-                  <div className="w-[356px] shrink-0">
+                  <div className="w-[492px] shrink-0">
                     <InfoCard brands={TRAILER_BRANDS} points={TRAILER_POINTS} />
                   </div>
                 </div>
@@ -94,7 +94,7 @@ function AutoParkBreadcrumb() {
 function CountCard({ value }: { value: string }) {
   return (
     <div className="flex h-[84px] w-[84px] shrink-0 items-center justify-center rounded-[24px] bg-[var(--accent-1)]">
-      <span className="font-heading text-[46px] leading-none tracking-[-0.05em] text-white">
+      <span className="relative top-[-1px] font-heading text-[46px] leading-none tracking-[-0.05em] text-white">
         {value}
       </span>
     </div>
@@ -150,7 +150,7 @@ function InfoCard({
       >
         {points.map((point) => (
           <div key={point} className="flex items-start gap-3">
-            <span className="mt-[1px] text-[22px] leading-none text-[var(--text)]">•</span>
+            <span className="relative top-[2px] text-[22px] leading-none text-[var(--text)]">•</span>
             <span>{point}</span>
           </div>
         ))}
