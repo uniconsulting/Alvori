@@ -32,10 +32,10 @@ export function GeographyGlobe({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-  const phiRef = useRef(0.9);
-  const thetaRef = useRef(0.18);
-  const scaleRef = useRef(1.14);
-
+const phiRef = useRef(-0.62);
+const thetaRef = useRef(0.18);
+const scaleRef = useRef(1.14);
+  
   const dragStartRef = useRef<{
     x: number;
     y: number;
@@ -155,7 +155,7 @@ export function GeographyGlobe({
 
     const animate = () => {
       if (!dragStartRef.current) {
-        phiRef.current += 0.0014;
+        phiRef.current += 0.0009;
       }
 
       globe.update({
