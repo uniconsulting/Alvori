@@ -118,10 +118,10 @@ export function AutoParkGallery() {
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
 
-    targetRef.current = {
-      x: (px - 0.5) * 12,
-      y: (py - 0.5) * 10,
-    };
+targetRef.current = {
+  x: (px - 0.5) * 8,
+  y: (py - 0.5) * 6,
+};
   };
 
   const handleMouseLeave = () => {
@@ -191,28 +191,28 @@ function GalleryCard({
     <div
       className={`group absolute overflow-hidden rounded-[26px] bg-[#26292e] ${className}`}
       onMouseEnter={onEnter}
-      style={{
-        zIndex: isActive ? 80 : baseZ,
-        transition:
-          'transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms cubic-bezier(0.22, 1, 0.36, 1), filter 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 260ms cubic-bezier(0.22, 1, 0.36, 1)',
-        transform: isRevealed
-          ? isActive
-            ? 'translateY(-8px) rotate(0deg) scale(1.035)'
-            : 'translateY(0) scale(1)'
-          : 'translateY(24px) scale(0.985)',
-        opacity: isRevealed ? (isDimmed ? 0.9 : 1) : 0,
-        filter: isRevealed
-          ? isActive
-            ? 'none'
-            : isDimmed
-              ? 'blur(1.2px) saturate(0.92) brightness(0.95)'
-              : 'blur(0.6px)'
-          : 'blur(10px)',
-        boxShadow: isActive
-          ? '0 26px 56px rgba(38,41,46,0.22)'
-          : '0 18px 44px rgba(38,41,46,0.14)',
-        transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
-      }}
+style={{
+  zIndex: isActive ? 80 : baseZ,
+  transition:
+    'transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1), filter 180ms cubic-bezier(0.22, 1, 0.36, 1), border-color 180ms cubic-bezier(0.22, 1, 0.36, 1)',
+  transform: isRevealed
+    ? isActive
+      ? 'translateY(-8px) rotate(0deg) scale(1.035)'
+      : 'translateY(0) scale(1)'
+    : 'translateY(24px) scale(0.985)',
+  opacity: isRevealed ? (isDimmed ? 0.9 : 1) : 0,
+  filter: isRevealed
+    ? isActive
+      ? 'none'
+      : isDimmed
+        ? 'blur(0.8px) saturate(0.95) brightness(0.97)'
+        : 'blur(0.35px)'
+    : 'blur(10px)',
+  boxShadow: isActive
+    ? '0 26px 56px rgba(38,41,46,0.22)'
+    : '0 18px 44px rgba(38,41,46,0.14)',
+  transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
+}}
     >
       <img
         src={src}
