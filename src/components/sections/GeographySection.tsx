@@ -107,43 +107,42 @@ export function GeographySection() {
                 </div>
               </div>
 
-              <div className="pt-12">
-                <div className="flex items-stretch gap-5">
-                  <Link
-                    href="/calculator"
-                    className="group inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-white shadow-[0_12px_28px_rgba(250,176,33,0.24)] transition-[transform,box-shadow,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:shadow-[0_18px_34px_rgba(250,176,33,0.30)] hover:brightness-[1.02]"
-                  >
-                    <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
-                    <span
-                      className="text-[18px] font-semibold tracking-[-0.02em]"
-                      style={{ fontFamily: 'var(--font-body-text)' }}
-                    >
-                      Открыть калькулятор
-                    </span>
-                  </Link>
+<div className="pt-12">
+  <div className="flex items-stretch gap-5">
+    <Link
+      href="/calculator"
+      className="group inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-white shadow-[0_12px_28px_rgba(250,176,33,0.24)] transition-[transform,box-shadow,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:shadow-[0_18px_34px_rgba(250,176,33,0.30)] hover:brightness-[1.02]"
+    >
+      <Calculator size={20} strokeWidth={2.1} className="shrink-0" />
+      <span
+        className="text-[18px] font-semibold tracking-[-0.02em]"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        Открыть калькулятор
+      </span>
+    </Link>
 
-                  <div className="inline-flex min-w-[306px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
-                    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                      активное направление
-                    </p>
+    <div className="inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
+      <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+        активное направление
+      </p>
 
-                    <div className="mt-2 flex items-center gap-3">
-                      <Route
-                        size={18}
-                        strokeWidth={2.05}
-                        className="shrink-0 text-[var(--accent-1)]"
-                      />
+      <div className="mt-2 flex items-center gap-3">
+        <Route
+          size={18}
+          strokeWidth={2.05}
+          className="shrink-0 text-[var(--accent-1)]"
+        />
 
-                      <p className="text-[18px] font-semibold tracking-[-0.02em] text-white">
-                        {from.label} — {to.label}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <p className="whitespace-nowrap text-[18px] font-semibold tracking-[-0.02em] text-white">
+          {from.label} — {to.label}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
-            <div className="pt-5">
+            <div className="pt-5 -ml-8 xl:-ml-10">
               {shouldMountGlobe ? (
                 <GeographyGlobe
                   activeRouteIndex={activeRouteIndex}
