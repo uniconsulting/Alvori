@@ -35,7 +35,7 @@ export function GeographyGlobe({
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
   const phiRef = useRef(-2.75);
-  const thetaRef = useRef(0.04);
+  const thetaRef = useRef(1.75);
   const scaleRef = useRef(1.18);
 
   const dragStartRef = useRef<{
