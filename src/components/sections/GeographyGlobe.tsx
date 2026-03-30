@@ -26,16 +26,18 @@ const SCALE_MARKS = Array.from({ length: 16 }, (_, index) => index);
 
 export function GeographyGlobe({
   activeRouteIndex,
+  isActive,
 }: {
   activeRouteIndex: number;
+  isActive: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-const phiRef = useRef(-0.62);
-const thetaRef = useRef(0.18);
-const scaleRef = useRef(1.14);
-  
+  const phiRef = useRef(-0.62);
+  const thetaRef = useRef(0.18);
+  const scaleRef = useRef(1.14);
+
   const dragStartRef = useRef<{
     x: number;
     y: number;
@@ -154,7 +156,7 @@ const scaleRef = useRef(1.14);
     globeRef.current = globe;
 
     const animate = () => {
-      if (!dragStartRef.current) {
+      if (isActive && !dragStartRef.current) {
         phiRef.current += 0.0009;
       }
 
@@ -183,7 +185,7 @@ const scaleRef = useRef(1.14);
       globe.destroy();
       globeRef.current = null;
     };
-  }, [isDark]);
+  }, [isDark, isActive]);
 
   const startDrag = (clientX: number, clientY: number) => {
     dragStartRef.current = {
