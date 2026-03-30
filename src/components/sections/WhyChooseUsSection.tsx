@@ -4,12 +4,12 @@ import {
   Clock3,
   Dot,
   FileText,
-  Route,
   ShieldCheck,
   SlidersHorizontal,
   Truck,
 } from 'lucide-react';
 import { Container } from '@/components/layout/Container';
+import { sitePath } from '@/lib/site-path';
 
 export function WhyChooseUsSection() {
   return (
@@ -38,8 +38,8 @@ export function WhyChooseUsSection() {
               </p>
             </div>
 
-            <div className="grid grid-cols-[1.05fr_1fr_1fr] gap-5">
-              <WhyCardTall
+            <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
+              <WhyCardTallImage
                 icon={Truck}
                 title="Собственный автопарк"
                 description={
@@ -51,35 +51,10 @@ export function WhyChooseUsSection() {
                     и обеспечивать предсказуемость работы.
                   </>
                 }
+                imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
               />
 
-              <WhyCard
-                icon={Route}
-                title="Экспедиционное направление"
-                description={
-                  <>
-                    Подбираем оптимальный формат перевозки
-                    <br />
-                    под маршрут, сроки и специфику задачи.
-                  </>
-                }
-              />
-
-              <WhyCard
-                icon={ShieldCheck}
-                title="Прозрачные условия"
-                description={
-                  <>
-                    Понятная логика взаимодействия,
-                    <br />
-                    согласованные условия
-                    <br />
-                    и без лишней сложности.
-                  </>
-                }
-              />
-
-              <WhyCardSmall
+              <WhyCardCompact
                 icon={Clock3}
                 title="Контроль сроков"
                 description={
@@ -91,7 +66,7 @@ export function WhyChooseUsSection() {
                 }
               />
 
-              <WhyCardSmall
+              <WhyCardCompact
                 icon={FileText}
                 title="Документы"
                 description={
@@ -103,7 +78,7 @@ export function WhyChooseUsSection() {
                 }
               />
 
-              <WhyCardSmall
+              <WhyCardMedium
                 icon={SlidersHorizontal}
                 title="Под задачу клиента"
                 description={
@@ -111,6 +86,20 @@ export function WhyChooseUsSection() {
                     Собираем маршрут
                     <br />
                     и формат работы под задачу.
+                  </>
+                }
+              />
+
+              <WhyCardMedium
+                icon={ShieldCheck}
+                title="Прозрачные условия"
+                description={
+                  <>
+                    Понятная логика взаимодействия,
+                    <br />
+                    согласованные условия
+                    <br />
+                    и без лишней сложности.
                   </>
                 }
               />
@@ -144,7 +133,50 @@ function WhyChooseUsBreadcrumb() {
   );
 }
 
-function WhyCardTall({
+function WhyCardTallImage({
+  icon: Icon,
+  title,
+  description,
+  imageSrc,
+}: {
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+  title: string;
+  description: React.ReactNode;
+  imageSrc: string;
+}) {
+  return (
+    <div className="relative row-span-2 min-h-[596px] overflow-hidden rounded-[32px] bg-[#26292e] shadow-[0_18px_44px_rgba(38,41,46,0.12)]">
+      <img
+        src={imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.18)_0%,rgba(38,41,46,0.34)_34%,rgba(38,41,46,0.72)_76%,rgba(38,41,46,0.94)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/12" />
+
+      <div className="relative flex h-full flex-col px-8 py-8">
+        <div className="mt-auto">
+          <div className="flex items-start gap-[10px]">
+            <Icon size={20} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+            <h3 className="font-heading text-[24px] leading-[1.06] tracking-[-0.028em] text-white">
+              {title}
+            </h3>
+          </div>
+
+          <div
+            className="mt-8 text-[17px] font-normal leading-[1.34] tracking-[-0.014em] text-white/84"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            {description}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WhyCardCompact({
   icon: Icon,
   title,
   description,
@@ -154,29 +186,25 @@ function WhyCardTall({
   description: React.ReactNode;
 }) {
   return (
-    <div className="row-span-2 flex min-h-[472px] flex-col rounded-[30px] bg-[#26292e] px-8 py-8 shadow-[0_18px_44px_rgba(38,41,46,0.12)]">
+    <div className="flex min-h-[132px] flex-col rounded-[28px] bg-[var(--surface)] px-6 py-6 shadow-[0_10px_24px_rgba(38,41,46,0.04)]">
       <div className="flex items-start gap-[10px]">
-        <Icon size={20} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
-        <h3 className="font-heading text-[24px] leading-[1.06] tracking-[-0.028em] text-white">
+        <Icon size={17} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
+        <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.02em] text-[var(--text)]">
           {title}
         </h3>
       </div>
 
       <div
-        className="mt-8 text-[17px] font-normal leading-[1.34] tracking-[-0.014em] text-white/82"
+        className="mt-5 text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {description}
-      </div>
-
-      <div className="mt-auto pt-8">
-        <div className="h-[1px] w-full bg-white/10" />
       </div>
     </div>
   );
 }
 
-function WhyCard({
+function WhyCardMedium({
   icon: Icon,
   title,
   description,
@@ -196,34 +224,6 @@ function WhyCard({
 
       <div
         className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-[var(--text-muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        {description}
-      </div>
-    </div>
-  );
-}
-
-function WhyCardSmall({
-  icon: Icon,
-  title,
-  description,
-}: {
-  icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
-  title: string;
-  description: React.ReactNode;
-}) {
-  return (
-    <div className="flex min-h-[164px] flex-col rounded-[24px] bg-[var(--surface)] px-6 py-6 shadow-[0_10px_24px_rgba(38,41,46,0.04)]">
-      <div className="flex items-start gap-[10px]">
-        <Icon size={17} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
-        <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.02em] text-[var(--text)]">
-          {title}
-        </h3>
-      </div>
-
-      <div
-        className="mt-5 text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {description}
