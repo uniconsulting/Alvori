@@ -78,7 +78,7 @@ export function WhyChooseUsSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
+            <div className="grid auto-rows-[minmax(132px,auto)] grid-cols-[1fr_1fr_1fr] gap-5">
               <RevealCard isVisible={isVisible} delayMs={120} className="row-span-2">
                 <TiltCardShell className="h-full">
                   <WhyCardTallImage
@@ -344,7 +344,7 @@ function WhyCardTallImage({
   showArrow?: boolean;
 }) {
   return (
-    <div className="relative min-h-[540px] overflow-visible">
+    <div className="relative h-[540px] overflow-visible">
       <div className="relative h-full overflow-hidden rounded-[32px] bg-[#26292e]">
         <img
           src={imageSrc}
@@ -402,7 +402,7 @@ function WhyCardCompactImage({
   imageSrc: string;
 }) {
   return (
-    <div className="relative min-h-[116px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-6 py-6">
+    <div className="relative h-[132px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-6 py-6">
       <img
         src={imageSrc}
         alt=""
@@ -443,7 +443,7 @@ function WhyCardMediumImage({
   imageSrc: string;
 }) {
   return (
-    <div className="relative min-h-[204px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7">
+    <div className="relative h-[224px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7">
       <img
         src={imageSrc}
         alt=""
