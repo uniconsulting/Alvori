@@ -34,9 +34,9 @@ export function GeographyGlobe({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
 
-  const phiRef = useRef(-0.62);
-  const thetaRef = useRef(0.18);
-  const scaleRef = useRef(1.14);
+const phiRef = useRef(-1.45);
+const thetaRef = useRef(0.16);
+const scaleRef = useRef(1.18);
 
   const dragStartRef = useRef<{
     x: number;
@@ -148,7 +148,7 @@ export function GeographyGlobe({
       arcHeight: 0.14,
       markerElevation: 0.04,
       scale: scaleRef.current,
-      offset: [0, -10],
+      offset: [0, -18],
       markers: markersRef.current,
       arcs: arcsRef.current,
     });
@@ -157,7 +157,7 @@ export function GeographyGlobe({
 
     const animate = () => {
       if (isActive && !dragStartRef.current) {
-        phiRef.current += 0.0009;
+        phiRef.current += 0.00055;=
       }
 
       globe.update({
