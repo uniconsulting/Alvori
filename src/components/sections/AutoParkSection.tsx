@@ -1,6 +1,7 @@
 'use client';
 
 import { Dot } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { AutoParkGallery } from '@/components/sections/AutoParkGallery';
 
@@ -21,9 +22,36 @@ const TRAILER_POINTS = [
   'Страхование груза',
 ];
 
+function cn(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(' ');
+}
+
 export function AutoParkSection() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsActive(true);
+        }
+      },
+      {
+        threshold: 0.16,
+        rootMargin: '120px 0px 120px 0px',
+      },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="h-full">
+    <div ref={sectionRef} className="h-full">
       <Container>
         <div
           className="px-[14px] md:px-[18px] xl:px-[22px]"
@@ -38,44 +66,92 @@ export function AutoParkSection() {
           }
         >
           <div className="flex flex-col gap-8 xl:gap-10">
-            <div className="flex items-center justify-between gap-6">
-              <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
-                Наш автопарк
-              </h2>
+            <div
+              className={cn(
+                'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                isActive
+                  ? 'translate-y-0 opacity-100 blur-0'
+                  : 'translate-y-[18px] opacity-0 blur-[10px]',
+              )}
+            >
+              <div className="flex items-center justify-between gap-6">
+                <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+                  Наш автопарк
+                </h2>
 
-              <AutoParkBreadcrumb />
+                <AutoParkBreadcrumb />
+              </div>
             </div>
 
             <div className="grid grid-cols-[1.82fr_1fr] items-start gap-8 xl:gap-10">
               <div className="flex flex-col gap-5">
                 <div className="flex items-start gap-5">
-                  <CountCard value="15" />
+                  <RevealBlock isActive={isActive} delayMs={140}>
+                    <CountCard value="15" />
+                  </RevealBlock>
 
-                  <div className="w-[var(--truck-title-w)] shrink-0">
+                  <RevealBlock isActive={isActive} delayMs={240} className="w-[var(--truck-title-w)] shrink-0">
                     <TitleCard label="тягачей" />
-                  </div>
+                  </RevealBlock>
 
-                  <div className="w-[var(--trailer-title-w)] shrink-0">
+                  <RevealBlock isActive={isActive} delayMs={340} className="w-[var(--trailer-title-w)] shrink-0">
                     <TitleCard label="и полуприцепов" dark />
-                  </div>
+                  </RevealBlock>
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-[calc(var(--count-w)+var(--section-gap)+var(--truck-title-w))] shrink-0">
+                  <RevealBlock
+                    isActive={isActive}
+                    delayMs={440}
+                    className="w-[calc(var(--count-w)+var(--section-gap)+var(--truck-title-w))] shrink-0"
+                  >
                     <InfoCard brands={TRUCK_BRANDS} points={TRUCK_POINTS} />
-                  </div>
+                  </RevealBlock>
 
-                  <div className="w-[var(--trailer-title-w)] shrink-0">
+                  <RevealBlock
+                    isActive={isActive}
+                    delayMs={540}
+                    className="w-[var(--trailer-title-w)] shrink-0"
+                  >
                     <InfoCard brands={TRAILER_BRANDS} points={TRAILER_POINTS} />
-                  </div>
+                  </RevealBlock>
                 </div>
               </div>
 
-              <AutoParkGallery />
+              <RevealBlock isActive={isActive} delayMs={340}>
+                <AutoParkGallery />
+              </RevealBlock>
             </div>
           </div>
         </div>
       </Container>
+    </div>
+  );
+}
+
+function RevealBlock({
+  children,
+  isActive,
+  delayMs,
+  className,
+}: {
+  children: React.ReactNode;
+  isActive: boolean;
+  delayMs: number;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+        isActive
+          ? 'translate-y-0 opacity-100 blur-0'
+          : 'translate-y-[18px] opacity-0 blur-[10px]',
+        className,
+      )}
+      style={{ transitionDelay: `${delayMs}ms` }}
+    >
+      {children}
     </div>
   );
 }
@@ -105,7 +181,7 @@ function AutoParkBreadcrumb() {
 function CountCard({ value }: { value: string }) {
   return (
     <div className="autopark-frame-hover flex h-[var(--top-h)] w-[var(--count-w)] shrink-0 items-center justify-center rounded-[22px] bg-[var(--accent-1)]">
-      <span className="autopark-count-premium relative left-[-1px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white">
+      <span className="autopark-count-premium relative left-[-2px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white">
         {value}
       </span>
     </div>
