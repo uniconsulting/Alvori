@@ -35,17 +35,36 @@ export function AutoParkSection() {
               <AutoParkBreadcrumb />
             </div>
 
-            <div className="grid grid-cols-[1.8fr_1fr] items-start gap-8 xl:gap-10">
+            <div className="grid grid-cols-[1.82fr_1fr] items-start gap-8 xl:gap-10">
               <div className="flex flex-col gap-5">
-                <div className="grid grid-cols-[116px_1fr_1fr] gap-5">
+                <div className="flex gap-5">
                   <CountCard value="15" />
-                  <TitleCard label="тягачей" />
-                  <TitleCard label="и полуприцепов" dark />
+
+                  <div className="flex min-w-0 flex-1 gap-5">
+                    <div className="w-[388px] shrink-0">
+                      <TitleCard label="тягачей" />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <TitleCard label="и полуприцепов" dark />
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-[calc(116px+1fr)_1fr] gap-5">
-                  <InfoCard brands={TRUCK_BRANDS} points={TRUCK_POINTS} />
-                  <InfoCard brands={TRAILER_BRANDS} points={TRAILER_POINTS} />
+                <div className="flex items-start gap-5">
+                  <div className="w-[504px] shrink-0">
+                    <InfoCard
+                      brands={TRUCK_BRANDS}
+                      points={TRUCK_POINTS}
+                    />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <InfoCard
+                      brands={TRAILER_BRANDS}
+                      points={TRAILER_POINTS}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -82,8 +101,8 @@ function AutoParkBreadcrumb() {
 
 function CountCard({ value }: { value: string }) {
   return (
-    <div className="flex h-[116px] items-center justify-center rounded-[30px] bg-[var(--accent-1)]">
-      <span className="font-heading text-[62px] leading-none tracking-[-0.05em] text-white">
+    <div className="flex h-[96px] w-[96px] shrink-0 items-center justify-center rounded-[26px] bg-[var(--accent-1)]">
+      <span className="font-heading text-[52px] leading-none tracking-[-0.05em] text-white">
         {value}
       </span>
     </div>
@@ -101,15 +120,15 @@ function TitleCard({
     <div
       className={
         dark
-          ? 'flex h-[116px] items-center justify-center rounded-[30px] bg-[#26292e]'
-          : 'flex h-[116px] items-center justify-center rounded-[30px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent'
+          ? 'flex h-[96px] items-center justify-center rounded-[26px] bg-[#26292e] px-8'
+          : 'flex h-[96px] items-center justify-center rounded-[26px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent px-8'
       }
     >
       <span
         className={
           dark
-            ? 'font-heading text-[34px] leading-none tracking-[-0.032em] text-white'
-            : 'font-heading text-[34px] leading-none tracking-[-0.032em] text-[var(--text)]'
+            ? 'font-heading text-[30px] leading-none tracking-[-0.032em] text-white'
+            : 'font-heading text-[30px] leading-none tracking-[-0.032em] text-[var(--text)]'
         }
       >
         {label}
@@ -126,20 +145,20 @@ function InfoCard({
   points: string[];
 }) {
   return (
-    <div className="rounded-[30px] bg-[var(--surface)] px-9 py-10">
-      <div className="flex flex-wrap gap-4">
+    <div className="rounded-[26px] bg-[var(--surface)] px-7 py-7">
+      <div className="flex flex-wrap gap-3">
         {brands.map((brand) => (
           <BrandPill key={brand} label={brand} />
         ))}
       </div>
 
       <div
-        className="mt-12 flex flex-col gap-8 text-[18px] font-normal leading-[1.3] tracking-[-0.018em] text-[var(--text)]"
+        className="mt-9 flex flex-col gap-5 text-[16px] font-normal leading-[1.28] tracking-[-0.016em] text-[var(--text)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {points.map((point) => (
-          <div key={point} className="flex items-start gap-4">
-            <span className="mt-[2px] text-[30px] leading-none text-[var(--text)]">•</span>
+          <div key={point} className="flex items-start gap-3">
+            <span className="mt-[1px] text-[24px] leading-none text-[var(--text)]">•</span>
             <span>{point}</span>
           </div>
         ))}
@@ -150,9 +169,9 @@ function InfoCard({
 
 function BrandPill({ label }: { label: string }) {
   return (
-    <div className="inline-flex h-[52px] items-center rounded-[14px] bg-[var(--bg)] px-6">
+    <div className="inline-flex h-[44px] items-center rounded-[12px] bg-[var(--bg)] px-5">
       <span
-        className="text-[18px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
+        className="text-[16px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {label}
