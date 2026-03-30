@@ -1,7 +1,6 @@
 'use client';
 
 import { Dot } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { AutoParkGallery } from '@/components/sections/AutoParkGallery';
 
@@ -27,34 +26,11 @@ function cn(...classes: Array<string | false | null | undefined>) {
 }
 
 export function AutoParkSection() {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsActive(true);
-        }
-      },
-      {
-        threshold: 0.16,
-        rootMargin: '120px 0px 120px 0px',
-      },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div ref={sectionRef} className="h-full">
+    <div className="h-full overflow-visible">
       <Container>
         <div
-          className="px-[14px] md:px-[18px] xl:px-[22px]"
+          className="overflow-visible px-[14px] md:px-[18px] xl:px-[22px]"
           style={
             {
               '--count-w': '76px',
@@ -65,93 +41,47 @@ export function AutoParkSection() {
             } as React.CSSProperties
           }
         >
-          <div className="flex flex-col gap-8 xl:gap-10">
-            <div
-              className={cn(
-                'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-                isActive
-                  ? 'translate-y-0 opacity-100 blur-0'
-                  : 'translate-y-[18px] opacity-0 blur-[10px]',
-              )}
-            >
-              <div className="flex items-center justify-between gap-6">
-                <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
-                  Наш автопарк
-                </h2>
+          <div className="flex flex-col gap-8 overflow-visible xl:gap-10">
+            <div className="flex items-center justify-between gap-6">
+              <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
+                Наш автопарк
+              </h2>
 
-                <AutoParkBreadcrumb />
-              </div>
+              <AutoParkBreadcrumb />
             </div>
 
-            <div className="grid grid-cols-[1.82fr_1fr] items-start gap-8 xl:gap-10">
-              <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-[1.82fr_1fr] items-start gap-8 overflow-visible xl:gap-10">
+              <div className="relative z-10 flex flex-col gap-5">
                 <div className="flex items-start gap-5">
-                  <RevealBlock isActive={isActive} delayMs={140}>
-                    <CountCard value={15} isActive={isActive} />
-                  </RevealBlock>
+                  <CountCard value={15} />
 
-                  <RevealBlock isActive={isActive} delayMs={240} className="w-[var(--truck-title-w)] shrink-0">
+                  <div className="w-[var(--truck-title-w)] shrink-0">
                     <TitleCard label="тягачей" />
-                  </RevealBlock>
+                  </div>
 
-                  <RevealBlock isActive={isActive} delayMs={340} className="w-[var(--trailer-title-w)] shrink-0">
+                  <div className="w-[var(--trailer-title-w)] shrink-0">
                     <TitleCard label="и полуприцепов" dark />
-                  </RevealBlock>
+                  </div>
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <RevealBlock
-                    isActive={isActive}
-                    delayMs={440}
-                    className="w-[calc(var(--count-w)+var(--section-gap)+var(--truck-title-w))] shrink-0"
-                  >
+                  <div className="w-[calc(var(--count-w)+var(--section-gap)+var(--truck-title-w))] shrink-0">
                     <InfoCard brands={TRUCK_BRANDS} points={TRUCK_POINTS} />
-                  </RevealBlock>
+                  </div>
 
-                  <RevealBlock
-                    isActive={isActive}
-                    delayMs={540}
-                    className="w-[var(--trailer-title-w)] shrink-0"
-                  >
+                  <div className="w-[var(--trailer-title-w)] shrink-0">
                     <InfoCard brands={TRAILER_BRANDS} points={TRAILER_POINTS} />
-                  </RevealBlock>
+                  </div>
                 </div>
               </div>
 
-              <RevealBlock isActive={isActive} delayMs={340}>
+              <div className="relative z-30 overflow-visible">
                 <AutoParkGallery />
-              </RevealBlock>
+              </div>
             </div>
           </div>
         </div>
       </Container>
-    </div>
-  );
-}
-
-function RevealBlock({
-  children,
-  isActive,
-  delayMs,
-  className,
-}: {
-  children: React.ReactNode;
-  isActive: boolean;
-  delayMs: number;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-        isActive
-          ? 'translate-y-0 opacity-100 blur-0'
-          : 'translate-y-[18px] opacity-0 blur-[10px]',
-        className,
-      )}
-      style={{ transitionDelay: `${delayMs}ms` }}
-    >
-      {children}
     </div>
   );
 }
@@ -178,52 +108,11 @@ function AutoParkBreadcrumb() {
   );
 }
 
-function CountCard({
-  value,
-  isActive,
-}: {
-  value: number;
-  isActive: boolean;
-}) {
-  const [displayValue, setDisplayValue] = useState(0);
-  const hasAnimatedRef = useRef(false);
-
-  useEffect(() => {
-    if (!isActive || hasAnimatedRef.current) return;
-
-    hasAnimatedRef.current = true;
-
-    const duration = 1400;
-    const start = performance.now();
-
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-
-    let frameId = 0;
-
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutCubic(progress);
-      const nextValue = Math.round(value * eased);
-
-      setDisplayValue(nextValue);
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(tick);
-      } else {
-        setDisplayValue(value);
-      }
-    };
-
-    frameId = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(frameId);
-  }, [isActive, value]);
-
+function CountCard({ value }: { value: number }) {
   return (
     <div className="autopark-frame-hover flex h-[var(--top-h)] w-[var(--count-w)] shrink-0 items-center justify-center rounded-[22px] bg-[var(--accent-1)]">
-      <span className="autopark-count-finish relative left-[-2px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white tabular-nums">
-        {displayValue}
+      <span className="relative left-[-2px] top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white tabular-nums">
+        {value}
       </span>
     </div>
   );
@@ -238,18 +127,18 @@ function TitleCard({
 }) {
   return (
     <div
-      className={
+      className={cn(
+        'autopark-frame-hover flex h-[var(--top-h)] items-center justify-center rounded-[24px] px-6',
         dark
-          ? 'autopark-frame-hover flex h-[var(--top-h)] items-center justify-center rounded-[24px] bg-[#26292e] px-6'
-          : 'autopark-frame-hover flex h-[var(--top-h)] items-center justify-center rounded-[24px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent px-6'
-      }
+          ? 'bg-[#26292e]'
+          : 'border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent',
+      )}
     >
       <span
-        className={
-          dark
-            ? 'font-heading text-[26px] leading-none tracking-[-0.03em] text-white'
-            : 'font-heading text-[26px] leading-none tracking-[-0.03em] text-[var(--text)]'
-        }
+        className={cn(
+          'font-heading text-[26px] leading-none tracking-[-0.03em]',
+          dark ? 'text-white' : 'text-[var(--text)]',
+        )}
       >
         {label}
       </span>
