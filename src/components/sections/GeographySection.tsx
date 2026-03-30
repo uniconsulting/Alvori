@@ -1,7 +1,7 @@
 'use client';
 
 import { Dot, Route } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { GeographyGlobe } from '@/components/sections/GeographyGlobe';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
@@ -15,15 +15,45 @@ const DISTRICTS = [
 ];
 
 export function GeographySection() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
+  const [shouldMountGlobe, setShouldMountGlobe] = useState(false);
+  const [isGlobeActive, setIsGlobeActive] = useState(false);
 
   useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry.isIntersecting;
+
+        if (visible) {
+          setShouldMountGlobe(true);
+        }
+
+        setIsGlobeActive(visible);
+      },
+      {
+        threshold: 0.18,
+        rootMargin: '160px 0px 160px 0px',
+      },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isGlobeActive) return;
+
     const interval = window.setInterval(() => {
       setActiveRouteIndex((prev) => (prev + 1) % GEO_ROUTES.length);
     }, 4200);
 
     return () => window.clearInterval(interval);
-  }, []);
+  }, [isGlobeActive]);
 
   const activeRoute = GEO_ROUTES[activeRouteIndex];
 
@@ -36,7 +66,7 @@ export function GeographySection() {
   const to = cityMap.get(activeRoute.to)!;
 
   return (
-    <div className="h-full">
+    <div ref={sectionRef} className="h-full">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="grid grid-cols-[0.92fr_1.08fr] items-stretch gap-10 xl:gap-14">
@@ -97,7 +127,16 @@ export function GeographySection() {
               </div>
             </div>
 
-            <GeographyGlobe activeRouteIndex={activeRouteIndex} />
+            {shouldMountGlobe ? (
+              <GeographyGlobe
+                activeRouteIndex={activeRouteIndex}
+                isActive={isGlobeActive}
+              />
+            ) : (
+              <div className="flex h-full min-h-[560px] items-start justify-center">
+                <div className="h-[540px] w-[540px] max-w-full rounded-full bg-[var(--surface)]/60" />
+              </div>
+            )}
           </div>
         </div>
       </Container>
@@ -148,4 +187,3 @@ function DistrictPill({
     </div>
   );
 }
-
