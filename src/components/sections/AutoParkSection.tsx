@@ -25,7 +25,18 @@ export function AutoParkSection() {
   return (
     <div className="h-full">
       <Container>
-        <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+        <div
+          className="px-[14px] md:px-[18px] xl:px-[22px]"
+          style={
+            {
+              '--count-w': '76px',
+              '--top-h': '78px',
+              '--section-gap': '20px',
+              '--truck-title-w': '360px',
+              '--trailer-title-w': '364px',
+            } as React.CSSProperties
+          }
+        >
           <div className="flex flex-col gap-8 xl:gap-10">
             <div className="flex items-center justify-between gap-6">
               <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
@@ -40,21 +51,21 @@ export function AutoParkSection() {
                 <div className="flex items-start gap-5">
                   <CountCard value="15" />
 
-                  <div className="w-[552px] shrink-0">
+                  <div className="w-[var(--truck-title-w)] shrink-0">
                     <TitleCard label="тягачей" />
                   </div>
 
-                  <div className="w-[492px] shrink-0">
+                  <div className="w-[var(--trailer-title-w)] shrink-0">
                     <TitleCard label="и полуприцепов" dark />
                   </div>
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-[552px] shrink-0">
+                  <div className="w-[calc(var(--count-w)+var(--section-gap)+var(--truck-title-w))] shrink-0">
                     <InfoCard brands={TRUCK_BRANDS} points={TRUCK_POINTS} />
                   </div>
 
-                  <div className="w-[492px] shrink-0">
+                  <div className="w-[var(--trailer-title-w)] shrink-0">
                     <InfoCard brands={TRAILER_BRANDS} points={TRAILER_POINTS} />
                   </div>
                 </div>
@@ -93,8 +104,8 @@ function AutoParkBreadcrumb() {
 
 function CountCard({ value }: { value: string }) {
   return (
-    <div className="flex h-[84px] w-[84px] shrink-0 items-center justify-center rounded-[24px] bg-[var(--accent-1)]">
-      <span className="relative top-[-1px] font-heading text-[46px] leading-none tracking-[-0.05em] text-white">
+    <div className="flex h-[var(--top-h)] w-[var(--count-w)] shrink-0 items-center justify-center rounded-[22px] bg-[var(--accent-1)]">
+      <span className="relative top-[1px] font-heading text-[42px] leading-none tracking-[-0.05em] text-white">
         {value}
       </span>
     </div>
@@ -112,15 +123,15 @@ function TitleCard({
     <div
       className={
         dark
-          ? 'flex h-[84px] items-center justify-center rounded-[24px] bg-[#26292e] px-7'
-          : 'flex h-[84px] items-center justify-center rounded-[24px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent px-7'
+          ? 'flex h-[var(--top-h)] items-center justify-center rounded-[24px] bg-[#26292e] px-6'
+          : 'flex h-[var(--top-h)] items-center justify-center rounded-[24px] border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent px-6'
       }
     >
       <span
         className={
           dark
-            ? 'font-heading text-[27px] leading-none tracking-[-0.03em] text-white'
-            : 'font-heading text-[27px] leading-none tracking-[-0.03em] text-[var(--text)]'
+            ? 'font-heading text-[26px] leading-none tracking-[-0.03em] text-white'
+            : 'font-heading text-[26px] leading-none tracking-[-0.03em] text-[var(--text)]'
         }
       >
         {label}
@@ -137,7 +148,7 @@ function InfoCard({
   points: string[];
 }) {
   return (
-    <div className="rounded-[24px] bg-[var(--surface)] px-6 py-6">
+    <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5">
       <div className="flex flex-wrap gap-3">
         {brands.map((brand) => (
           <BrandPill key={brand} label={brand} />
@@ -149,8 +160,8 @@ function InfoCard({
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {points.map((point) => (
-          <div key={point} className="flex items-start gap-3">
-            <span className="relative top-[2px] text-[22px] leading-none text-[var(--text)]">•</span>
+          <div key={point} className="flex items-center gap-3">
+            <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--text)]" />
             <span>{point}</span>
           </div>
         ))}
