@@ -169,14 +169,14 @@ function WhyCardTallImage({
 
         <div className="relative flex h-full flex-col justify-end px-8 py-8">
           <div className="flex items-start gap-[10px]">
-            <Icon size={20} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
-            <h3 className="font-heading text-[24px] leading-[1.06] tracking-[-0.028em] text-white">
+            <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-white" />
+            <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-white">
               {title}
             </h3>
           </div>
 
           <div
-            className="mt-8 text-[15px] font-normal leading-[1.34] tracking-[-0.014em] text-white/84"
+            className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/84"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
@@ -236,14 +236,14 @@ function WhyCardCompactImage({
 
       <div className="relative flex h-full flex-col justify-end">
         <div className="flex items-start gap-[10px]">
-          <Icon size={17} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
-          <h3 className="font-heading text-[18px] leading-[1.08] tracking-[-0.02em] text-[var(--text)]">
+          <Icon size={18} strokeWidth={2.05} className="mt-[1px] shrink-0 text-[var(--text)]" />
+          <h3 className="font-heading text-[21px] leading-[1.08] tracking-[-0.024em] text-[var(--text)]">
             {title}
           </h3>
         </div>
 
         <div
-          className="mt-5 text-[15px] font-normal leading-[1.34] tracking-[-0.012em] text-[var(--text-muted)]"
+          className="mt-7 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-[var(--text-muted)]"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {description}
