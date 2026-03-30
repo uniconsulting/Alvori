@@ -22,7 +22,7 @@ export default function Home() {
           <WhyChooseUsSection />
         </section>
 
-        <section className="pb-20 pt-8 md:pb-24 md:pt-10 xl:pb-24 xl:pt-10">
+        <section className="pb-6 pt-8 md:pb-8 md:pt-10 xl:pb-8 xl:pt-10">
           <AutoParkSection />
         </section>
 
