@@ -35,7 +35,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     delayMs: 240,
   },
   {
-    id: 'bottom',
+    id: 'left',
     src: `${sitePath}/autopark/gallery-3.webp`,
     alt: 'Полуприцеп снизу слева',
     className: 'left-[0px] top-[232px] h-[178px] w-[262px] rotate-[-9deg]',
@@ -43,7 +43,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     delayMs: 360,
   },
   {
-    id: 'back',
+    id: 'right',
     src: `${sitePath}/autopark/gallery-4.webp`,
     alt: 'Логистика и парк на заднем плане',
     className: 'left-[308px] top-[232px] h-[154px] w-[224px] rotate-[10deg]',
@@ -118,10 +118,10 @@ export function AutoParkGallery() {
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
 
-targetRef.current = {
-  x: (px - 0.5) * 8,
-  y: (py - 0.5) * 6,
-};
+    targetRef.current = {
+      x: (px - 0.5) * 8,
+      y: (py - 0.5) * 6,
+    };
   };
 
   const handleMouseLeave = () => {
@@ -149,6 +149,7 @@ targetRef.current = {
           return (
             <GalleryCard
               key={item.id}
+              id={item.id}
               src={item.src}
               alt={item.alt}
               className={item.className}
@@ -167,6 +168,7 @@ targetRef.current = {
 }
 
 function GalleryCard({
+  id,
   src,
   alt,
   className,
@@ -177,6 +179,7 @@ function GalleryCard({
   baseZ,
   onEnter,
 }: {
+  id: string;
   src: string;
   alt: string;
   className: string;
@@ -187,37 +190,39 @@ function GalleryCard({
   baseZ: number;
   onEnter: () => void;
 }) {
+  const hoverTransform = getHoverTransform(id);
+
   return (
     <div
       className={`group absolute overflow-hidden rounded-[26px] bg-[#26292e] ${className}`}
       onMouseEnter={onEnter}
-style={{
-  zIndex: isActive ? 80 : baseZ,
-  transition:
-    'transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1), filter 180ms cubic-bezier(0.22, 1, 0.36, 1), border-color 180ms cubic-bezier(0.22, 1, 0.36, 1)',
-  transform: isRevealed
-    ? isActive
-      ? 'translateY(-8px) rotate(0deg) scale(1.035)'
-      : 'translateY(0) scale(1)'
-    : 'translateY(24px) scale(0.985)',
-  opacity: isRevealed ? (isDimmed ? 0.9 : 1) : 0,
-  filter: isRevealed
-    ? isActive
-      ? 'none'
-      : isDimmed
-        ? 'blur(0.8px) saturate(0.95) brightness(0.97)'
-        : 'blur(0.35px)'
-    : 'blur(10px)',
-  boxShadow: isActive
-    ? '0 26px 56px rgba(38,41,46,0.22)'
-    : '0 18px 44px rgba(38,41,46,0.14)',
-  transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
-}}
+      style={{
+        zIndex: isActive ? 80 : baseZ,
+        transition:
+          'transform 340ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1), filter 140ms cubic-bezier(0.22, 1, 0.36, 1), border-color 180ms cubic-bezier(0.22, 1, 0.36, 1)',
+        transform: isRevealed
+          ? isActive
+            ? hoverTransform
+            : 'translate3d(0,0,0) scale(1)'
+          : 'translateY(24px) scale(0.985)',
+        opacity: isRevealed ? (isDimmed ? 0.9 : 1) : 0,
+        filter: isRevealed
+          ? isActive
+            ? 'blur(0px) saturate(1) brightness(1)'
+            : isDimmed
+              ? 'blur(0.9px) saturate(0.94) brightness(0.96)'
+              : 'blur(0.45px)'
+          : 'blur(10px)',
+        boxShadow: isActive
+          ? '0 26px 56px rgba(38,41,46,0.22)'
+          : '0 18px 44px rgba(38,41,46,0.14)',
+        transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
+      }}
     >
       <img
         src={src}
         alt={alt}
-        className="h-full w-full object-cover object-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+        className="h-full w-full object-cover object-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.028]"
         loading="lazy"
       />
 
@@ -230,4 +235,19 @@ style={{
       <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]" />
     </div>
   );
+}
+
+function getHoverTransform(id: string) {
+  switch (id) {
+    case 'main':
+      return 'translate3d(0,-8px,0) rotate(0deg) scale(1.035)';
+    case 'left':
+      return 'translate3d(-36px,0,0) rotate(-4deg) scale(1.03)';
+    case 'top':
+      return 'translate3d(-28px,-24px,0) rotate(3deg) scale(1.03)';
+    case 'right':
+      return 'translate3d(0,26px,0) rotate(4deg) scale(1.03)';
+    default:
+      return 'translate3d(0,0,0) scale(1)';
+  }
 }
