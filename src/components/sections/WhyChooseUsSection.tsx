@@ -44,8 +44,6 @@ export function WhyChooseUsSection() {
                 title="Собственный автопарк"
                 description={
                   <>
-                    Собственные единицы транспорта
-                    <br />
                     позволяет держать качество
                     <br />
                     исполнения под контролем и обеспечивать
@@ -158,7 +156,7 @@ function WhyCardTallImage({
   showArrow?: boolean;
 }) {
   return (
-    <div className="relative row-span-2 min-h-[540px]">
+    <div className="relative row-span-2 min-h-[540px] overflow-visible">
       <div className="relative h-full overflow-hidden rounded-[32px] bg-[#26292e]">
         <img
           src={imageSrc}
@@ -178,7 +176,7 @@ function WhyCardTallImage({
           </div>
 
           <div
-            className="mt-8 text-[16px] font-normal leading-[1.34] tracking-[-0.014em] text-white/84"
+            className="mt-8 text-[15px] font-normal leading-[1.34] tracking-[-0.014em] text-white/84"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             {description}
@@ -188,9 +186,14 @@ function WhyCardTallImage({
 
       {showArrow ? (
         <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 text-[#26292e]">
-          <svg width="26" height="82" viewBox="0 0 26 82" fill="none" aria-hidden="true">
-            <path d="M13 0V66" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-            <path d="M2 55L13 78L24 55" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+          <svg width="34" height="88" viewBox="0 0 34 88" fill="none" aria-hidden="true">
+            <path
+              d="M17 0V66M17 66L4 79M17 66L30 79"
+              stroke="currentColor"
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
       ) : null}
