@@ -8,7 +8,7 @@ import {
   SlidersHorizontal,
   Truck,
 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { sitePath } from '@/lib/site-path';
 
@@ -33,9 +33,7 @@ export function WhyChooseUsSection() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsActive(true);
-        }
+        if (entry.isIntersecting) setIsActive(true);
       },
       {
         threshold: 0.16,
@@ -55,9 +53,7 @@ export function WhyChooseUsSection() {
             <div
               className={cn(
                 'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-                isActive
-                  ? 'translate-y-0 opacity-100 blur-0'
-                  : 'translate-y-[18px] opacity-0 blur-[10px]',
+                isActive ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-[18px] opacity-0 blur-[10px]',
               )}
             >
               <div className="flex items-center justify-between gap-6">
@@ -82,8 +78,8 @@ export function WhyChooseUsSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[1fr_1fr_1fr] gap-5">
-              <RevealCard isActive={isActive} delayMs={140} className="row-span-2">
+            <div className="grid grid-cols-[1fr_1fr_1fr] grid-rows-[118px_206px] gap-5">
+              <RevealCard isActive={isActive} delayMs={140} className="row-span-2 h-[344px]">
                 <WhyCardTallImage
                   icon={Truck}
                   title="Собственный автопарк"
@@ -101,7 +97,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={240}>
+              <RevealCard isActive={isActive} delayMs={240} className="h-[118px]">
                 <WhyCardCompactImage
                   icon={Clock3}
                   title="Контроль сроков"
@@ -116,7 +112,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={340}>
+              <RevealCard isActive={isActive} delayMs={340} className="h-[118px]">
                 <WhyCardCompactImage
                   icon={FileText}
                   title="Документы"
@@ -131,7 +127,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={440}>
+              <RevealCard isActive={isActive} delayMs={440} className="h-[206px]">
                 <WhyCardMediumImage
                   icon={SlidersHorizontal}
                   title="Под задачу клиента"
@@ -148,7 +144,7 @@ export function WhyChooseUsSection() {
                 />
               </RevealCard>
 
-              <RevealCard isActive={isActive} delayMs={540}>
+              <RevealCard isActive={isActive} delayMs={540} className="h-[206px]">
                 <WhyCardMediumImage
                   icon={ShieldCheck}
                   title="Прозрачные условия"
@@ -181,9 +177,7 @@ function WhyChooseUsBreadcrumb() {
       >
         главная
       </span>
-
       <Dot size={18} className="mx-[2px] text-[var(--accent-1)]" />
-
       <span
         className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
@@ -209,9 +203,7 @@ function RevealCard({
     <div
       className={cn(
         'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-        isActive
-          ? 'translate-y-0 opacity-100 blur-0'
-          : 'translate-y-[22px] opacity-0 blur-[12px]',
+        isActive ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-[22px] opacity-0 blur-[12px]',
         className,
       )}
       style={{ transitionDelay: `${delayMs}ms` }}
@@ -221,39 +213,12 @@ function RevealCard({
   );
 }
 
-function TiltCardShell({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const currentRef = useRef<TiltView>({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 1,
-  });
-
-  const targetRef = useRef<TiltView>({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 1,
-  });
-
-  const velocityRef = useRef<TiltView>({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 0,
-  });
-
+function TiltCardShell({ children }: { children: React.ReactNode }) {
+  const currentRef = useRef<TiltView>({ rotateX: 0, rotateY: 0, y: 0, scale: 1 });
+  const targetRef = useRef<TiltView>({ rotateX: 0, rotateY: 0, y: 0, scale: 1 });
+  const velocityRef = useRef<TiltView>({ rotateX: 0, rotateY: 0, y: 0, scale: 0 });
   const frameRef = useRef<number | null>(null);
-  const [view, setView] = useState<TiltView>({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 1,
-  });
+  const [view, setView] = useState<TiltView>({ rotateX: 0, rotateY: 0, y: 0, scale: 1 });
 
   useEffect(() => {
     const stiffness = 0.14;
@@ -275,7 +240,6 @@ function TiltCardShell({
     };
 
     frameRef.current = requestAnimationFrame(step);
-
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
@@ -283,7 +247,6 @@ function TiltCardShell({
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 1024) return;
-
     const rect = event.currentTarget.getBoundingClientRect();
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
@@ -297,12 +260,7 @@ function TiltCardShell({
   };
 
   const handleMouseLeave = () => {
-    targetRef.current = {
-      rotateX: 0,
-      rotateY: 0,
-      y: 0,
-      scale: 1,
-    };
+    targetRef.current = { rotateX: 0, rotateY: 0, y: 0, scale: 1 };
   };
 
   return (
@@ -337,14 +295,9 @@ function WhyCardTallImage({
   showArrow?: boolean;
 }) {
   return (
-    <div className="relative min-h-[540px] overflow-visible">
+    <div className="relative h-full overflow-visible">
       <div className="relative h-full overflow-hidden rounded-[32px] bg-[#26292e]">
-        <img
-          src={imageSrc}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
-
+        <img src={imageSrc} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
         <CardImageMask />
         <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-white/12" />
 
@@ -369,13 +322,7 @@ function WhyCardTallImage({
         <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 text-[#26292e]">
           <svg width="28" height="86" viewBox="0 0 28 86" fill="none" aria-hidden="true">
             <path d="M14 0V62" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-            <path
-              d="M6 54L14 62L22 54"
-              stroke="currentColor"
-              strokeWidth="5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M6 54L14 62L22 54" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       ) : null}
@@ -395,13 +342,8 @@ function WhyCardCompactImage({
   imageSrc: string;
 }) {
   return (
-    <div className="relative min-h-[116px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-6 py-6">
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
-
+    <div className="relative h-full overflow-hidden rounded-[28px] bg-[var(--surface)] px-6 py-6">
+      <img src={imageSrc} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
       <CardImageMask compact />
       <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/12" />
 
@@ -436,13 +378,8 @@ function WhyCardMediumImage({
   imageSrc: string;
 }) {
   return (
-    <div className="relative min-h-[204px] overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7">
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
-
+    <div className="relative h-full overflow-hidden rounded-[28px] bg-[var(--surface)] px-7 py-7">
+      <img src={imageSrc} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
       <CardImageMask />
       <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/12" />
 
