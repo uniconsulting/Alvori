@@ -12,11 +12,6 @@ type GalleryItem = {
   delayMs: number;
 };
 
-type ParallaxView = {
-  x: number;
-  y: number;
-};
-
 const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'main',
@@ -57,12 +52,6 @@ export function AutoParkGallery() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
 
-  const currentRef = useRef<ParallaxView>({ x: 0, y: 0 });
-  const targetRef = useRef<ParallaxView>({ x: 0, y: 0 });
-  const velocityRef = useRef<ParallaxView>({ x: 0, y: 0 });
-  const frameRef = useRef<number | null>(null);
-
-  const [view, setView] = useState<ParallaxView>({ x: 0, y: 0 });
   const items = useMemo(() => GALLERY_ITEMS, []);
 
   useEffect(() => {
@@ -85,47 +74,7 @@ export function AutoParkGallery() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const stiffness = 0.08;
-    const damping = 0.84;
-
-    const step = () => {
-      const current = currentRef.current;
-      const target = targetRef.current;
-      const velocity = velocityRef.current;
-
-      (Object.keys(current) as Array<keyof ParallaxView>).forEach((key) => {
-        const force = (target[key] - current[key]) * stiffness;
-        velocity[key] = (velocity[key] + force) * damping;
-        current[key] = current[key] + velocity[key];
-      });
-
-      setView({ ...current });
-      frameRef.current = requestAnimationFrame(step);
-    };
-
-    frameRef.current = requestAnimationFrame(step);
-
-    return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    };
-  }, []);
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (window.innerWidth < 1024) return;
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width;
-    const py = (event.clientY - rect.top) / rect.height;
-
-    targetRef.current = {
-      x: (px - 0.5) * 8,
-      y: (py - 0.5) * 6,
-    };
-  };
-
   const handleMouseLeave = () => {
-    targetRef.current = { x: 0, y: 0 };
     setActiveId(null);
   };
 
@@ -133,36 +82,28 @@ export function AutoParkGallery() {
     <div
       ref={containerRef}
       className="relative z-[40] h-[504px] overflow-visible"
-      onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div
-        className="relative h-full will-change-transform"
-        style={{
-          transform: `translate3d(${view.x}px, ${view.y}px, 0)`,
-        }}
-      >
-        {items.map((item) => {
-          const isActive = activeId === item.id;
-          const isDimmed = activeId !== null && activeId !== item.id;
+      {items.map((item) => {
+        const isActive = activeId === item.id;
+        const isBlurred = activeId !== null && activeId !== item.id;
 
-          return (
-            <GalleryCard
-              key={item.id}
-              id={item.id}
-              src={item.src}
-              alt={item.alt}
-              className={item.className}
-              isActive={isActive}
-              isDimmed={isDimmed}
-              isRevealed={isRevealed}
-              delayMs={item.delayMs}
-              baseZ={item.baseZ}
-              onEnter={() => setActiveId(item.id)}
-            />
-          );
-        })}
-      </div>
+        return (
+          <GalleryCard
+            key={item.id}
+            id={item.id}
+            src={item.src}
+            alt={item.alt}
+            className={item.className}
+            isActive={isActive}
+            isBlurred={isBlurred}
+            isRevealed={isRevealed}
+            delayMs={item.delayMs}
+            baseZ={item.baseZ}
+            onEnter={() => setActiveId(item.id)}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -173,7 +114,7 @@ function GalleryCard({
   alt,
   className,
   isActive,
-  isDimmed,
+  isBlurred,
   isRevealed,
   delayMs,
   baseZ,
@@ -184,7 +125,7 @@ function GalleryCard({
   alt: string;
   className: string;
   isActive: boolean;
-  isDimmed: boolean;
+  isBlurred: boolean;
   isRevealed: boolean;
   delayMs: number;
   baseZ: number;
@@ -199,22 +140,22 @@ function GalleryCard({
       style={{
         zIndex: isActive ? 80 : baseZ,
         transition:
-          'transform 340ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms cubic-bezier(0.22, 1, 0.36, 1), filter 140ms cubic-bezier(0.22, 1, 0.36, 1), border-color 180ms cubic-bezier(0.22, 1, 0.36, 1)',
+          'transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1), filter 110ms cubic-bezier(0.22, 1, 0.36, 1), border-color 140ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms cubic-bezier(0.22, 1, 0.36, 1)',
         transform: isRevealed
           ? isActive
             ? hoverTransform
             : 'translate3d(0,0,0) scale(1)'
-          : 'translateY(24px) scale(0.985)',
-        opacity: isRevealed ? (isDimmed ? 0.9 : 1) : 0,
+          : 'translateY(18px) scale(0.99)',
+        opacity: isRevealed ? 1 : 0,
         filter: isRevealed
           ? isActive
             ? 'blur(0px) saturate(1) brightness(1)'
-            : isDimmed
-              ? 'blur(0.9px) saturate(0.94) brightness(0.96)'
-              : 'blur(0.45px)'
-          : 'blur(10px)',
+            : isBlurred
+              ? 'blur(0.9px)'
+              : 'blur(0px)'
+          : 'blur(8px)',
         boxShadow: isActive
-          ? '0 26px 56px rgba(38,41,46,0.22)'
+          ? '0 24px 48px rgba(38,41,46,0.2)'
           : '0 18px 44px rgba(38,41,46,0.14)',
         transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
       }}
@@ -222,7 +163,7 @@ function GalleryCard({
       <img
         src={src}
         alt={alt}
-        className="h-full w-full object-cover object-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.028]"
+        className="h-full w-full object-cover object-center transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]"
         loading="lazy"
       />
 
@@ -240,13 +181,13 @@ function GalleryCard({
 function getHoverTransform(id: string) {
   switch (id) {
     case 'main':
-      return 'translate3d(0,-8px,0) rotate(0deg) scale(1.035)';
+      return 'translate3d(0,-6px,0) rotate(0deg) scale(1.028)';
     case 'left':
-      return 'translate3d(-36px,0,0) rotate(-4deg) scale(1.03)';
+      return 'translate3d(-28px,0,0) rotate(-4deg) scale(1.022)';
     case 'top':
-      return 'translate3d(-28px,-24px,0) rotate(3deg) scale(1.03)';
+      return 'translate3d(-22px,-18px,0) rotate(3deg) scale(1.022)';
     case 'right':
-      return 'translate3d(0,26px,0) rotate(4deg) scale(1.03)';
+      return 'translate3d(0,20px,0) rotate(4deg) scale(1.022)';
     default:
       return 'translate3d(0,0,0) scale(1)';
   }
