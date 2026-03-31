@@ -135,40 +135,6 @@ img {
 }
 
 /* =========================
-   HEADER — premium show / hide
-   ========================= */
-
-.header-shell {
-  position: fixed;
-  inset-inline: 0;
-  top: 0;
-  z-index: 90;
-  pointer-events: none;
-  will-change: transform, opacity, filter;
-  transition:
-    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 620ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.header-shell > * {
-  pointer-events: auto;
-}
-
-.header-shell--visible {
-  opacity: 1;
-  filter: blur(0);
-  transform: translate3d(0, 0, 0) scale(1);
-}
-
-.header-shell--hidden {
-  opacity: 0;
-  filter: blur(10px);
-  transform: translate3d(0, -18px, 0) scale(0.988);
-  pointer-events: none;
-}
-
-/* =========================
    HEADER — premium shell / backdrop
    ========================= */
 
@@ -202,7 +168,7 @@ img {
   position: absolute;
   inset-inline: 0;
   top: 0;
-  height: 168px;
+  height: 132px;
   pointer-events: none;
   opacity: 0;
   transition:
@@ -210,16 +176,16 @@ img {
     transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
   transform: translate3d(0, 0, 0);
 
-  backdrop-filter: blur(14px) saturate(1.04);
-  -webkit-backdrop-filter: blur(14px) saturate(1.04);
+  backdrop-filter: blur(18px) saturate(1.02);
+  -webkit-backdrop-filter: blur(18px) saturate(1.02);
 
   background:
     linear-gradient(
       180deg,
-      rgba(246, 246, 246, 0.78) 0%,
-      rgba(246, 246, 246, 0.58) 42%,
-      rgba(246, 246, 246, 0.28) 72%,
-      rgba(246, 246, 246, 0.08) 100%
+      rgba(246, 246, 246, 0.26) 0%,
+      rgba(246, 246, 246, 0.18) 38%,
+      rgba(246, 246, 246, 0.10) 68%,
+      rgba(246, 246, 246, 0.00) 100%
     );
 }
 
@@ -227,10 +193,10 @@ html[data-theme='dark'] .header-shell__backdrop {
   background:
     linear-gradient(
       180deg,
-      rgba(38, 41, 46, 0.76) 0%,
-      rgba(38, 41, 46, 0.56) 42%,
-      rgba(38, 41, 46, 0.26) 72%,
-      rgba(38, 41, 46, 0.06) 100%
+      rgba(38, 41, 46, 0.24) 0%,
+      rgba(38, 41, 46, 0.16) 38%,
+      rgba(38, 41, 46, 0.08) 68%,
+      rgba(38, 41, 46, 0.00) 100%
     );
 }
 
