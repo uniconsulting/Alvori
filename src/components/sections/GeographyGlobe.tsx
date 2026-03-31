@@ -231,7 +231,7 @@ export function GeographyGlobe({
  <div className="relative h-[640px] w-[720px] max-w-none">
   <canvas
     ref={canvasRef}
-    className="h-[620px] w-[620px] max-w-none -translate-x-[86px] translate-y-[4px] cursor-grab"
+    className="h-[620px] w-[620px] max-w-none -translate-x-[86px] -translate-y-[10px] cursor-grab"
             style={{ aspectRatio: '1 / 1' }}
             onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
             onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
