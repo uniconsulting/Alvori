@@ -343,7 +343,6 @@ export default function RequestPageClient() {
       </div>
     </div>
   )}
-      </div>
     </div>
   </Container>
 </section>
