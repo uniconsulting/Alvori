@@ -12,13 +12,13 @@ export type HeroSlide = {
 export const heroSlides: HeroSlide[] = [
   {
     title: 'успешных перевозок',
-    value: '>10.000',
+    value: '> 10.000',
     ctaLabel: 'оформить заявку',
     href: ctaRoutes.heroPrimary,
   },
   {
     title: 'мы на ati.su',
-    value: '728 149',
+    value: '1005',
     ctaLabel: 'открыть профиль',
     href: externalRoutes.ati,
     external: true,
