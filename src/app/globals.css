@@ -134,6 +134,40 @@ img {
   }
 }
 
+/* =========================
+   HEADER — premium show / hide
+   ========================= */
+
+.header-shell {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 90;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+  transition:
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.header-shell > * {
+  pointer-events: auto;
+}
+
+.header-shell--visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.header-shell--hidden {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translate3d(0, -18px, 0) scale(0.988);
+  pointer-events: none;
+}
+
 .footer-road {
   overflow: hidden;
   -webkit-mask-image: linear-gradient(
