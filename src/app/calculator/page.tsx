@@ -784,15 +784,12 @@ function ResultPanel({
               отправить этот расчёт
             </Link>
 
-            <div className="grid grid-cols-2 gap-4 items-center">
-              <div />
-              <Link
-                href={requestHref}
-                className="col-span-2 inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-              >
-                запросить коммерческое предложение
-              </Link>
-            </div>
+            <Link
+              href={requestHref}
+              className="inline-flex h-[54px] w-[calc(100%_-_50%_-_8px)] min-w-[calc(100%_-_50%_-_8px)] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14 justify-self-start"
+            >
+              запросить коммерческое предложение
+            </Link>
 
             <div />
           </div>
