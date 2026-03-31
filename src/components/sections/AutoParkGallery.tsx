@@ -138,9 +138,9 @@ function GalleryCard({
       className={`group absolute overflow-hidden rounded-[26px] bg-[#26292e] ${className}`}
       onMouseEnter={onEnter}
       style={{
-        zIndex: isActive ? 80 : baseZ,
+        zIndex: isActive ? baseZ + 20 : baseZ,
         transition:
-          'transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1), filter 110ms cubic-bezier(0.22, 1, 0.36, 1), border-color 140ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms cubic-bezier(0.22, 1, 0.36, 1)',
+          'transform 520ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1), filter 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms cubic-bezier(0.22, 1, 0.36, 1)',
         transform: isRevealed
           ? isActive
             ? hoverTransform
@@ -149,29 +149,33 @@ function GalleryCard({
         opacity: isRevealed ? 1 : 0,
         filter: isRevealed
           ? isActive
-            ? 'blur(0px) saturate(1) brightness(1)'
+            ? 'blur(0px) saturate(1.02) brightness(1.01)'
             : isBlurred
-              ? 'blur(0.9px)'
-              : 'blur(0px)'
+              ? 'blur(0.35px) saturate(0.96) brightness(0.98)'
+              : 'blur(0px) saturate(1) brightness(1)'
           : 'blur(8px)',
         boxShadow: isActive
-          ? '0 24px 48px rgba(38,41,46,0.2)'
-          : '0 18px 44px rgba(38,41,46,0.14)',
+          ? '0 20px 34px rgba(38,41,46,0.14)'
+          : '0 14px 28px rgba(38,41,46,0.1)',
         transitionDelay: isRevealed ? `${delayMs}ms` : '0ms',
       }}
     >
       <img
         src={src}
         alt={alt}
-        className="h-full w-full object-cover object-center transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]"
+        className="h-full w-full object-cover object-center transition-transform duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{
+          transform: isActive ? 'scale(1.012)' : 'scale(1)',
+        }}
         loading="lazy"
       />
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.06)_0%,rgba(38,41,46,0.14)_52%,rgba(38,41,46,0.30)_100%)]" />
       <div
-        className={`pointer-events-none absolute inset-0 rounded-[26px] ${
-          isActive ? 'border border-white/30' : 'border border-white/22'
-        }`}
+        className="pointer-events-none absolute inset-0 rounded-[26px] transition-all duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{
+          border: isActive ? '1px solid rgba(255,255,255,0.32)' : '1px solid rgba(255,255,255,0.22)',
+        }}
       />
       <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]" />
     </div>
@@ -181,13 +185,13 @@ function GalleryCard({
 function getHoverTransform(id: string) {
   switch (id) {
     case 'main':
-      return 'translate3d(0,-6px,0) rotate(0deg) scale(1.028)';
+      return 'translate3d(0,-2px,0) rotate(-1deg) scale(1.014)';
     case 'left':
-      return 'translate3d(-28px,0,0) rotate(-4deg) scale(1.022)';
+      return 'translate3d(-12px,-2px,0) rotate(-7deg) scale(1.014)';
     case 'top':
-      return 'translate3d(-22px,-18px,0) rotate(3deg) scale(1.022)';
+      return 'translate3d(-10px,-10px,0) rotate(6deg) scale(1.014)';
     case 'right':
-      return 'translate3d(0,20px,0) rotate(4deg) scale(1.022)';
+      return 'translate3d(-6px,8px,0) rotate(8deg) scale(1.014)';
     default:
       return 'translate3d(0,0,0) scale(1)';
   }
