@@ -54,7 +54,7 @@ export function AutoParkSection() {
             <div className="grid grid-cols-[1.82fr_1fr] items-start gap-8 overflow-visible xl:gap-10">
               <div className="relative z-10 flex flex-col gap-5">
                 <div className="flex items-start gap-5">
-                  <CountCard value={15} />
+                  <CountCard value={17} />
 
                   <div className="w-[var(--truck-title-w)] shrink-0">
                     <TitleCard label="тягачей" />
