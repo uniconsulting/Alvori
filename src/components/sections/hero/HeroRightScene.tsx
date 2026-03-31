@@ -213,7 +213,7 @@ function BentoCard({
 
   const borderClass =
     theme === 'light'
-      ? 'bg-[linear-gradient(135deg,rgba(38,41,46,0.34)_0%,rgba(38,41,46,0.14)_24%,rgba(38,41,46,0.28)_48%,rgba(38,41,46,0.12)_74%,rgba(38,41,46,0.36)_100%)] opacity-95'
+      ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.42)_24%,rgba(255,255,255,0.88)_48%,rgba(255,255,255,0.36)_74%,rgba(255,255,255,0.98)_100%)] opacity-100'
       : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.06)_24%,rgba(255,255,255,0.12)_48%,rgba(255,255,255,0.05)_74%,rgba(255,255,255,0.18)_100%)] opacity-50';
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -266,7 +266,7 @@ function BentoCard({
       >
         <Link
           href={href}
-          className="hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[1.5px]"
+          className="hero-card-tilt group relative block h-full overflow-hidden rounded-[32px] p-[2px]"
           style={{
             transform: `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
           }}
@@ -275,7 +275,7 @@ function BentoCard({
 
           <div
             className={cn(
-              'relative h-full overflow-hidden rounded-[30.5px]',
+              'relative h-full overflow-hidden rounded-[30px]',
               variant === 'accent'
                 ? 'bg-[var(--accent-1)]'
                 : variant === 'light'
