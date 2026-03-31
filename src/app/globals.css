@@ -199,7 +199,7 @@ img {
   .footer-truck {
     animation: none;
     transform: translate3d(0, 0, 0);
-    top: calc(81% - 52px);
+    top: calc(83% - 52px);
   }
 }
 
