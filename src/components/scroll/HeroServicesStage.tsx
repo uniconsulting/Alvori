@@ -83,9 +83,10 @@ export function HeroServicesStage() {
 
   return (
     <section
-      ref={rootRef}
-      className="relative left-1/2 h-[620vh] w-screen -translate-x-1/2 overflow-x-clip"
-    >
+  id="hero-services-stage"
+  ref={rootRef}
+  className="relative h-[300vh]"
+>
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 overflow-hidden">
