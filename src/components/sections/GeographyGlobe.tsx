@@ -205,8 +205,8 @@ export function GeographyGlobe({
 
   return (
     <div className="relative z-10 flex h-full flex-col items-center justify-start">
-      <div className="relative flex h-[640px] w-full items-start justify-center">
-        <div className="relative h-[640px] w-[720px] max-w-none">
+      <div className="relative flex h-[580px] w-full items-start justify-center">
+        <div className="relative h-[580px] w-[720px] max-w-none">
           <canvas
             ref={canvasRef}
             className="h-[620px] w-[620px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
