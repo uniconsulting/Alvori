@@ -134,13 +134,12 @@ export default function CalculatorPage() {
   }, [fromCityObj, toCityObj]);
 
   useEffect(() => {
-    if (filtersOpen) {
-      const previous = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = previous;
-      };
-    }
+    if (!filtersOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [filtersOpen]);
 
   const result = useMemo(() => {
@@ -252,7 +251,7 @@ export default function CalculatorPage() {
       <Header />
 
       <main>
-        <section className="pb-6 pt-8 md:pb-8 md:pt-10 xl:pb-8 xl:pt-12">
+        <section className="pb-6 pt-12 md:pb-8 md:pt-14 xl:pb-8 xl:pt-16">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <PageHeader />
@@ -349,19 +348,23 @@ function PageHeader() {
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-white shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
+            className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             <ArrowLeft size={15} className="mr-2 text-[var(--accent-1)]" />
             <span className="text-white">вернуться</span>
           </Link>
 
-          <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+          <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[18px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
             <span
               className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
               style={{ fontFamily: 'var(--font-body-text)' }}
             >
-              калькулятор <span className="text-[var(--accent-1)]">·</span> запрос <span className="text-[var(--accent-1)]">·</span> КП
+              калькулятор
+              <span className="px-[8px] text-[var(--accent-1)]">·</span>
+              запрос
+              <span className="px-[8px] text-[var(--accent-1)]">·</span>
+              КП
             </span>
           </div>
         </div>
@@ -414,7 +417,7 @@ function ControlBar({
 }) {
   return (
     <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 pl-[4px]">
         <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
         <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
           Параметры перевозки
@@ -461,7 +464,7 @@ function ControlBar({
         <button
           type="button"
           onClick={onOpenFilters}
-          className="inline-flex h-[84px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)] transition hover:opacity-95"
+          className="inline-flex h-[84px] items-center justify-center gap-3 rounded-[18px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)] transition hover:opacity-95"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           <SlidersHorizontal size={17} strokeWidth={2} />
@@ -639,7 +642,7 @@ function PointsSegment({
 }) {
   return (
     <div className="relative h-[84px] rounded-[18px] bg-[var(--bg)] px-5 py-4">
-      <div className="pr-[78px]">
+      <div className="pr-[84px]">
         <div className="whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
           {label}
         </div>
@@ -652,14 +655,14 @@ function PointsSegment({
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-[var(--surface)] text-[var(--text)]"
+          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]"
         >
           −
         </button>
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-[var(--surface)] text-[var(--text)]"
+          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]"
         >
           +
         </button>
@@ -730,7 +733,7 @@ function ResultPanel({
             </h2>
           </div>
 
-          <div className="mt-7 grid grid-cols-[0.95fr_1.15fr_0.9fr] gap-4">
+          <div className="mt-7 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4">
             <div className="rounded-[24px] bg-white/6 px-6 py-6">
               <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                 ориентировочная стоимость
@@ -739,13 +742,22 @@ function ResultPanel({
                 {formatCurrency(center)} ₽
               </p>
 
-              <div className="mt-5 rounded-[18px] bg-white/6 px-5 py-4">
+              <div className="mt-5 rounded-[14px] bg-white/6 px-5 py-4">
                 <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
                   рабочая вилка
                 </p>
                 <p className="mt-2 text-[24px] font-semibold tracking-[-0.03em]">
                   {formatCurrency(min)} – {formatCurrency(max)} ₽
                 </p>
+              </div>
+
+              <div className="mt-5">
+                <Link
+                  href={requestHref}
+                  className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+                >
+                  отправить этот расчёт
+                </Link>
               </div>
             </div>
 
@@ -754,6 +766,15 @@ function ResultPanel({
               <MetricCard label="Срок" value={days} />
               <MetricCard label="Кузов" value={body} />
               <MetricCard label="Ставка / км" value={pricePerKm} />
+
+              <div className="col-span-2">
+                <Link
+                  href={requestHref}
+                  className="inline-flex h-[54px] w-[calc(50%_-_8px)] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                >
+                  запросить коммерческое предложение
+                </Link>
+              </div>
             </div>
 
             <div className="rounded-[24px] bg-white/6 px-5 py-5">
@@ -775,22 +796,6 @@ function ResultPanel({
             </div>
           </div>
 
-          <div className="mt-5 flex gap-3">
-            <Link
-              href={requestHref}
-              className="header-utility-button inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-white"
-            >
-              отправить этот расчёт
-            </Link>
-
-            <Link
-              href={requestHref}
-              className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-            >
-              запросить коммерческое предложение
-            </Link>
-          </div>
-
           <p className="mt-5 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
             Итоговый тариф подтверждается после уточнения параметров груза, маршрута и условий подачи транспорта.
           </p>
@@ -808,7 +813,7 @@ function MetricCard({
   value: string;
 }) {
   return (
-    <div className="rounded-[20px] bg-white/6 px-5 py-5">
+    <div className="rounded-[14px] bg-white/6 px-5 py-5">
       <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
         {label}
       </p>
@@ -901,7 +906,7 @@ function FiltersDrawer(props: {
       />
 
       <aside
-        className={`fixed right-0 top-0 z-50 h-screen w-[480px] overflow-y-auto bg-[var(--surface)] px-6 py-6 shadow-[-24px_0_48px_rgba(38,41,46,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`drawer-scroll fixed right-0 top-0 z-50 h-screen w-[480px] overflow-y-auto bg-[var(--surface)] px-6 py-6 shadow-[-24px_0_48px_rgba(38,41,46,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -1030,7 +1035,7 @@ function NumberControl({
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--bg)] text-[var(--text)]"
+          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-[var(--bg)] text-[var(--text)]"
         >
           −
         </button>
@@ -1038,7 +1043,7 @@ function NumberControl({
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-[var(--bg)] text-[var(--text)]"
+          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-[var(--bg)] text-[var(--text)]"
         >
           +
         </button>
@@ -1071,7 +1076,7 @@ function DrawerSelect({
 function modeButtonClass(active: boolean) {
   return `inline-flex h-[48px] items-center justify-center rounded-[14px] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] transition ${
     active
-      ? 'bg-[var(--accent-1)] text-white'
+      ? 'bg-[var(--accent-2)] text-[var(--accent-2-text)]'
       : 'bg-[var(--bg)] text-[var(--text)]'
   }`;
 }
