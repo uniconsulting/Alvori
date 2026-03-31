@@ -731,7 +731,7 @@ function ResultPanel({
           </div>
 
           <div className="mt-7 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4 items-stretch">
-            <div className="rounded-[24px] bg-white/6 px-6 py-6 self-start">
+            <div className="rounded-[24px] bg-white/6 px-6 py-6">
               <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                 ориентировочная стоимость
               </p>
@@ -750,7 +750,7 @@ function ResultPanel({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
+            <div className="grid grid-cols-2 grid-rows-2 gap-4">
               <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} />
               <MetricCard label="Срок" value={days} />
               <MetricCard label="Кузов" value={body} />
@@ -786,7 +786,7 @@ function ResultPanel({
 
             <Link
               href={requestHref}
-              className="inline-flex h-[54px] w-[calc(100%_-_50%_-_8px)] min-w-[calc(100%_-_50%_-_8px)] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14 justify-self-start"
+              className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
             >
               запросить коммерческое предложение
             </Link>
