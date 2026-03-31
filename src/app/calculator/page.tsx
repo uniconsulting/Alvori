@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Calculator,
   ChevronDown,
@@ -157,10 +157,6 @@ export default function CalculatorPage() {
 
     return {
       bodyLabel: body.label,
-      urgencyLabel: urg.label,
-      tempLabel: temp.label,
-      insuranceLabel: ins.label,
-      loadingLabel: load.label,
       minTotal,
       maxTotal,
       center,
@@ -233,18 +229,18 @@ export default function CalculatorPage() {
       <Header />
 
       <main>
-        <section className="pb-8 pt-8 md:pb-10 md:pt-10 xl:pb-12 xl:pt-12">
+        <section className="pb-6 pt-8 md:pb-8 md:pt-10 xl:pb-8 xl:pt-12">
           <Container>
-            <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+            <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <div className="flex items-center justify-between gap-6">
-                <h1 className="font-heading text-[48px] leading-[0.96] tracking-[-0.045em] text-[var(--text)] xl:text-[52px]">
+                <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
                   Расчёт грузоперевозки
                 </h1>
 
                 <div className="flex items-center gap-3">
                   <Link
                     href="/"
-                    className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-white shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
+                    className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-[#ffffff] shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
                   >
                     <ArrowLeft size={15} className="mr-2" />
@@ -263,14 +259,14 @@ export default function CalculatorPage() {
               </div>
 
               <p
-                className="mt-8 max-w-[760px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--text-muted)]"
+                className="mt-10 max-w-[760px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--text-muted)]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
                 Получите ориентировочную стоимость перевозки по РФ на основе
                 маршрута, параметров груза и текущей рыночной ставки.
               </p>
 
-              <div className="mt-6 inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3">
+              <div className="mt-8 inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3">
                 <span
                   className="text-[15px] font-semibold tracking-[-0.016em] text-[var(--text)]"
                   style={{ fontFamily: 'var(--font-body-text)' }}
@@ -282,43 +278,41 @@ export default function CalculatorPage() {
           </Container>
         </section>
 
-        <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
+        <section className="pb-10 pt-0 md:pb-12 xl:pb-14">
           <Container>
-            <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-              <div className="grid grid-cols-[0.96fr_0.78fr] items-start gap-6 xl:gap-8">
+            <div className="px-[10px] md:px-[14px] xl:px-[16px]">
+              <div className="grid grid-cols-[0.96fr_0.78fr] items-start gap-5 xl:gap-6">
                 <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
-                      <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-                        Параметры перевозки
-                      </h2>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
+                    <h2 className="whitespace-nowrap font-heading text-[28px] leading-[0.98] tracking-[-0.03em]">
+                      Параметры перевозки
+                    </h2>
+                  </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setMode('quick')}
-                        className={cnButton(
-                          mode === 'quick'
-                            ? 'bg-[var(--accent-1)] text-white'
-                            : 'bg-[var(--bg)] text-[var(--text)]'
-                        )}
-                      >
-                        быстрый расчёт
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setMode('advanced')}
-                        className={cnButton(
-                          mode === 'advanced'
-                            ? 'bg-[var(--accent-1)] text-white'
-                            : 'bg-[var(--bg)] text-[var(--text)]'
-                        )}
-                      >
-                        точный расчёт
-                      </button>
-                    </div>
+                  <div className="mt-6 grid max-w-[390px] grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setMode('quick')}
+                      className={cnButton(
+                        mode === 'quick'
+                          ? 'bg-[var(--accent-1)] text-white'
+                          : 'bg-white text-[var(--text)] border border-[rgba(38,41,46,0.08)]'
+                      )}
+                    >
+                      быстрый расчёт
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMode('advanced')}
+                      className={cnButton(
+                        mode === 'advanced'
+                          ? 'bg-[var(--accent-1)] text-white'
+                          : 'bg-white text-[var(--text)] border border-[rgba(38,41,46,0.08)]'
+                      )}
+                    >
+                      точный расчёт
+                    </button>
                   </div>
 
                   <div className="mt-7 grid grid-cols-2 gap-4">
@@ -382,13 +376,13 @@ export default function CalculatorPage() {
 
                   <div className="mt-8 rounded-[20px] bg-[var(--bg)] p-5">
                     <div className="flex items-center gap-3">
-                      <Truck size={18} strokeWidth={2} className="text-[var(--accent-1)]" />
-                      <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.025em]">
+                      <Truck size={18} strokeWidth={2} className="text-[var(--text)]" />
+                      <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.025em] text-[var(--text)]">
                         Груз и условия
                       </h3>
                     </div>
 
-                    <div className="mt-5 grid grid-cols-3 gap-4">
+                    <div className="mt-7 grid grid-cols-3 gap-4">
                       <Field label="Вес, т">
                         <input
                           type="number"
@@ -471,7 +465,7 @@ export default function CalculatorPage() {
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                                 placeholder="Укажите особенности груза, сроки, пожелания"
-                                className={`${inputClass} min-h-[124px] resize-none py-4`}
+                                className={`${inputClass} min-h-[112px] resize-none py-4`}
                               />
                             </Field>
                           </div>
@@ -563,7 +557,7 @@ export default function CalculatorPage() {
 
         <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
           <Container>
-            <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+            <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
                 <div className="flex items-center gap-3">
                   <MapPinned size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
@@ -670,7 +664,7 @@ function cnButton(activeClass: string) {
 }
 
 const inputClass =
-  'h-[56px] w-full rounded-[12px] border border-transparent bg-white px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
+  'h-[56px] w-full rounded-[12px] border border-[rgba(38,41,46,0.12)] bg-[rgba(255,255,255,0.96)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(250,176,33,0.26)] focus:border-[rgba(250,176,33,0.38)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
 
 function CustomSelect({
   value,
@@ -682,14 +676,27 @@ function CustomSelect({
   options: Array<{ value: string; label: string }>;
 }) {
   const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const selected = options.find((opt) => opt.value === value);
 
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!rootRef.current) return;
+      if (!rootRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, []);
+
   return (
-    <div className="relative">
+    <div ref={rootRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-transparent bg-white px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow] duration-200 hover:border-[rgba(38,41,46,0.08)]"
+        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-[rgba(38,41,46,0.12)] bg-[rgba(255,255,255,0.96)] px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow,background-color] duration-200 hover:border-[rgba(250,176,33,0.26)]"
       >
         <span>{selected?.label}</span>
         <ChevronDown
