@@ -7,7 +7,7 @@ export const contacts = {
   emailHref: 'mailto:alvori@mail.ru',
   address: 'Ульяновск, Московское ш., 24В',
   telegramLabel: 'написать в tg',
-  telegramHref: '#',
+  telegramHref: '/contacts',
   maxLabel: 'написать в max',
-  maxHref: '#',
+  maxHref: '/contacts',
 };

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { contacts } from '@/content/contacts';
 import { legalLinks } from '@/content/legal';
+import { homeNavigation } from '@/config/anchors';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 
@@ -136,6 +137,18 @@ export function Footer() {
               </h3>
 
               <div className="flex flex-col gap-5">
+                {homeNavigation.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-text)] transition hover:opacity-75"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+
+                <div className="mt-1 h-[1px] w-full bg-[var(--footer-line)] opacity-25" />
+
                 {legalLinks.map((item) => (
                   <Link
                     key={item.href}

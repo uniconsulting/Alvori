@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
+import { appRoutes } from '@/config/routes';
+import { homeAnchorIds } from '@/config/anchors';
 
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
@@ -33,7 +35,7 @@ export function ContactsSection() {
   }, []);
 
   return (
-    <div ref={sectionRef} className="h-full">
+    <div id={homeAnchorIds.contacts} ref={sectionRef} className="h-full scroll-mt-[120px]">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
@@ -51,7 +53,7 @@ export function ContactsSection() {
                 </h2>
 
                 <Link
-                  href="/request"
+                  href={appRoutes.request}
                   className="header-utility-button inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]"
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
@@ -147,7 +149,7 @@ function ContactFormCard() {
           </button>
 
           <Link
-            href="/request"
+            href={appRoutes.request}
             className="inline-flex h-[52px] items-center justify-center rounded-[12px] bg-[var(--bg)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:bg-white hover:shadow-[0_10px_24px_rgba(38,41,46,0.05)]"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >

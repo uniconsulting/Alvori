@@ -3,6 +3,7 @@
 import { Dot } from 'lucide-react';
 import { Container } from '@/components/layout/Container';
 import { AutoParkGallery } from '@/components/sections/AutoParkGallery';
+import { homeAnchorIds } from '@/config/anchors';
 
 const TRUCK_BRANDS = ['DAF', 'SCANIA', 'MERCEDES', 'MAN'];
 const TRAILER_BRANDS = ['KRONE', 'SCHMITZ', 'TONAR'];
@@ -27,7 +28,7 @@ function cn(...classes: Array<string | false | null | undefined>) {
 
 export function AutoParkSection() {
   return (
-    <div className="h-full overflow-visible">
+    <div id={homeAnchorIds.fleet} className="h-full overflow-visible scroll-mt-[120px]">
       <Container>
         <div
           className="overflow-visible px-[14px] md:px-[18px] xl:px-[22px]"

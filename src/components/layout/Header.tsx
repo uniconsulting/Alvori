@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { ThemeLogo } from '@/components/ui/ThemeLogo';
 import { contacts } from '@/content/contacts';
-import { navigation } from '@/content/navigation';
+import { homeNavigation } from '@/config/anchors';
+import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
 
 type ThemeMode = 'light' | 'dark';
@@ -65,7 +66,7 @@ export function Header() {
             </div>
 
             <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
-              <CompactAction href="#pricing" variant="accent" ariaLabel="калькулятор">
+              <CompactAction href={ctaRoutes.headerCalculator} variant="accent" ariaLabel="калькулятор">
                 <Calculator size={20} strokeWidth={1.8} />
               </CompactAction>
 
@@ -106,7 +107,7 @@ export function Header() {
           {menuOpen ? (
             <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
               <div className="flex flex-col gap-4">
-                {navigation.map((item) => (
+                {homeNavigation.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -127,7 +128,7 @@ export function Header() {
                 </a>
 
                 <Link
-                  href="#pricing"
+                  href={ctaRoutes.headerCalculator}
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
                 >
@@ -172,7 +173,7 @@ function AnchorNav({ className }: { className?: string }) {
         className,
       )}
     >
-      {navigation.map((item, index) => (
+      {homeNavigation.map((item, index) => (
         <div key={item.href} className="flex shrink-0 items-center">
           <Link
             href={item.href}
@@ -181,7 +182,7 @@ function AnchorNav({ className }: { className?: string }) {
             {item.label}
           </Link>
 
-          {index < navigation.length - 1 ? (
+          {index < homeNavigation.length - 1 ? (
             <span className="mx-[16px] block h-[30px] w-[2px] shrink-0 rounded-full bg-[var(--bg)]" />
           ) : null}
         </div>
@@ -220,12 +221,12 @@ function UtilityCluster({
         className,
       )}
     >
-      <UtilityLinkButton href="#pricing" variant="accent" ariaLabel="калькулятор">
+      <UtilityLinkButton href={ctaRoutes.headerCalculator} variant="accent" ariaLabel="калькулятор">
         <Calculator size={22} strokeWidth={1.8} />
       </UtilityLinkButton>
 
       <UtilityLinkButton
-        href="/request/"
+        href={ctaRoutes.headerRequest}
         variant="neutral"
         ariaLabel="запрос кп"
         theme={theme}

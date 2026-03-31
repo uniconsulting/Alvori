@@ -5,6 +5,8 @@ import { ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
+import { appRoutes, externalRoutes } from '@/config/routes';
+import { homeAnchorHrefs } from '@/config/anchors';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -59,7 +61,7 @@ export function HeroRightScene() {
             запроса и отправки кп
           </>
         }
-        href="/request/"
+        href={appRoutes.request}
         imageSrc={assets.request}
         theme={theme}
         variant="accent"
@@ -75,7 +77,7 @@ export function HeroRightScene() {
             с нашими принципами
           </>
         }
-        href="#about"
+        href={homeAnchorHrefs.about}
         imageSrc={assets.principles}
         theme={theme}
         variant="dark"
@@ -93,7 +95,7 @@ export function HeroRightScene() {
             вашей грузоперевозки
           </>
         }
-        href="#pricing"
+        href={appRoutes.calculator}
         imageSrc={assets.calc}
         theme={theme}
         variant="light"

@@ -1,3 +1,6 @@
+import { homeAnchorHrefs } from '@/config/anchors';
+import { ctaRoutes, externalRoutes } from '@/config/routes';
+
 export type HeroSlide = {
   title: string;
   value: string;
@@ -11,20 +14,20 @@ export const heroSlides: HeroSlide[] = [
     title: 'успешных перевозок',
     value: '>10.000',
     ctaLabel: 'оформить заявку',
-    href: '/request/',
+    href: ctaRoutes.heroPrimary,
   },
   {
     title: 'мы на ati.su',
     value: '728 149',
     ctaLabel: 'открыть профиль',
-    href: 'https://ati.su/',
+    href: externalRoutes.ati,
     external: true,
   },
   {
     title: 'знаем своё дело',
     value: 'на 100%',
     ctaLabel: 'познакомиться',
-    href: '#services',
+    href: homeAnchorHrefs.services,
   },
 ];
 

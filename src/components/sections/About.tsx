@@ -4,6 +4,7 @@ import { Calculator, CheckCheck, Dot, FileText, Quote, Send, Truck } from 'lucid
 import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
+import { homeAnchorIds } from '@/config/anchors';
 
 type ProcessStep = {
   id: string;
@@ -88,7 +89,7 @@ export function About() {
   const typedQuote = useTypewriter(quoteText, 3600);
 
   return (
-    <div className="h-full">
+    <div id={homeAnchorIds.about} className="h-full scroll-mt-[120px]">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">

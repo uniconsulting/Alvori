@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { GeographyGlobe } from '@/components/sections/GeographyGlobe';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
+import { homeAnchorIds } from '@/config/anchors';
 
 const DISTRICTS = [
   'Центральный федеральный округ',
@@ -67,7 +68,7 @@ export function GeographySection() {
   const to = cityMap.get(activeRoute.to)!;
 
   return (
-    <div ref={sectionRef} className="h-full">
+    <div id={homeAnchorIds.geography} ref={sectionRef} className="h-full scroll-mt-[120px]">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="grid grid-cols-[0.92fr_1.08fr] items-stretch gap-10 xl:gap-14">

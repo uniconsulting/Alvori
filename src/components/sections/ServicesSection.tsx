@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   ArrowRight,
   Dot,
@@ -13,6 +14,8 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
 import { sitePath } from '@/lib/site-path';
+import { appRoutes } from '@/config/routes';
+import { homeAnchorIds } from '@/config/anchors';
 
 type TiltView = {
   rotateX: number;
@@ -70,7 +73,7 @@ export function ServicesSection({
   cardsProgress = 1,
 }: ServicesSectionProps) {
   return (
-    <div className="h-full">
+    <div id={homeAnchorIds.services} className="h-full scroll-mt-[120px]">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-12 xl:gap-14">
@@ -102,6 +105,7 @@ export function ServicesSection({
                     </>
                   }
                   ctaLabel="изучить географию"
+                  href={appRoutes.services.intercity}
                 />
               </AnimatedCard>
 
@@ -119,6 +123,7 @@ export function ServicesSection({
                     </>
                   }
                   ctaLabel="обсудить условия"
+                  href={appRoutes.services.interterminal}
                 />
               </AnimatedCard>
 
@@ -136,6 +141,7 @@ export function ServicesSection({
                     </>
                   }
                   ctaLabel="связаться с нами"
+                  href={appRoutes.services.expedition}
                 />
               </AnimatedCard>
 
@@ -151,6 +157,7 @@ export function ServicesSection({
                     </>
                   }
                   ctaLabel="описать задачу"
+                  href={appRoutes.services.project}
                 />
               </AnimatedCard>
 
@@ -168,6 +175,7 @@ export function ServicesSection({
                   ctaLabel="уточнить детали"
                   accentLabel="ADR"
                   isAdr
+                  href={appRoutes.services.adr}
                 />
               </AnimatedCard>
             </div>
@@ -226,6 +234,7 @@ function ServiceCard({
   title,
   description,
   ctaLabel,
+  href,
   accentLabel,
   isAdr = false,
 }: {
@@ -233,6 +242,7 @@ function ServiceCard({
   title: string;
   description: React.ReactNode;
   ctaLabel: string;
+  href: string;
   accentLabel?: string;
   isAdr?: boolean;
 }) {
@@ -278,6 +288,7 @@ function ServiceCard({
 
   return (
     <TiltCardShell>
+      <Link href={href} className="block h-full">
       {isAdr ? (
         <div className="relative rounded-[28px] p-[2px]">
           <div className="service-adr-border pointer-events-none absolute inset-0 rounded-[28px]" />
@@ -286,6 +297,7 @@ function ServiceCard({
       ) : (
         <div className="rounded-[28px]">{inner}</div>
       )}
+      </Link>
     </TiltCardShell>
   );
 }
@@ -295,14 +307,17 @@ function ServiceTallCard({
   title,
   description,
   ctaLabel,
+  href,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
   description: React.ReactNode;
   ctaLabel: string;
+  href: string;
 }) {
   return (
     <TiltCardShell className="row-span-2">
+      <Link href={href} className="block h-full">
       <div className="relative h-[548px] overflow-hidden rounded-[28px] bg-[var(--accent-2)]">
         <img
           src={`${sitePath}/services/expedition-bg.webp`}
@@ -336,6 +351,7 @@ function ServiceTallCard({
           </div>
         </div>
       </div>
+      </Link>
     </TiltCardShell>
   );
 }
