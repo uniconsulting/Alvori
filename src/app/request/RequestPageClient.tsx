@@ -273,7 +273,7 @@ export default function RequestPageClient() {
                           </p>
                         </div>
 
-                        <label className="relative mt-4 flex min-h-[212px] flex-1 cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 transition hover:bg-white/10">
+                        <label className="relative mt-4 flex min-h-[184px] flex-1 cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 transition hover:bg-white/10">
                           <input
                             type="file"
                             multiple
@@ -293,11 +293,11 @@ export default function RequestPageClient() {
                                 Загрузить файлы
                               </span>
                               <span className="mt-2 text-[13px] text-white/58">
-                                PDF, DOCX, XLSX, PPTX, TXT · до 5 файлов
+                                PDF, DOCX, XLSX, PPTX, TXT · до 3 файлов
                               </span>
 
-                              <div className="pointer-events-none absolute inset-x-5 bottom-5 rounded-[14px] bg-white/10 px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 transition duration-300 group-hover:text-white/72 group-hover:opacity-100">
-                                Прикрепите до 5 файлов с коммерческим предложением в допустимых форматах.
+                              <div className="pointer-events-none absolute inset-x-5 bottom-5 z-10 rounded-[14px] bg-[#3a3d43] px-4 py-3 text-[13px] leading-[1.35] text-white/0 opacity-0 shadow-[0_12px_28px_rgba(0,0,0,0.28)] transition duration-300 group-hover:text-white/78 group-hover:opacity-100">
+                                Прикрепите до 3 файлов с коммерческим предложением в допустимых форматах.
                               </div>
                             </div>
                           ) : (
