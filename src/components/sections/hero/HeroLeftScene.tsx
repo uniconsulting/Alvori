@@ -10,15 +10,32 @@ import { heroSlides } from './hero-data';
 
 type ThemeMode = 'light' | 'dark';
 
+function scrollToHeroScene(scene: 'services' | 'about') {
+  if (typeof window === 'undefined') return;
+
+  const root = document.getElementById('hero-services-stage');
+  if (!root) return;
+
+  const rect = root.getBoundingClientRect();
+  const pageTop = window.scrollY + rect.top;
+  const maxScrollable = Math.max(root.offsetHeight - window.innerHeight, 0);
+
+  const progress = scene === 'services' ? 0.24 : 0.88;
+  const targetY = pageTop + maxScrollable * progress;
+
+  window.scrollTo({
+    top: targetY,
+    behavior: 'smooth',
+  });
+}
+
 export function HeroLeftScene() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [activeSlide, setActiveSlide] = useState(0);
-  const [displayValue, setDisplayValue] = useState('>0');
+  const [displayValue, setDisplayValue] = useState('> 0');
   const [metricValueFinish, setMetricValueFinish] = useState(false);
 
   const [atiDigits, setAtiDigits] = useState<AtiDigitState[]>([
-    { char: '0', locked: false, spinning: false },
-    { char: '0', locked: false, spinning: false },
     { char: '0', locked: false, spinning: false },
     { char: '0', locked: false, spinning: false },
     { char: '0', locked: false, spinning: false },
@@ -80,11 +97,8 @@ export function HeroLeftScene() {
 
   const slide = heroSlides[activeSlide];
 
-  const easeOutExpo = (t: number) =>
-    t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-
-  const easeOutQuint = (t: number) =>
-    1 - Math.pow(1 - t, 5);
+  const formatThousands = (value: number) =>
+    value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
   const animateCount = (target: number, duration = 5200) => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
@@ -92,9 +106,6 @@ export function HeroLeftScene() {
     setMetricValueFinish(false);
 
     const start = performance.now();
-
-    const formatThousands = (value: number) =>
-      value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
@@ -109,16 +120,16 @@ export function HeroLeftScene() {
         value = Math.round(2000 + (8000 - 2000) * (1 - Math.pow(1 - t, 2.4)));
       } else {
         const t = (progress - 0.74) / 0.26;
-        value = Math.round(8000 + (10000 - 8000) * (1 - Math.pow(1 - t, 3.2)));
+        value = Math.round(8000 + (target - 8000) * (1 - Math.pow(1 - t, 3.2)));
       }
 
       if (progress < 1) {
-        setDisplayValue(`>${formatThousands(value)}`);
+        setDisplayValue(`> ${formatThousands(value)}`);
         animationFrameRef.current = requestAnimationFrame(tick);
         return;
       }
 
-      setDisplayValue('>10.000');
+      setDisplayValue(`> ${formatThousands(target)}`);
       setMetricValueFinish(true);
 
       window.setTimeout(() => {
@@ -126,26 +137,25 @@ export function HeroLeftScene() {
       }, 760);
     };
 
-    setDisplayValue('>0');
+    setDisplayValue('> 0');
     animationFrameRef.current = requestAnimationFrame(tick);
   };
 
-  const animateAtiLock = (target = '728149') => {
+  const animateAtiLock = (target = '1005') => {
     if (intervalRef.current) window.clearInterval(intervalRef.current);
 
     const finalDigits = target.split('');
     let activeIndex = 0;
     let spinTick = 0;
-    const spinFrames = [16, 15, 14, 13, 12, 12];
+    const spinFrames = [16, 15, 14, 13];
 
-    setAtiDigits([
-      { char: '0', locked: false, spinning: false },
-      { char: '0', locked: false, spinning: false },
-      { char: '0', locked: false, spinning: false },
-      { char: '0', locked: false, spinning: false },
-      { char: '0', locked: false, spinning: false },
-      { char: '0', locked: false, spinning: false },
-    ]);
+    setAtiDigits(
+      finalDigits.map(() => ({
+        char: '0',
+        locked: false,
+        spinning: false,
+      })),
+    );
 
     intervalRef.current = window.setInterval(() => {
       setAtiDigits((prev) => {
@@ -204,7 +214,7 @@ export function HeroLeftScene() {
           })),
         );
 
-        setDisplayValue('728 149');
+        setDisplayValue('1005');
       }
     }, 82);
   };
@@ -219,8 +229,6 @@ export function HeroLeftScene() {
         { char: '0', locked: false, spinning: false },
         { char: '0', locked: false, spinning: false },
         { char: '0', locked: false, spinning: false },
-        { char: '0', locked: false, spinning: false },
-        { char: '0', locked: false, spinning: false },
       ]);
     }
 
@@ -230,7 +238,7 @@ export function HeroLeftScene() {
     }
 
     if (index === 1) {
-      animateAtiLock('728149');
+      animateAtiLock('1005');
       return;
     }
 
@@ -246,10 +254,10 @@ export function HeroLeftScene() {
   };
 
   return (
-    <div className="relative xl:-ml-[60px]">
+    <div className="relative xl:-ml-[60px] min-[1920px]:xl:ml-[24px]">
       <div
         className={cn(
-          'hero-trailer-shell relative h-auto w-full xl:h-[550px] xl:w-[840px]',
+          'hero-trailer-shell relative h-auto w-full xl:h-[550px] xl:w-[840px] min-[1920px]:xl:w-[910px]',
           trailerReady && 'hero-trailer-shell--ready',
         )}
       >
@@ -260,7 +268,7 @@ export function HeroLeftScene() {
         />
 
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%]">
+          <div className="absolute left-[42%] top-[15%] w-[380px] max-w-[43%] min-[1920px]:left-[45%]">
             <div
               key={activeSlide}
               className={cn(
@@ -283,23 +291,9 @@ export function HeroLeftScene() {
               >
                 {activeSlide === 1 ? (
                   <span className="hero-ati-code">
-                    {atiDigits.slice(0, 3).map((digit, index) => (
+                    {atiDigits.map((digit, index) => (
                       <span
-                        key={`left-${index}`}
-                        className={cn(
-                          'hero-ati-digit',
-                          digit.spinning ? 'hero-ati-digit--spinning' : 'hero-ati-digit--locked',
-                        )}
-                      >
-                        {digit.char}
-                      </span>
-                    ))}
-
-                    <span className="hero-ati-gap" />
-
-                    {atiDigits.slice(3).map((digit, index) => (
-                      <span
-                        key={`right-${index}`}
+                        key={`ati-${index}`}
                         className={cn(
                           'hero-ati-digit',
                           digit.spinning ? 'hero-ati-digit--spinning' : 'hero-ati-digit--locked',
@@ -348,6 +342,18 @@ function HeroActionButton({
 }) {
   const className =
     'hero-cta-lift inline-flex h-[48px] w-[284px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-8 text-[17px] font-medium lowercase text-[var(--accent-1-text)]';
+
+  if (label.trim().toLowerCase() === 'познакомиться') {
+    return (
+      <button
+        type="button"
+        onClick={() => scrollToHeroScene('about')}
+        className={className}
+      >
+        {label}
+      </button>
+    );
+  }
 
   if (external) {
     return (
