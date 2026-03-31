@@ -109,7 +109,7 @@ export function GeographySection() {
                   </div>
                 </div>
 
-                <div className="pt-12">
+                <div className="pt-8">
                   <div className="flex items-stretch gap-5">
                     <Link
                       href="/calculator"
@@ -128,7 +128,7 @@ export function GeographySection() {
               </div>
 
               <div className="relative z-30 pt-5">
-                <div className="pointer-events-none absolute inset-x-0 bottom-[0] top-0 z-40 flex items-end justify-end">
+                <div className="pointer-events-none absolute inset-x-0 bottom-[32px] z-40 flex justify-end">
                   <div className="pointer-events-auto inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
                     <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                       активное направление
