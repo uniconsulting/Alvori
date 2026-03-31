@@ -15,6 +15,7 @@ import {
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Container } from '@/components/layout/Container';
+import { RUSSIA_CITIES, findCityByValue, type RussiaCity } from '@/content/cities';
 
 type CalcMode = 'quick' | 'advanced';
 type BodyType = 'tent' | 'curtain' | 'isotherm' | 'reefer' | 'adr';
@@ -87,12 +88,38 @@ function pluralize(n: number, forms: [string, string, string]) {
   return forms[2];
 }
 
+function deg2rad(value: number) {
+  return (value * Math.PI) / 180;
+}
+
+function calculateRoadDistanceKm(from?: RussiaCity, to?: RussiaCity) {
+  if (!from || !to) return 0;
+  if (from.value === to.value) return 0;
+
+  const earthRadiusKm = 6371;
+  const dLat = deg2rad(to.lat - from.lat);
+  const dLon = deg2rad(to.lon - from.lon);
+
+  const lat1 = deg2rad(from.lat);
+  const lat2 = deg2rad(to.lat);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const straight = earthRadiusKm * c;
+
+  const roadFactor = straight < 300 ? 1.24 : straight < 900 ? 1.19 : 1.16;
+  return Math.round(straight * roadFactor);
+}
+
 export default function CalculatorPage() {
   const [mode, setMode] = useState<CalcMode>('quick');
 
-  const [fromCity, setFromCity] = useState('');
-  const [toCity, setToCity] = useState('');
-  const [distanceKm, setDistanceKm] = useState<number>(950);
+  const [fromCity, setFromCity] = useState<string>('ulyanovsk');
+  const [toCity, setToCity] = useState<string>('moscow');
+  const [distanceKm, setDistanceKm] = useState<number>(0);
   const [loadingDate, setLoadingDate] = useState('');
   const [extraPoints, setExtraPoints] = useState<number>(0);
 
@@ -106,6 +133,14 @@ export default function CalculatorPage() {
   const [volumeM3, setVolumeM3] = useState<number>(82);
   const [pallets, setPallets] = useState<number>(33);
   const [comment, setComment] = useState('');
+
+  const fromCityObj = useMemo(() => findCityByValue(fromCity), [fromCity]);
+  const toCityObj = useMemo(() => findCityByValue(toCity), [toCity]);
+
+  useEffect(() => {
+    const nextDistance = calculateRoadDistanceKm(fromCityObj, toCityObj);
+    setDistanceKm(nextDistance);
+  }, [fromCityObj, toCityObj]);
 
   const result = useMemo(() => {
     const body = BODY_CONFIG[bodyType];
@@ -188,8 +223,8 @@ export default function CalculatorPage() {
 
   const requestQuery = useMemo(() => {
     const params = new URLSearchParams({
-      from: fromCity,
-      to: toCity,
+      from: fromCityObj?.label ?? '',
+      to: toCityObj?.label ?? '',
       distance: String(distanceKm),
       body: BODY_CONFIG[bodyType].label,
       weight: String(weightTons),
@@ -207,8 +242,8 @@ export default function CalculatorPage() {
 
     return `/request?${params.toString()}`;
   }, [
-    fromCity,
-    toCity,
+    fromCityObj,
+    toCityObj,
     distanceKm,
     bodyType,
     weightTons,
@@ -243,7 +278,7 @@ export default function CalculatorPage() {
                     className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-[#ffffff] shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
                   >
-                    <ArrowLeft size={15} className="mr-2" />
+                    <ArrowLeft size={15} className="mr-2 text-[#ffffff]" />
                     вернуться
                   </Link>
 
@@ -297,7 +332,7 @@ export default function CalculatorPage() {
                       className={cnButton(
                         mode === 'quick'
                           ? 'bg-[var(--accent-1)] text-white'
-                          : 'bg-white text-[var(--text)] border border-[rgba(38,41,46,0.08)]'
+                          : 'border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text)]'
                       )}
                     >
                       быстрый расчёт
@@ -308,7 +343,7 @@ export default function CalculatorPage() {
                       className={cnButton(
                         mode === 'advanced'
                           ? 'bg-[var(--accent-1)] text-white'
-                          : 'bg-white text-[var(--text)] border border-[rgba(38,41,46,0.08)]'
+                          : 'border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text)]'
                       )}
                     >
                       точный расчёт
@@ -317,28 +352,29 @@ export default function CalculatorPage() {
 
                   <div className="mt-7 grid grid-cols-2 gap-4">
                     <Field label="Город отправления">
-                      <input
+                      <CitySelect
                         value={fromCity}
-                        onChange={(e) => setFromCity(e.target.value)}
-                        placeholder="Например, Ульяновск"
-                        className={inputClass}
+                        onChange={setFromCity}
+                        cities={RUSSIA_CITIES}
+                        placeholder="Выберите город"
                       />
                     </Field>
 
                     <Field label="Город назначения">
-                      <input
+                      <CitySelect
                         value={toCity}
-                        onChange={(e) => setToCity(e.target.value)}
-                        placeholder="Например, Москва"
-                        className={inputClass}
+                        onChange={setToCity}
+                        cities={RUSSIA_CITIES}
+                        placeholder="Выберите город"
                       />
                     </Field>
 
                     <Field label="Расстояние, км">
                       <input
-                        type="number"
-                        value={distanceKm}
-                        onChange={(e) => setDistanceKm(Number(e.target.value || 0))}
+                        type="text"
+                        value={distanceKm > 0 ? formatDistance(distanceKm) : ''}
+                        readOnly
+                        placeholder="Подбирается автоматически"
                         className={inputClass}
                       />
                     </Field>
@@ -554,40 +590,6 @@ export default function CalculatorPage() {
             </div>
           </Container>
         </section>
-
-        <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
-          <Container>
-            <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
-                <div className="flex items-center gap-3">
-                  <MapPinned size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-                  <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-                    Как мы считаем
-                  </h2>
-                </div>
-
-                <div className="mt-6 grid grid-cols-2 gap-4">
-                  <ExplainCard
-                    title="1. Базовая ставка маршрута"
-                    text="Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ."
-                  />
-                  <ExplainCard
-                    title="2. Поправка на кузов"
-                    text="Дальше учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка."
-                  />
-                  <ExplainCard
-                    title="3. Поправка на условия"
-                    text="Срочность, температурный режим, тип загрузки, страхование и дополнительные точки корректируют итог."
-                  />
-                  <ExplainCard
-                    title="4. Рабочая вилка"
-                    text="На выходе показываем ориентир и вилку, чтобы расчёт был честным и ближе к реальной ставке рынка."
-                  />
-                </div>
-              </div>
-            </div>
-          </Container>
-        </section>
       </main>
 
       <Footer />
@@ -634,37 +636,12 @@ function StatCard({
   );
 }
 
-function ExplainCard({
-  title,
-  text,
-}: {
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-[20px] bg-[var(--bg)] px-5 py-5">
-      <div className="flex items-center justify-between">
-        <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.024em]">
-          {title}
-        </h3>
-        <ChevronDown size={17} strokeWidth={2} className="text-[var(--text-muted)]" />
-      </div>
-      <p
-        className="mt-4 text-[15px] leading-[1.35] tracking-[-0.014em] text-[var(--text-muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        {text}
-      </p>
-    </div>
-  );
-}
-
 function cnButton(activeClass: string) {
   return `inline-flex h-[48px] items-center justify-center rounded-[14px] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] transition ${activeClass}`;
 }
 
 const inputClass =
-  'h-[56px] w-full rounded-[12px] border border-[rgba(38,41,46,0.12)] bg-[rgba(255,255,255,0.96)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(250,176,33,0.26)] focus:border-[rgba(250,176,33,0.38)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
+  'h-[56px] w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface-strong)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(250,176,33,0.26)] focus:border-[rgba(250,176,33,0.38)] focus:bg-[var(--surface-strong)] focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
 
 function CustomSelect({
   value,
@@ -696,7 +673,7 @@ function CustomSelect({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-[rgba(38,41,46,0.12)] bg-[rgba(255,255,255,0.96)] px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow,background-color] duration-200 hover:border-[rgba(250,176,33,0.26)]"
+        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-[var(--border)] bg-[var(--surface-strong)] px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow] duration-200 hover:border-[rgba(250,176,33,0.26)]"
       >
         <span>{selected?.label}</span>
         <ChevronDown
@@ -707,7 +684,7 @@ function CustomSelect({
       </button>
 
       {open ? (
-        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-[14px] border border-[rgba(38,41,46,0.08)] bg-white shadow-[0_18px_34px_rgba(38,41,46,0.08)]">
+        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--surface)] shadow-[0_18px_34px_rgba(38,41,46,0.08)]">
           {options.map((option) => (
             <button
               key={option.value}
@@ -716,8 +693,8 @@ function CustomSelect({
                 onChange(option.value);
                 setOpen(false);
               }}
-              className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] transition hover:bg-[var(--surface)] ${
-                option.value === value ? 'bg-[var(--surface)] font-semibold' : ''
+              className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--surface-strong)] ${
+                option.value === value ? 'bg-[var(--surface-strong)] font-semibold' : ''
               }`}
             >
               {option.label}
@@ -729,3 +706,97 @@ function CustomSelect({
   );
 }
 
+function CitySelect({
+  value,
+  onChange,
+  cities,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  cities: RussiaCity[];
+  placeholder: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  const selected = cities.find((city) => city.value === value);
+
+  const filtered = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return cities.slice(0, 12);
+    return cities
+      .filter((city) => city.label.toLowerCase().includes(normalized))
+      .slice(0, 12);
+  }, [cities, query]);
+
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (!rootRef.current) return;
+      if (!rootRef.current.contains(event.target as Node)) {
+        setOpen(false);
+        setQuery('');
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, []);
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-[var(--border)] bg-[var(--surface-strong)] px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow] duration-200 hover:border-[rgba(250,176,33,0.26)]"
+      >
+        <span>{selected?.label ?? placeholder}</span>
+        <ChevronDown
+          size={16}
+          strokeWidth={2}
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open ? (
+        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--surface)] shadow-[0_18px_34px_rgba(38,41,46,0.08)]">
+          <div className="border-b border-[var(--border)] p-3">
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Поиск города"
+              className="h-[44px] w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 text-[14px] text-[var(--text)] outline-none placeholder:text-[var(--text-muted)]"
+            />
+          </div>
+
+          <div className="max-h-[280px] overflow-y-auto py-1">
+            {filtered.length > 0 ? (
+              filtered.map((city) => (
+                <button
+                  key={city.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(city.value);
+                    setOpen(false);
+                    setQuery('');
+                  }}
+                  className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] text-[var(--text)] transition hover:bg-[var(--surface-strong)] ${
+                    city.value === value ? 'bg-[var(--surface-strong)] font-semibold' : ''
+                  }`}
+                >
+                  {city.label}
+                </button>
+              ))
+            ) : (
+              <div className="px-4 py-4 text-[14px] text-[var(--text-muted)]">
+                Ничего не найдено
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
