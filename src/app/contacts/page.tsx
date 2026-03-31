@@ -117,12 +117,12 @@ export default function ContactsPage() {
                   </div>
 
                   <div className="flex w-[248px] flex-col gap-3">
-                    <Link
-                      href={CONTACTS.telegramHref}
-                      className="inline-flex h-[56px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-                    >
-                      написать в Telegram
-                    </Link>
+<Link
+  href={CONTACTS.telegramHref}
+  className="inline-flex h-[56px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] !text-[var(--accent-1-text)]"
+>
+  написать в Telegram
+</Link>
 
                     <Link
                       href={CONTACTS.maxHref}
@@ -182,7 +182,7 @@ export default function ContactsPage() {
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
-                <div className="relative overflow-hidden rounded-[26px]">
+                <div className="relative overflow-hidden rounded-[22px]">
                   <iframe
                     src={CONTACTS.mapEmbed}
                     width="100%"
@@ -281,7 +281,8 @@ function ContactMiniCard({
           {label}
         </span>
       </div>
-      <div className="mt-3 text-[22px] font-semibold tracking-[-0.024em] text-white">
+
+      <div className="mt-3 text-[26px] font-semibold tracking-[-0.03em] text-white">
         {value}
       </div>
     </div>
