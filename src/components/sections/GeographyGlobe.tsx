@@ -264,7 +264,7 @@ export function GeographyGlobe({
           ))}
         </div>
 
-        <div className="absolute right-0 top-[30%] flex -translate-y-1/2 flex-col items-center gap-3">
+        <div className="absolute right-0 top-[35%] flex -translate-y-1/2 flex-col items-center gap-3">
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
