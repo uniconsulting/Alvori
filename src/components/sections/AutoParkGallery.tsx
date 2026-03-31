@@ -100,6 +100,7 @@ export function AutoParkGallery() {
             isRevealed={isRevealed}
             delayMs={item.delayMs}
             baseZ={item.baseZ}
+            activeId={activeId}
             onEnter={() => setActiveId(item.id)}
           />
         );
@@ -118,6 +119,7 @@ function GalleryCard({
   isRevealed,
   delayMs,
   baseZ,
+  activeId,
   onEnter,
 }: {
   id: string;
@@ -129,29 +131,31 @@ function GalleryCard({
   isRevealed: boolean;
   delayMs: number;
   baseZ: number;
+  activeId: string | null;
   onEnter: () => void;
 }) {
-  const hoverTransform = getHoverTransform(id);
+  const activeTransform = getActiveTransform(id);
+  const passiveTransform = getPassiveTransform(id, activeId);
 
   return (
     <div
       className={`group absolute overflow-hidden rounded-[26px] bg-[#26292e] ${className}`}
       onMouseEnter={onEnter}
       style={{
-        zIndex: isActive ? baseZ + 20 : baseZ,
+        zIndex: isActive ? 120 : baseZ,
         transition:
-          'transform 520ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1), filter 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms cubic-bezier(0.22, 1, 0.36, 1)',
+          'transform 560ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 560ms cubic-bezier(0.22, 1, 0.36, 1), filter 460ms cubic-bezier(0.22, 1, 0.36, 1), border-color 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 560ms cubic-bezier(0.22, 1, 0.36, 1)',
         transform: isRevealed
           ? isActive
-            ? hoverTransform
-            : 'translate3d(0,0,0) scale(1)'
+            ? activeTransform
+            : passiveTransform
           : 'translateY(18px) scale(0.99)',
         opacity: isRevealed ? 1 : 0,
         filter: isRevealed
           ? isActive
-            ? 'blur(0px) saturate(1.02) brightness(1.01)'
+            ? 'blur(0px) saturate(1.03) brightness(1.015)'
             : isBlurred
-              ? 'blur(0.35px) saturate(0.96) brightness(0.98)'
+              ? 'blur(0.3px) saturate(0.95) brightness(0.985)'
               : 'blur(0px) saturate(1) brightness(1)'
           : 'blur(8px)',
         boxShadow: isActive
@@ -163,35 +167,82 @@ function GalleryCard({
       <img
         src={src}
         alt={alt}
-        className="h-full w-full object-cover object-center transition-transform duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="h-full w-full object-cover object-center transition-transform duration-[560ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
-          transform: isActive ? 'scale(1.012)' : 'scale(1)',
+          transform: isActive ? 'scale(1.014)' : 'scale(1)',
         }}
         loading="lazy"
       />
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(38,41,46,0.06)_0%,rgba(38,41,46,0.14)_52%,rgba(38,41,46,0.30)_100%)]" />
+
       <div
-        className="pointer-events-none absolute inset-0 rounded-[26px] transition-all duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="pointer-events-none absolute inset-0 rounded-[26px] transition-all duration-[460ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           border: isActive ? '1px solid rgba(255,255,255,0.32)' : '1px solid rgba(255,255,255,0.22)',
         }}
       />
+
       <div className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]" />
     </div>
   );
 }
 
-function getHoverTransform(id: string) {
+function getActiveTransform(id: string) {
   switch (id) {
     case 'main':
-      return 'translate3d(0,-2px,0) rotate(-1deg) scale(1.014)';
+      return 'translate3d(0,-4px,0) rotate(-1deg) scale(1.016)';
     case 'left':
-      return 'translate3d(-12px,-2px,0) rotate(-7deg) scale(1.014)';
+      return 'translate3d(-14px,-4px,0) rotate(-7deg) scale(1.016)';
     case 'top':
-      return 'translate3d(-10px,-10px,0) rotate(6deg) scale(1.014)';
+      return 'translate3d(-10px,-12px,0) rotate(6deg) scale(1.016)';
     case 'right':
-      return 'translate3d(-6px,8px,0) rotate(8deg) scale(1.014)';
+      return 'translate3d(-12px,-6px,0) rotate(8deg) scale(1.018)';
+    default:
+      return 'translate3d(0,0,0) scale(1)';
+  }
+}
+
+function getPassiveTransform(id: string, activeId: string | null) {
+  if (!activeId) return 'translate3d(0,0,0) scale(1)';
+
+  switch (activeId) {
+    case 'main':
+      return id === 'top'
+        ? 'translate3d(8px,-2px,0) scale(0.996)'
+        : id === 'left'
+          ? 'translate3d(-8px,4px,0) scale(0.996)'
+          : id === 'right'
+            ? 'translate3d(10px,6px,0) scale(0.996)'
+            : 'translate3d(0,0,0) scale(1)';
+
+    case 'top':
+      return id === 'main'
+        ? 'translate3d(6px,8px,0) scale(0.996)'
+        : id === 'left'
+          ? 'translate3d(-4px,4px,0) scale(0.996)'
+          : id === 'right'
+            ? 'translate3d(8px,6px,0) scale(0.996)'
+            : 'translate3d(0,0,0) scale(1)';
+
+    case 'left':
+      return id === 'main'
+        ? 'translate3d(8px,4px,0) scale(0.996)'
+        : id === 'top'
+          ? 'translate3d(6px,-2px,0) scale(0.996)'
+          : id === 'right'
+            ? 'translate3d(10px,4px,0) scale(0.996)'
+            : 'translate3d(0,0,0) scale(1)';
+
+    case 'right':
+      return id === 'main'
+        ? 'translate3d(-6px,6px,0) scale(0.996)'
+        : id === 'top'
+          ? 'translate3d(-8px,-2px,0) scale(0.996)'
+          : id === 'left'
+            ? 'translate3d(-10px,2px,0) scale(0.996)'
+            : 'translate3d(0,0,0) scale(1)';
+
     default:
       return 'translate3d(0,0,0) scale(1)';
   }
