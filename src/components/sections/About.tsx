@@ -290,14 +290,14 @@ function ProcessFlowNodes() {
                 className="group flex items-center justify-center"
               >
                 <span
-                  className={cn(
-                    'text-[17px] font-semibold lowercase tracking-[-0.02em] transition-all duration-500',
-                    isActive
-                      ? 'text-[var(--text)] scale-[1.065]'
-                      : isPassed
-                        ? 'text-[var(--text)]'
-                        : 'text-[var(--text-muted)] group-hover:text-[var(--text)]',
-                  )}
+className={cn(
+  'about-process-node text-[17px] font-semibold lowercase tracking-[-0.02em]',
+  isActive
+    ? 'is-active text-[var(--text)]'
+    : isPassed
+      ? 'is-passed text-[var(--text)]'
+      : 'is-idle text-[var(--text-muted)] group-hover:text-[var(--text)]',
+)}
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
                   {step.title}
