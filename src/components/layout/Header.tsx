@@ -152,14 +152,14 @@ export function Header() {
   };
 
   return (
-    <header
-      className="site-header fixed inset-x-0 top-0 z-50 border-b border-[var(--divider)]"
-      style={{
-        background: 'color-mix(in oklab, var(--bg) 72%, transparent)',
-        backdropFilter: 'blur(18px) saturate(1.04)',
-        WebkitBackdropFilter: 'blur(18px) saturate(1.04)',
-      }}
-    >
+<header
+  className="site-header fixed inset-x-0 top-0 z-50"
+  style={{
+    background: 'color-mix(in oklab, var(--bg) 72%, transparent)',
+    backdropFilter: 'blur(14px) saturate(1.03)',
+    WebkitBackdropFilter: 'blur(14px) saturate(1.03)',
+  }}
+>
       <Container>
         <div className="hidden items-center py-4 xl:flex">
           <LogoBlock />
