@@ -273,7 +273,7 @@ export default function RequestPageClient() {
                           </p>
                         </div>
 
-                        <label className="relative mt-4 flex min-h-[184px] flex-1 cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 transition hover:bg-white/10">
+                        <label className="relative mt-4 flex min-h-[172px] flex-1 cursor-pointer flex-col overflow-hidden rounded-[18px] bg-white/6 px-5 py-5 transition hover:bg-white/10">
                           <input
                             type="file"
                             multiple
