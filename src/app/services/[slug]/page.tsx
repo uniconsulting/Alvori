@@ -13,6 +13,10 @@ const titles: Record<string, string> = {
   adr: 'опасные грузы',
 };
 
+export function generateStaticParams() {
+  return Object.keys(titles).map((slug) => ({ slug }));
+}
+
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const title = titles[slug];
@@ -27,7 +31,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <main className="py-6 md:py-8">
         <Container>
           <Card className="p-6 md:p-8">
-            <SectionHeading title={title} description="Страница-заглушка для дальнейшего наполнения по направлению в проекте «Алвори»." />
+            <SectionHeading
+              title={title}
+              description="Страница-заглушка для дальнейшего наполнения по направлению в проекте «Алвори»."
+            />
           </Card>
         </Container>
       </main>
