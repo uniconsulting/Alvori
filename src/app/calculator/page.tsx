@@ -713,7 +713,9 @@ function ResultPanel({
       {empty ? (
         <div className="flex min-h-[260px] items-center justify-center rounded-[24px] bg-white/6">
           <div className="text-center">
-            <h2 className="font-heading text-[34px] tracking-[-0.03em]">Выберите маршрут</h2>
+            <h2 className="font-heading text-[34px] tracking-[-0.03em]">
+              Выберите маршрут
+            </h2>
             <p className="mt-3 text-[16px] text-white/68">
               Укажите города отправления и назначения, чтобы получить расчёт.
             </p>
@@ -729,7 +731,7 @@ function ResultPanel({
           </div>
 
           <div className="mt-7 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4 items-stretch">
-            <div className="flex h-full flex-col rounded-[24px] bg-white/6 px-6 py-6">
+            <div className="flex h-full min-h-[324px] flex-col rounded-[24px] bg-white/6 px-6 py-6">
               <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                 ориентировочная стоимость
               </p>
@@ -748,14 +750,14 @@ function ResultPanel({
               </div>
             </div>
 
-            <div className="grid h-full grid-cols-2 grid-rows-2 gap-4">
+            <div className="grid h-full min-h-[324px] grid-cols-2 grid-rows-2 gap-4">
               <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} />
               <MetricCard label="Срок" value={days} />
               <MetricCard label="Кузов" value={body} />
               <MetricCard label="Ставка / км" value={pricePerKm} />
             </div>
 
-            <div className="rounded-[24px] bg-white/6 px-5 py-5 self-start">
+            <div className="flex h-full min-h-[324px] flex-col rounded-[24px] bg-white/6 px-5 py-5">
               <div className="flex items-center gap-2">
                 <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
                 <p className="text-[15px] font-semibold tracking-[-0.016em]">
@@ -777,12 +779,12 @@ function ResultPanel({
           <div className="mt-5 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4 items-center">
             <Link
               href={requestHref}
-              className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+              className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] !text-[var(--accent-1-text)]"
             >
               отправить этот расчёт
             </Link>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid h-[54px] grid-cols-2 gap-4">
               <div />
               <Link
                 href={requestHref}
