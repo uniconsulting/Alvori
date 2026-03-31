@@ -109,7 +109,7 @@ export function GeographySection() {
                   </div>
                 </div>
 
-                <div className="pt-8">
+                <div className="pt-2">
                   <div className="flex items-stretch gap-5">
                     <Link
                       href="/calculator"
