@@ -84,7 +84,7 @@ export function GeographySection() {
 
             <div className="grid grid-cols-[0.92fr_1.08fr] items-start gap-10 xl:gap-14">
               <div className="relative z-10">
-                <div className="mt-1 flex flex-col gap-5">
+                <div className="mt-1">
                   <p
                     className="max-w-[660px] text-[20px] font-normal leading-[1.28] tracking-[-0.018em] text-[var(--text)]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
@@ -97,7 +97,7 @@ export function GeographySection() {
                   </p>
                 </div>
 
-                <div className="mt-8 flex flex-col gap-3">
+                <div className="mt-10 flex flex-col gap-3">
                   {DISTRICTS.map((district, index) => (
                     <DistrictPill
                       key={district}
@@ -107,7 +107,7 @@ export function GeographySection() {
                   ))}
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-10">
                   <Link
                     href="/calculator"
                     className="header-utility-button inline-flex min-w-[364px] items-center justify-center gap-3 rounded-[22px] bg-[var(--accent-1)] px-8 py-7 text-[var(--accent-1-text)]"
@@ -125,7 +125,7 @@ export function GeographySection() {
 
               <div className="relative z-30 pt-5">
                 <div className="flex justify-end">
-                  <div className="mt-[255px] inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
+                  <div className="mt-[332px] inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
                     <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
                       активное направление
                     </p>
