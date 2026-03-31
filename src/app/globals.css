@@ -674,3 +674,12 @@ html[data-theme='dark'] .hero-card-tilt:hover {
     filter: brightness(0.99);
   }
 }
+
+.drawer-blur-lock {
+  overflow: hidden;
+}
+
+.drawer-scroll {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
