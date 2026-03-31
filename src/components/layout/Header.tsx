@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { ThemeLogo } from '@/components/ui/ThemeLogo';
 import { contacts } from '@/content/contacts';
-import { homeAnchorIds, homeNavigation } from '@/config/anchors';
+import { homeNavigation } from '@/config/anchors';
 import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
 
@@ -55,36 +55,36 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
-      const scrollDelta = currentY - lastScrollYRef.current;
-      const isScrollingUp = scrollDelta < -2;
+      const delta = currentY - lastScrollYRef.current;
+      const isScrollingDown = delta > 2;
 
       const heroStage = document.getElementById('hero-services-stage');
-      const geographySection = document.getElementById(homeAnchorIds.geography);
+      const whyChooseUs = document.getElementById('why-choose-us');
 
-      const anchorY = currentY + 140;
-
-      if (!heroStage || !geographySection) {
+      if (!heroStage || !whyChooseUs) {
         setIsVisible(true);
         lastScrollYRef.current = currentY;
         return;
       }
 
+      const anchorY = currentY + 140;
+
       const heroTop = heroStage.offsetTop;
       const heroBottom = heroTop + heroStage.offsetHeight;
-
-      const geographyTop = geographySection.offsetTop;
-      const geographyBottom = geographyTop + geographySection.offsetHeight;
+      const whyTop = whyChooseUs.offsetTop;
 
       let nextVisible = true;
 
-      if (anchorY >= heroTop && anchorY < heroBottom) {
+      if (anchorY < heroTop) {
+        nextVisible = true;
+      } else if (anchorY >= heroTop && anchorY < whyTop) {
         nextVisible = false;
-      } else if (anchorY >= geographyTop && anchorY < geographyBottom) {
-        nextVisible = isScrollingUp;
-      } else if (anchorY >= geographyBottom) {
-        nextVisible = !isScrollingUp;
       } else {
         nextVisible = true;
+      }
+
+      if (anchorY >= heroTop && anchorY < whyTop && !isScrollingDown) {
+        nextVisible = false;
       }
 
       setIsVisible(nextVisible);
@@ -92,7 +92,6 @@ export function Header() {
     };
 
     handleScroll();
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
 
@@ -119,7 +118,9 @@ export function Header() {
         isVisible ? 'header-shell--visible' : 'header-shell--hidden',
       )}
     >
-      <header className="relative z-30 pt-4 md:pt-6 xl:pt-10">
+      <div className="header-shell__backdrop" />
+
+      <header className="relative z-[1] pt-4 md:pt-6 xl:pt-10">
         <Container>
           <div className="hidden items-center xl:flex">
             <LogoBlock />
