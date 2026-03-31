@@ -74,19 +74,19 @@ export function HeroServicesStage() {
       servicesCardsProgress,
       servicesExit,
 
-      aboutOpacity: clamp(aboutEnter * 1.12, 0, 1),
-      aboutY: `${54 - 54 * aboutEnter}px`,
-      aboutBlur: `${16 - 16 * aboutEnter}px`,
+      aboutOpacity: clamp(aboutEnter * 1.06, 0, 1),
+      aboutY: `${34 - 34 * aboutEnter}px`,
+      aboutBlur: `${8 - 8 * aboutEnter}px`,
       aboutReveal,
     };
   }, [progress]);
 
   return (
     <section
-  id="hero-services-stage"
-  ref={rootRef}
-  className="relative h-[300vh]"
->
+      id="hero-services-stage"
+      ref={rootRef}
+      className="relative h-[300vh]"
+    >
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 overflow-hidden">
@@ -155,7 +155,7 @@ export function HeroServicesStage() {
               transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
             }}
           >
-            <About />
+            <About revealProgress={transforms.aboutReveal} />
           </div>
 
           <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
