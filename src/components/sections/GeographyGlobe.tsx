@@ -103,10 +103,12 @@ export function GeographyGlobe({
 
     const globe = createGlobe(canvas, {
       devicePixelRatio: 2,
-      width: 920 * 2,
-      height: 920 * 2,
+      width: 820 * 2,
+      height: 820 * 2,
       phi: phiRef.current,
       theta: thetaRef.current,
+
+      // Всегда держим светлую тему глобуса
       dark: 0,
       diffuse: 1.34,
       mapSamples: 24000,
@@ -114,6 +116,7 @@ export function GeographyGlobe({
       mapBaseBrightness: 0.0,
       baseColor: rgb('#eef1f5'),
       glowColor: rgb('#ffffff'),
+
       markerColor: rgb('#ffffff'),
       arcColor: rgb('#fab021'),
       arcWidth: 1.2,
@@ -136,12 +139,15 @@ export function GeographyGlobe({
         phi: phiRef.current,
         theta: thetaRef.current,
         scale: scaleRef.current,
+
+        // Всегда светлая палитра
         dark: 0,
         diffuse: 1.34,
         mapBrightness: 4.8,
         mapBaseBrightness: 0.0,
         baseColor: rgb('#eef1f5'),
         glowColor: rgb('#ffffff'),
+
         markerColor: rgb('#ffffff'),
         markers: markersRef.current,
         arcs: arcsRef.current,
@@ -198,12 +204,12 @@ export function GeographyGlobe({
   const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
 
   return (
-    <div className="relative z-20 flex h-full flex-col items-center justify-start">
-      <div className="relative flex h-[720px] w-full items-start justify-center">
-        <div className="relative h-[720px] w-[860px] max-w-none">
+    <div className="relative z-10 flex h-full flex-col items-center justify-start">
+      <div className="relative flex h-[640px] w-full items-start justify-center">
+        <div className="relative h-[640px] w-[720px] max-w-none">
           <canvas
             ref={canvasRef}
-            className="h-[700px] w-[700px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
+            className="h-[620px] w-[620px] max-w-none -translate-x-[92px] -translate-y-[40px] cursor-grab"
             style={{ aspectRatio: '1 / 1' }}
             onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
             onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
@@ -236,7 +242,7 @@ export function GeographyGlobe({
           ))}
         </div>
 
-        <div className="absolute right-0 top-[35%] flex -translate-y-1/2 flex-col items-center gap-3">
+        <div className="absolute right-0 top-[35%] z-20 flex -translate-y-1/2 flex-col items-center gap-3">
           <button
             type="button"
             onClick={() => changeZoom(zoomIndex + 1)}
