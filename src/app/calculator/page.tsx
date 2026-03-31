@@ -10,7 +10,10 @@ import {
   MapPinned,
   Route,
   Truck,
+  ArrowLeft,
 } from 'lucide-react';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { Container } from '@/components/layout/Container';
 
 type CalcMode = 'quick' | 'advanced';
@@ -161,8 +164,6 @@ export default function CalculatorPage() {
       minTotal,
       maxTotal,
       center,
-      baseRateMin: BASE_RATE_MIN,
-      baseRateMax: BASE_RATE_MAX,
       transitDays: estimateTransitDays(distanceKm),
       pricePerKmMin: minTotal / Math.max(distanceKm, 1),
       pricePerKmMax: maxTotal / Math.max(distanceKm, 1),
@@ -197,424 +198,406 @@ export default function CalculatorPage() {
       body: BODY_CONFIG[bodyType].label,
       weight: String(weightTons),
       volume: String(volumeM3),
+      pallets: String(pallets),
       points: String(extraPoints),
+      urgency: URGENCY_CONFIG[urgency].label,
+      temp: TEMP_CONFIG[tempMode].label,
+      loading: LOADING_CONFIG[loadingType].label,
+      insurance: INSURANCE_CONFIG[insurance].label,
+      date: loadingDate,
+      comment,
       result: `${Math.round(result.minTotal)}-${Math.round(result.maxTotal)}`,
     });
 
     return `/request?${params.toString()}`;
-  }, [fromCity, toCity, distanceKm, bodyType, weightTons, volumeM3, extraPoints, result]);
+  }, [
+    fromCity,
+    toCity,
+    distanceKm,
+    bodyType,
+    weightTons,
+    volumeM3,
+    pallets,
+    extraPoints,
+    urgency,
+    tempMode,
+    loadingType,
+    insurance,
+    loadingDate,
+    comment,
+    result,
+  ]);
 
   return (
-    <main className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
-      <section className="pb-8 pt-8 md:pb-10 md:pt-10 xl:pb-12 xl:pt-12">
-        <Container>
-          <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-            <div className="grid grid-cols-[0.9fr_1.1fr] items-end gap-8 xl:gap-10">
-              <div>
-                <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-                  <span
-                    className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
-                    style={{ fontFamily: 'var(--font-body-text)' }}
-                  >
-                    калькулятор грузоперевозки
-                  </span>
-                </div>
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+      <Header />
 
-                <h1 className="mt-6 font-heading text-[58px] leading-[0.94] tracking-[-0.05em] text-[var(--text)]">
-                  Расчёт
-                  <br />
-                  грузоперевозки
+      <main>
+        <section className="pb-8 pt-8 md:pb-10 md:pt-10 xl:pb-12 xl:pt-12">
+          <Container>
+            <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+              <div className="flex items-center justify-between gap-6">
+                <h1 className="font-heading text-[48px] leading-[0.96] tracking-[-0.045em] text-[var(--text)] xl:text-[52px]">
+                  Расчёт грузоперевозки
                 </h1>
 
-                <p
-                  className="mt-5 max-w-[640px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--text-muted)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  Получите ориентировочную стоимость перевозки по РФ на основе
-                  маршрута, параметров груза и текущей рыночной ставки.
-                </p>
-
-                <div className="mt-6 inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3">
-                  <span
-                    className="text-[15px] font-semibold tracking-[-0.016em] text-[var(--text)]"
+                <div className="flex items-center gap-3">
+                  <Link
+                    href="/"
+                    className="inline-flex h-[42px] items-center rounded-[16px] bg-[#26292e] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-white shadow-[0_8px_20px_rgba(38,41,46,0.08)]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
                   >
-                    рыночная база: 78–87 ₽/км
-                  </span>
+                    <ArrowLeft size={15} className="mr-2" />
+                    вернуться
+                  </Link>
+
+                  <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+                    <span
+                      className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      калькулятор · запрос · КП
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex justify-end">
-                <div className="grid w-full max-w-[440px] grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setMode('quick')}
-                    className={cnButton(
-                      mode === 'quick'
-                        ? 'bg-[var(--accent-1)] text-white'
-                        : 'bg-[var(--surface)] text-[var(--text)]'
-                    )}
-                  >
-                    быстрый расчёт
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMode('advanced')}
-                    className={cnButton(
-                      mode === 'advanced'
-                        ? 'bg-[var(--accent-1)] text-white'
-                        : 'bg-[var(--surface)] text-[var(--text)]'
-                    )}
-                  >
-                    точный расчёт
-                  </button>
-                </div>
+              <p
+                className="mt-8 max-w-[760px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--text-muted)]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                Получите ориентировочную стоимость перевозки по РФ на основе
+                маршрута, параметров груза и текущей рыночной ставки.
+              </p>
+
+              <div className="mt-6 inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3">
+                <span
+                  className="text-[15px] font-semibold tracking-[-0.016em] text-[var(--text)]"
+                  style={{ fontFamily: 'var(--font-body-text)' }}
+                >
+                  рыночная база: 78–87 ₽/км
+                </span>
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
 
-      <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
-        <Container>
-          <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-            <div className="grid grid-cols-[0.96fr_0.78fr] items-start gap-6 xl:gap-8">
-              <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
-                <div className="flex items-center gap-3">
-                  <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
-                  <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-                    Параметры перевозки
-                  </h2>
-                </div>
+        <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
+          <Container>
+            <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+              <div className="grid grid-cols-[0.96fr_0.78fr] items-start gap-6 xl:gap-8">
+                <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
+                      <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
+                        Параметры перевозки
+                      </h2>
+                    </div>
 
-                <div className="mt-7 grid grid-cols-2 gap-4">
-                  <Field label="Город отправления">
-                    <input
-                      value={fromCity}
-                      onChange={(e) => setFromCity(e.target.value)}
-                      placeholder="Например, Ульяновск"
-                      className={inputClass}
-                    />
-                  </Field>
-
-                  <Field label="Город назначения">
-                    <input
-                      value={toCity}
-                      onChange={(e) => setToCity(e.target.value)}
-                      placeholder="Например, Москва"
-                      className={inputClass}
-                    />
-                  </Field>
-
-                  <Field label="Расстояние, км">
-                    <input
-                      type="number"
-                      value={distanceKm}
-                      onChange={(e) => setDistanceKm(Number(e.target.value || 0))}
-                      className={inputClass}
-                    />
-                  </Field>
-
-                  <Field label="Дата погрузки">
-                    <input
-                      type="date"
-                      value={loadingDate}
-                      onChange={(e) => setLoadingDate(e.target.value)}
-                      className={inputClass}
-                    />
-                  </Field>
-
-                  <Field label="Тип кузова">
-                    <select
-                      value={bodyType}
-                      onChange={(e) => setBodyType(e.target.value as BodyType)}
-                      className={inputClass}
-                    >
-                      {Object.entries(BODY_CONFIG).map(([key, config]) => (
-                        <option key={key} value={key}>
-                          {config.label}
-                        </option>
-                      ))}
-                    </select>
-                  </Field>
-
-                  <Field label="Доп. точки">
-                    <input
-                      type="number"
-                      min={0}
-                      value={extraPoints}
-                      onChange={(e) => setExtraPoints(Number(e.target.value || 0))}
-                      className={inputClass}
-                    />
-                  </Field>
-                </div>
-
-                <div className="mt-8 rounded-[20px] bg-[var(--bg)] p-5">
-                  <div className="flex items-center gap-3">
-                    <Truck size={18} strokeWidth={2} className="text-[var(--accent-1)]" />
-                    <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.025em]">
-                      Груз и условия
-                    </h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setMode('quick')}
+                        className={cnButton(
+                          mode === 'quick'
+                            ? 'bg-[var(--accent-1)] text-white'
+                            : 'bg-[var(--bg)] text-[var(--text)]'
+                        )}
+                      >
+                        быстрый расчёт
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMode('advanced')}
+                        className={cnButton(
+                          mode === 'advanced'
+                            ? 'bg-[var(--accent-1)] text-white'
+                            : 'bg-[var(--bg)] text-[var(--text)]'
+                        )}
+                      >
+                        точный расчёт
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="mt-5 grid grid-cols-3 gap-4">
-                    <Field label="Вес, т">
+                  <div className="mt-7 grid grid-cols-2 gap-4">
+                    <Field label="Город отправления">
                       <input
-                        type="number"
-                        value={weightTons}
-                        onChange={(e) => setWeightTons(Number(e.target.value || 0))}
+                        value={fromCity}
+                        onChange={(e) => setFromCity(e.target.value)}
+                        placeholder="Например, Ульяновск"
                         className={inputClass}
                       />
                     </Field>
 
-                    <Field label="Объём, м³">
+                    <Field label="Город назначения">
                       <input
-                        type="number"
-                        value={volumeM3}
-                        onChange={(e) => setVolumeM3(Number(e.target.value || 0))}
+                        value={toCity}
+                        onChange={(e) => setToCity(e.target.value)}
+                        placeholder="Например, Москва"
                         className={inputClass}
                       />
                     </Field>
 
-                    <Field label="Паллеты">
+                    <Field label="Расстояние, км">
                       <input
                         type="number"
-                        value={pallets}
-                        onChange={(e) => setPallets(Number(e.target.value || 0))}
+                        value={distanceKm}
+                        onChange={(e) => setDistanceKm(Number(e.target.value || 0))}
+                        className={inputClass}
+                      />
+                    </Field>
+
+                    <Field label="Дата погрузки">
+                      <input
+                        type="date"
+                        value={loadingDate}
+                        onChange={(e) => setLoadingDate(e.target.value)}
+                        className={inputClass}
+                      />
+                    </Field>
+
+                    <Field label="Тип кузова">
+                      <CustomSelect
+                        value={bodyType}
+                        onChange={(value) => setBodyType(value as BodyType)}
+                        options={Object.entries(BODY_CONFIG).map(([key, config]) => ({
+                          value: key,
+                          label: config.label,
+                        }))}
+                      />
+                    </Field>
+
+                    <Field label="Доп. точки">
+                      <input
+                        type="number"
+                        min={0}
+                        value={extraPoints}
+                        onChange={(e) => setExtraPoints(Number(e.target.value || 0))}
                         className={inputClass}
                       />
                     </Field>
                   </div>
 
-                  {mode === 'advanced' ? (
+                  <div className="mt-8 rounded-[20px] bg-[var(--bg)] p-5">
+                    <div className="flex items-center gap-3">
+                      <Truck size={18} strokeWidth={2} className="text-[var(--accent-1)]" />
+                      <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.025em]">
+                        Груз и условия
+                      </h3>
+                    </div>
+
+                    <div className="mt-5 grid grid-cols-3 gap-4">
+                      <Field label="Вес, т">
+                        <input
+                          type="number"
+                          value={weightTons}
+                          onChange={(e) => setWeightTons(Number(e.target.value || 0))}
+                          className={inputClass}
+                        />
+                      </Field>
+
+                      <Field label="Объём, м³">
+                        <input
+                          type="number"
+                          value={volumeM3}
+                          onChange={(e) => setVolumeM3(Number(e.target.value || 0))}
+                          className={inputClass}
+                        />
+                      </Field>
+
+                      <Field label="Паллеты">
+                        <input
+                          type="number"
+                          value={pallets}
+                          onChange={(e) => setPallets(Number(e.target.value || 0))}
+                          className={inputClass}
+                        />
+                      </Field>
+                    </div>
+
                     <div className="mt-5 grid grid-cols-2 gap-4">
                       <Field label="Срочность">
-                        <select
+                        <CustomSelect
                           value={urgency}
-                          onChange={(e) => setUrgency(e.target.value as UrgencyType)}
-                          className={inputClass}
-                        >
-                          {Object.entries(URGENCY_CONFIG).map(([key, config]) => (
-                            <option key={key} value={key}>
-                              {config.label}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(value) => setUrgency(value as UrgencyType)}
+                          options={Object.entries(URGENCY_CONFIG).map(([key, config]) => ({
+                            value: key,
+                            label: config.label,
+                          }))}
+                        />
                       </Field>
 
                       <Field label="Температурный режим">
-                        <select
+                        <CustomSelect
                           value={tempMode}
-                          onChange={(e) => setTempMode(e.target.value as TempMode)}
-                          className={inputClass}
-                        >
-                          {Object.entries(TEMP_CONFIG).map(([key, config]) => (
-                            <option key={key} value={key}>
-                              {config.label}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(value) => setTempMode(value as TempMode)}
+                          options={Object.entries(TEMP_CONFIG).map(([key, config]) => ({
+                            value: key,
+                            label: config.label,
+                          }))}
+                        />
                       </Field>
 
-                      <Field label="Тип загрузки">
-                        <select
-                          value={loadingType}
-                          onChange={(e) => setLoadingType(e.target.value as LoadingType)}
-                          className={inputClass}
-                        >
-                          {Object.entries(LOADING_CONFIG).map(([key, config]) => (
-                            <option key={key} value={key}>
-                              {config.label}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
+                      {mode === 'advanced' ? (
+                        <>
+                          <Field label="Тип загрузки">
+                            <CustomSelect
+                              value={loadingType}
+                              onChange={(value) => setLoadingType(value as LoadingType)}
+                              options={Object.entries(LOADING_CONFIG).map(([key, config]) => ({
+                                value: key,
+                                label: config.label,
+                              }))}
+                            />
+                          </Field>
 
-                      <Field label="Страхование">
-                        <select
-                          value={insurance}
-                          onChange={(e) => setInsurance(e.target.value as InsuranceType)}
-                          className={inputClass}
-                        >
-                          {Object.entries(INSURANCE_CONFIG).map(([key, config]) => (
-                            <option key={key} value={key}>
-                              {config.label}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
+                          <Field label="Страхование">
+                            <CustomSelect
+                              value={insurance}
+                              onChange={(value) => setInsurance(value as InsuranceType)}
+                              options={Object.entries(INSURANCE_CONFIG).map(([key, config]) => ({
+                                value: key,
+                                label: config.label,
+                              }))}
+                            />
+                          </Field>
 
-                      <div className="col-span-2">
-                        <Field label="Комментарий">
-                          <textarea
-                            rows={4}
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            placeholder="Укажите особенности груза, сроки, пожелания"
-                            className={`${inputClass} min-h-[124px] resize-none py-4`}
-                          />
-                        </Field>
-                      </div>
+                          <div className="col-span-2">
+                            <Field label="Комментарий">
+                              <textarea
+                                rows={4}
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                placeholder="Укажите особенности груза, сроки, пожелания"
+                                className={`${inputClass} min-h-[124px] resize-none py-4`}
+                              />
+                            </Field>
+                          </div>
+                        </>
+                      ) : null}
                     </div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="sticky top-8 rounded-[30px] bg-[#26292e] px-8 py-8 text-white">
-                <div className="flex items-center gap-3">
-                  <Route size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-                  <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em]">
-                    Результат
-                  </h2>
+                  </div>
                 </div>
 
-                <div className="mt-7">
-                  <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                    ориентировочная стоимость
-                  </p>
-                  <p className="mt-2 font-heading text-[54px] leading-[0.95] tracking-[-0.05em]">
-                    {formatCurrency(result.center)} ₽
-                  </p>
-                </div>
+                <div className="sticky top-8 rounded-[30px] bg-[#26292e] px-8 py-8 text-white">
+                  <div className="flex items-center gap-3">
+                    <Route size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
+                    <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em]">
+                      Результат
+                    </h2>
+                  </div>
 
-                <div className="mt-6 rounded-[18px] bg-white/6 px-5 py-4">
-                  <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                    рабочая вилка
-                  </p>
-                  <p className="mt-2 text-[24px] font-semibold tracking-[-0.03em]">
-                    {formatCurrency(result.minTotal)} – {formatCurrency(result.maxTotal)} ₽
-                  </p>
-                </div>
-
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  <StatCard label="Расстояние" value={`${formatDistance(distanceKm)} км`} />
-                  <StatCard label="Срок" value={result.transitDays} />
-                  <StatCard label="Кузов" value={result.bodyLabel} />
-                  <StatCard
-                    label="Ставка / км"
-                    value={`${formatCurrency(result.pricePerKmMin)}–${formatCurrency(result.pricePerKmMax)} ₽`}
-                  />
-                </div>
-
-                <div className="mt-7 rounded-[18px] bg-white/6 px-5 py-5">
-                  <div className="flex items-center gap-2">
-                    <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
-                    <p className="text-[15px] font-semibold tracking-[-0.016em]">
-                      Что повлияло на цену
+                  <div className="mt-7">
+                    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                      ориентировочная стоимость
+                    </p>
+                    <p className="mt-2 font-heading text-[54px] leading-[0.95] tracking-[-0.05em]">
+                      {formatCurrency(result.center)} ₽
                     </p>
                   </div>
 
-                  <div className="mt-4 flex flex-col gap-3">
-                    {result.factors.map((factor) => (
-                      <div key={factor} className="flex items-center gap-3 text-[15px] text-white/82">
-                        <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
-                        <span>{factor}</span>
-                      </div>
-                    ))}
+                  <div className="mt-6 rounded-[18px] bg-white/6 px-5 py-4">
+                    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                      рабочая вилка
+                    </p>
+                    <p className="mt-2 text-[24px] font-semibold tracking-[-0.03em]">
+                      {formatCurrency(result.minTotal)} – {formatCurrency(result.maxTotal)} ₽
+                    </p>
                   </div>
-                </div>
 
-                <div className="mt-6 flex flex-col gap-3">
-                  <Link
-                    href={requestQuery}
-                    className="header-utility-button inline-flex h-[56px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-white"
-                  >
-                    отправить этот расчёт
-                  </Link>
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    <StatCard label="Расстояние" value={`${formatDistance(distanceKm)} км`} />
+                    <StatCard label="Срок" value={result.transitDays} />
+                    <StatCard label="Кузов" value={result.bodyLabel} />
+                    <StatCard
+                      label="Ставка / км"
+                      value={`${formatCurrency(result.pricePerKmMin)}–${formatCurrency(result.pricePerKmMax)} ₽`}
+                    />
+                  </div>
 
-                  <Link
-                    href="/request"
-                    className="inline-flex h-[52px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-                  >
-                    запросить коммерческое предложение
-                  </Link>
-                </div>
+                  <div className="mt-7 rounded-[18px] bg-white/6 px-5 py-5">
+                    <div className="flex items-center gap-2">
+                      <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
+                      <p className="text-[15px] font-semibold tracking-[-0.016em]">
+                        Что повлияло на цену
+                      </p>
+                    </div>
 
-                <p className="mt-4 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
-                  Итоговый тариф подтверждается после уточнения параметров груза,
-                  маршрута и условий подачи транспорта.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
+                    <div className="mt-4 flex flex-col gap-3">
+                      {result.factors.map((factor) => (
+                        <div key={factor} className="flex items-center gap-3 text-[15px] text-white/82">
+                          <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
+                          <span>{factor}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-      <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
-        <Container>
-          <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-            <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
-              <div className="flex items-center gap-3">
-                <MapPinned size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-                <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
-                  Как мы считаем
-                </h2>
-              </div>
+                  <div className="mt-6 flex flex-col gap-3">
+                    <Link
+                      href={requestQuery}
+                      className="header-utility-button inline-flex h-[56px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-white"
+                    >
+                      отправить этот расчёт
+                    </Link>
 
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                <ExplainCard
-                  title="1. Базовая ставка маршрута"
-                  text="Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ."
-                />
-                <ExplainCard
-                  title="2. Поправка на кузов"
-                  text="Дальше учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка."
-                />
-                <ExplainCard
-                  title="3. Поправка на условия"
-                  text="Срочность, температурный режим, тип загрузки, страхование и дополнительные точки корректируют итог."
-                />
-                <ExplainCard
-                  title="4. Рабочая вилка"
-                  text="На выходе показываем ориентир и вилку, чтобы расчёт был честным и ближе к реальной ставке рынка."
-                />
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
+                    <Link
+                      href="/request"
+                      className="inline-flex h-[52px] items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                    >
+                      запросить коммерческое предложение
+                    </Link>
+                  </div>
 
-      <section className="pb-16 pt-2 md:pb-20 xl:pb-24">
-        <Container>
-          <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-            <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
-              <div className="grid grid-cols-[1fr_auto] items-center gap-6">
-                <div>
-                  <h2 className="font-heading text-[32px] leading-[0.98] tracking-[-0.03em]">
-                    Нужен точный расчёт или КП?
-                  </h2>
-                  <p
-                    className="mt-3 max-w-[620px] text-[16px] leading-[1.32] tracking-[-0.014em] text-[var(--text-muted)]"
-                    style={{ fontFamily: 'var(--font-body-text)' }}
-                  >
-                    Передайте нам параметры перевозки, и мы подготовим детальный
-                    расчёт с учётом маршрута, типа кузова и условий подачи.
+                  <p className="mt-4 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
+                    Итоговый тариф подтверждается после уточнения параметров груза,
+                    маршрута и условий подачи транспорта.
                   </p>
                 </div>
+              </div>
+            </div>
+          </Container>
+        </section>
 
-                <div className="flex gap-3">
-                  <Link
-                    href={requestQuery}
-                    className="header-utility-button inline-flex h-[56px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] text-white"
-                  >
-                    <Calculator size={18} strokeWidth={2} className="mr-2" />
-                    передать расчёт
-                  </Link>
+        <section className="pb-10 pt-4 md:pb-12 xl:pb-14">
+          <Container>
+            <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+              <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8">
+                <div className="flex items-center gap-3">
+                  <MapPinned size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
+                  <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
+                    Как мы считаем
+                  </h2>
+                </div>
 
-                  <Link
-                    href="/request"
-                    className="inline-flex h-[56px] items-center justify-center rounded-[14px] bg-[var(--bg)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)] transition hover:bg-white"
-                  >
-                    <FileText size={17} strokeWidth={2} className="mr-2" />
-                    запросить КП
-                  </Link>
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <ExplainCard
+                    title="1. Базовая ставка маршрута"
+                    text="Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ."
+                  />
+                  <ExplainCard
+                    title="2. Поправка на кузов"
+                    text="Дальше учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка."
+                  />
+                  <ExplainCard
+                    title="3. Поправка на условия"
+                    text="Срочность, температурный режим, тип загрузки, страхование и дополнительные точки корректируют итог."
+                  />
+                  <ExplainCard
+                    title="4. Рабочая вилка"
+                    text="На выходе показываем ориентир и вилку, чтобы расчёт был честным и ближе к реальной ставке рынка."
+                  />
                 </div>
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
-    </main>
+          </Container>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
@@ -683,8 +666,58 @@ function ExplainCard({
 }
 
 function cnButton(activeClass: string) {
-  return `inline-flex h-[52px] items-center justify-center rounded-[16px] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] transition ${activeClass}`;
+  return `inline-flex h-[48px] items-center justify-center rounded-[14px] px-5 text-[14px] font-semibold lowercase tracking-[-0.016em] transition ${activeClass}`;
 }
 
 const inputClass =
-  'h-[56px] w-full rounded-[12px] border border-transparent bg-[var(--bg)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
+  'h-[56px] w-full rounded-[12px] border border-transparent bg-white px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]';
+
+function CustomSelect({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<{ value: string; label: string }>;
+}) {
+  const [open, setOpen] = useState(false);
+  const selected = options.find((opt) => opt.value === value);
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex h-[56px] w-full items-center justify-between rounded-[12px] border border-transparent bg-white px-5 text-left text-[15px] tracking-[-0.014em] text-[var(--text)] transition-[border-color,box-shadow] duration-200 hover:border-[rgba(38,41,46,0.08)]"
+      >
+        <span>{selected?.label}</span>
+        <ChevronDown
+          size={16}
+          strokeWidth={2}
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {open ? (
+        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-[14px] border border-[rgba(38,41,46,0.08)] bg-white shadow-[0_18px_34px_rgba(38,41,46,0.08)]">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+              className={`flex w-full items-center px-4 py-3 text-left text-[14px] tracking-[-0.014em] transition hover:bg-[var(--surface)] ${
+                option.value === value ? 'bg-[var(--surface)] font-semibold' : ''
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
