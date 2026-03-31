@@ -226,41 +226,43 @@ export function GeographyGlobe({
   const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
 
   return (
-    <div className="relative z-30 flex h-full w-full flex-col items-center justify-start">
-      <div className="relative flex h-[640px] w-[680px] max-w-none items-start justify-center">
-        <canvas
-          ref={canvasRef}
-          className="h-[620px] w-[620px] max-w-none cursor-grab"
-          style={{ aspectRatio: '1 / 1' }}
-          onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
-          onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
-          onMouseUp={endDrag}
-          onMouseLeave={endDrag}
-          onTouchStart={(event) => {
-            if (event.touches[0]) {
-              startDrag(event.touches[0].clientX, event.touches[0].clientY);
-            }
-          }}
-          onTouchMove={(event) => {
-            if (event.touches[0]) {
-              moveDrag(event.touches[0].clientX, event.touches[0].clientY);
-            }
-          }}
-          onTouchEnd={endDrag}
-        />
-
-        {activeCities.map((city) => (
-          <div
-            key={city.id}
-            className="geography-globe-label pointer-events-none"
-            style={{
-              positionAnchor: `--cobe-${city.id}` as React.CSSProperties['positionAnchor'],
-              opacity: `var(--cobe-visible-${city.id}, 0)`,
+    <div className="flex h-full flex-col items-center justify-start">
+      <div className="relative flex h-[640px] w-full items-start justify-center">
+        <div className="relative h-[640px] w-[720px] max-w-none">
+          <canvas
+            ref={canvasRef}
+            className="h-[620px] w-[620px] max-w-none translate-x-[20px] translate-y-[20px] cursor-grab"
+            style={{ aspectRatio: '1 / 1' }}
+            onMouseDown={(event) => startDrag(event.clientX, event.clientY)}
+            onMouseMove={(event) => moveDrag(event.clientX, event.clientY)}
+            onMouseUp={endDrag}
+            onMouseLeave={endDrag}
+            onTouchStart={(event) => {
+              if (event.touches[0]) {
+                startDrag(event.touches[0].clientX, event.touches[0].clientY);
+              }
             }}
-          >
-            {city.label}
-          </div>
-        ))}
+            onTouchMove={(event) => {
+              if (event.touches[0]) {
+                moveDrag(event.touches[0].clientX, event.touches[0].clientY);
+              }
+            }}
+            onTouchEnd={endDrag}
+          />
+
+          {activeCities.map((city) => (
+            <div
+              key={city.id}
+              className="geography-globe-label pointer-events-none"
+              style={{
+                positionAnchor: `--cobe-${city.id}` as React.CSSProperties['positionAnchor'],
+                opacity: `var(--cobe-visible-${city.id}, 0)`,
+              }}
+            >
+              {city.label}
+            </div>
+          ))}
+        </div>
 
         <div className="absolute right-0 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
           <button
@@ -278,7 +280,7 @@ export function GeographyGlobe({
           <div className="flex h-[360px] flex-col items-center justify-between py-1">
             {SCALE_MARKS.map((markIndex) => {
               const major = isMajorMark(markIndex);
-              const isMarkActive = markIndex === activeMarkIndex;
+              const isActive = markIndex === activeMarkIndex;
 
               return (
                 <button
@@ -297,7 +299,7 @@ export function GeographyGlobe({
                       block rounded-full transition-all duration-300
                       ${major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]'}
                       ${
-                        isMarkActive
+                        isActive
                           ? 'bg-[var(--accent-1)]'
                           : major
                             ? isDark
