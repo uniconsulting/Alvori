@@ -56,6 +56,8 @@ useEffect(() => {
   const handleScroll = () => {
     const currentY = window.scrollY;
     const delta = currentY - lastScrollYRef.current;
+
+    const isScrollingUp = delta < -2;
     const isScrollingDown = delta > 2;
 
     const heroStage = document.getElementById('hero-services-stage');
@@ -67,7 +69,7 @@ useEffect(() => {
       return;
     }
 
-    // До первого реального скролла хедер всегда раскрыт
+    // До первого реального скролла header всегда раскрыт
     if (currentY <= 4) {
       setIsVisible(true);
       lastScrollYRef.current = currentY;
@@ -80,20 +82,25 @@ useEffect(() => {
     const heroBottom = heroTop + heroStage.offsetHeight;
     const whyTop = whyChooseUs.offsetTop;
 
-    let nextVisible = true;
+    let nextVisible = isVisible;
 
-    if (anchorY < heroTop) {
-      nextVisible = true;
-    } else if (anchorY >= heroTop && anchorY < whyTop) {
+    // Пока пользователь в hero / scroll-scene — header скрыт
+    if (anchorY >= heroTop && anchorY < heroBottom) {
       nextVisible = false;
-    } else {
-      nextVisible = true;
     }
-
-    // Пока мы выше секции "Почему выбирают нас",
-    // при скролле вверх хедер не возвращается
-    if (anchorY >= heroTop && anchorY < whyTop && !isScrollingDown) {
+    // Между концом scroll-scene и секцией "Почему выбирают нас" — тоже скрыт всегда
+    else if (anchorY >= heroBottom && anchorY < whyTop) {
       nextVisible = false;
+    }
+    // После секции "Почему выбирают нас":
+    // вверх — показать, вниз — скрыть
+    else if (anchorY >= whyTop) {
+      if (isScrollingUp) nextVisible = true;
+      if (isScrollingDown) nextVisible = false;
+    }
+    // До начала scroll-scene
+    else if (anchorY < heroTop) {
+      nextVisible = true;
     }
 
     setIsVisible(nextVisible);
@@ -101,6 +108,7 @@ useEffect(() => {
   };
 
   handleScroll();
+
   window.addEventListener('scroll', handleScroll, { passive: true });
   window.addEventListener('resize', handleScroll);
 
@@ -108,7 +116,7 @@ useEffect(() => {
     window.removeEventListener('scroll', handleScroll);
     window.removeEventListener('resize', handleScroll);
   };
-}, []);
+}, [isVisible]);
 
   const handleThemeToggle = () => {
     const root = document.documentElement;
