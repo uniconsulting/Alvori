@@ -129,15 +129,16 @@ useEffect(() => {
   };
 
   return (
-    <div
-      className={cn(
-        'header-shell',
-        isVisible ? 'header-shell--visible' : 'header-shell--hidden',
-      )}
-    >
-      <div className="header-shell__backdrop" />
+<div
+  className={cn(
+    'header-shell',
+    isVisible ? 'header-shell--visible' : 'header-shell--hidden',
+  )}
+>
+  <div className="header-shell__backdrop" />
 
-      <header className="relative z-[1] pt-4 md:pt-6 xl:pt-10">
+  <div className="header-shell__inner">
+    <header className="pt-4 md:pt-6 xl:pt-10">
         <Container>
           <div className="hidden items-center xl:flex">
             <LogoBlock />
@@ -263,7 +264,8 @@ useEffect(() => {
         </Container>
       </header>
     </div>
-  );
+  </div>
+);
 }
 
 function LogoBlock() {
