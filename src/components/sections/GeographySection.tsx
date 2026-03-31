@@ -142,7 +142,7 @@ export function GeographySection() {
       </p>
     </div>
   </div>
-
+</div>
                 <div className="absolute inset-0 z-20 flex items-start justify-center">
                   <div className="relative -ml-8 xl:-ml-10">
                     {shouldMountGlobe ? (
