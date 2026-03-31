@@ -123,44 +123,38 @@ export function GeographySection() {
                 </div>
               </div>
 
-              <div className="relative z-30 pt-5">
-                <div className="relative z-40 flex justify-end">
-                  <div className="mt-[464px] inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
-                    <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
-                      активное направление
-                    </p>
+<div className="relative z-30 pt-5">
+  <div className="relative z-50 flex justify-end">
+    <div className="mt-[464px] inline-flex min-w-[392px] flex-col justify-center rounded-[22px] bg-[#26292e] px-6 py-5">
+      <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+        активное направление
+      </p>
 
-                    <div className="mt-2 flex items-center gap-3">
-                      <Route
-                        size={18}
-                        strokeWidth={2.05}
-                        className="shrink-0 text-[var(--accent-1)]"
-                      />
+      <div className="mt-2 flex items-center gap-3">
+        <Route
+          size={18}
+          strokeWidth={2.05}
+          className="shrink-0 text-[var(--accent-1)]"
+        />
 
-                      <p className="whitespace-nowrap text-[18px] font-semibold tracking-[-0.02em] text-white">
-                        {from.label} — {to.label}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+        <p className="whitespace-nowrap text-[18px] font-semibold tracking-[-0.02em] text-white">
+          {from.label} — {to.label}
+        </p>
+      </div>
+    </div>
+  </div>
 
-                <div className="pointer-events-none absolute inset-0 z-40 flex items-start justify-center">
-                  <div className="pointer-events-auto relative -ml-8 xl:-ml-10">
-                    {shouldMountGlobe ? (
-                      <GeographyGlobe
-                        activeRouteIndex={activeRouteIndex}
-                        isActive={isGlobeActive}
-                      />
-                    ) : (
-                      <div className="flex h-full min-h-[560px] items-start justify-center">
-                        <div className="h-[620px] w-[620px] max-w-none rounded-full bg-[var(--surface)]/60" />
-                      </div>
-                    )}
-                  </div>
-                </div>
+  <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center">
+    <div className="pointer-events-auto relative -ml-8 xl:-ml-10">
+      <GeographyGlobe
+        activeRouteIndex={activeRouteIndex}
+        isActive={isGlobeActive}
+      />
+    </div>
+  </div>
 
-                <div className="h-[640px]" />
-              </div>
+  <div className="h-[640px]" />
+</div>
             </div>
           </div>
         </div>
