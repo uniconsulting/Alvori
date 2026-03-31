@@ -407,7 +407,7 @@ function ControlBar({
   routeDistance: number;
 }) {
   return (
-    <div className="rounded-[30px] bg-[var(--surface)] p-4 shadow-[var(--shadow-soft)]">
+    <div className="rounded-[30px] bg-[var(--surface)] px-4 pb-4 pt-6 shadow-[var(--shadow-soft)]">
       <div className="flex items-center gap-3 pl-[10px]">
         <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
         <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
@@ -415,7 +415,7 @@ function ControlBar({
         </h2>
 
         <div
-          className="ml-auto text-right text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)]"
+          className="ml-auto mr-[8px] text-right text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)]"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           Маршрут:{' '}
