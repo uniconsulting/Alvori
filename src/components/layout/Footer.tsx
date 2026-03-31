@@ -5,6 +5,7 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { contacts } from '@/content/contacts';
+import { legalLinks } from '@/content/legal';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 
@@ -134,11 +135,16 @@ export function Footer() {
                 инфо-блок
               </h3>
 
-              <div className="space-y-3 text-[17px] leading-[1.25] tracking-[-0.01em] text-[var(--footer-text)]">
-                <div>{contacts.company}</div>
-                <div>ИНН: {contacts.inn}</div>
-                <div>грузоперевозки по РФ</div>
-                <div>запросы и коммерческие предложения</div>
+              <div className="flex flex-col gap-5">
+                {legalLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-text)] transition hover:opacity-75"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
             </div>
 
