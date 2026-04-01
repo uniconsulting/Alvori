@@ -42,7 +42,6 @@ export function Header() {
 
   const lastYRef = useRef(0);
   const hiddenRef = useRef(false);
-  const handledSceneRef = useRef<string | null>(null);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -145,38 +144,6 @@ export function Header() {
       delete document.documentElement.dataset.headerHidden;
     };
   }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (pathname !== '/') return;
-
-    const params = new URLSearchParams(window.location.search);
-    const scene = params.get('scene');
-
-    if (scene !== 'services' && scene !== 'about') return;
-    if (handledSceneRef.current === scene) return;
-
-    handledSceneRef.current = scene;
-
-    let raf1 = 0;
-    let raf2 = 0;
-    let timeoutId: number | null = null;
-
-    raf1 = window.requestAnimationFrame(() => {
-      raf2 = window.requestAnimationFrame(() => {
-        timeoutId = window.setTimeout(() => {
-          scrollToHeroScene(scene);
-          router.replace('/', { scroll: false });
-        }, 80);
-      });
-    });
-
-    return () => {
-      if (raf1) window.cancelAnimationFrame(raf1);
-      if (raf2) window.cancelAnimationFrame(raf2);
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, [pathname, router]);
 
   const handleThemeToggle = () => {
     const root = document.documentElement;
