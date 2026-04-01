@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { ThemeLogo } from '@/components/ui/ThemeLogo';
 import { contacts } from '@/content/contacts';
+import { legalLinks } from '@/content/legal';
 import { homeNavigation } from '@/config/anchors';
 import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
@@ -70,6 +71,11 @@ export function Header() {
 
     const decide = () => {
       raf = 0;
+
+      if (menuOpen) {
+        setHidden(false);
+        return;
+      }
 
       const currentY = window.scrollY || 0;
       const prevY = lastYRef.current || 0;
@@ -143,7 +149,28 @@ export function Header() {
       if (raf) window.cancelAnimationFrame(raf);
       delete document.documentElement.dataset.headerHidden;
     };
-  }, []);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const html = document.documentElement;
+    const body = document.body;
+
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyTouchAction = body.style.touchAction;
+
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    body.style.touchAction = 'none';
+
+    return () => {
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      body.style.touchAction = previousBodyTouchAction;
+    };
+  }, [menuOpen]);
 
   const handleThemeToggle = () => {
     const root = document.documentElement;
@@ -164,6 +191,8 @@ export function Header() {
     scrollToHeroScene(scene);
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <header
       className="site-header fixed inset-x-0 top-0 z-50"
@@ -177,10 +206,7 @@ export function Header() {
         <div className="hidden items-center py-4 xl:flex">
           <LogoBlock />
           <OuterDivider className="ml-[36px]" />
-          <AnchorNav
-            className="ml-[36px]"
-            onNavigateHomeScene={navigateToHomeScene}
-          />
+          <AnchorNav className="ml-[36px]" onNavigateHomeScene={navigateToHomeScene} />
           <OuterDivider className="ml-[36px]" />
           <PhoneBlock className="ml-[36px]" />
           <UtilityCluster
@@ -192,7 +218,7 @@ export function Header() {
 
         <div className="py-4 xl:hidden">
           <div className="flex items-center justify-between">
-            <Link href="/" className="block h-[48px] w-[184px]">
+            <Link href="/" className="ml-[6px] block h-[48px] w-[184px] shrink-0">
               <ThemeLogo
                 placement="header"
                 className="h-full w-full object-contain object-left"
@@ -242,63 +268,109 @@ export function Header() {
               </button>
             </div>
           </div>
-
-          {menuOpen ? (
-            <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
-              <div className="flex flex-col gap-4">
-                {homeNavigation.map((item) => {
-                  const isServices = item.href.includes('scene=services');
-                  const isAbout = item.href.includes('scene=about');
-
-                  if (isServices || isAbout) {
-                    return (
-                      <button
-                        key={item.href}
-                        type="button"
-                        onClick={() => {
-                          setMenuOpen(false);
-                          navigateToHomeScene(isServices ? 'services' : 'about');
-                        }}
-                        className="header-link-hover text-left text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
-                      >
-                        {item.label}
-                      </button>
-                    );
-                  }
-
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-
-                <div className="h-[2px] w-full rounded-full bg-[var(--bg)]" />
-
-                <a
-                  href={contacts.phoneHref}
-                  className="header-phone-hover text-[17px] font-semibold lowercase leading-none tracking-[-0.02em] text-[var(--text)]"
-                >
-                  {contacts.phoneDisplay}
-                </a>
-
-                <Link
-                  href={ctaRoutes.headerCalculator}
-                  onClick={() => setMenuOpen(false)}
-                  className="inline-flex h-[48px] items-center justify-center rounded-[20px] bg-[var(--accent-1)] px-4 text-[15px] font-medium lowercase text-[var(--accent-1-text)] transition hover:opacity-90"
-                >
-                  рассчитать стоимость
-                </Link>
-              </div>
-            </div>
-          ) : null}
         </div>
       </Container>
+
+      {menuOpen ? (
+        <div className="fixed inset-x-0 bottom-0 top-[92px] z-[49] xl:hidden">
+          <div className="absolute inset-0 bg-[color:color-mix(in_oklab,var(--bg)_92%,transparent)]" />
+
+          <div className="relative h-full overflow-y-auto overscroll-contain">
+            <Container className="h-full">
+              <div className="flex min-h-full flex-col px-[10px] pb-8 pt-2">
+                <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
+                  <a
+                    href={contacts.phoneHref}
+                    className="header-phone-hover block text-[20px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
+                  >
+                    {contacts.phoneDisplay}
+                  </a>
+
+                  <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
+
+                  <nav className="mt-5 flex flex-col gap-4">
+                    {homeNavigation.map((item) => {
+                      const isServices = item.href.includes('scene=services');
+                      const isAbout = item.href.includes('scene=about');
+
+                      if (isServices || isAbout) {
+                        return (
+                          <button
+                            key={item.href}
+                            type="button"
+                            onClick={() => {
+                              closeMenu();
+                              navigateToHomeScene(isServices ? 'services' : 'about');
+                            }}
+                            className="header-link-hover text-left text-[22px] font-semibold lowercase leading-[1.02] tracking-[-0.03em] text-[var(--text)]"
+                          >
+                            {item.label}
+                          </button>
+                        );
+                      }
+
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={closeMenu}
+                          className="header-link-hover text-[22px] font-semibold lowercase leading-[1.02] tracking-[-0.03em] text-[var(--text)]"
+                        >
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+
+                  <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
+
+                  <div className="mt-5 grid gap-3">
+                    <Link
+                      href={ctaRoutes.headerCalculator}
+                      onClick={closeMenu}
+                      className="inline-flex h-[52px] w-full items-center justify-center rounded-[18px] bg-[var(--accent-1)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)]"
+                    >
+                      рассчитать стоимость
+                    </Link>
+
+                    <Link
+                      href={ctaRoutes.headerRequest}
+                      onClick={closeMenu}
+                      className="inline-flex h-[48px] w-full items-center justify-center rounded-[16px] bg-[var(--surface-soft)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)]"
+                    >
+                      запросить или отправить кп
+                    </Link>
+                  </div>
+
+                  <div className="mt-5 h-[2px] w-full rounded-full bg-[var(--bg)]" />
+
+                  <div className="mt-5">
+                    <p
+                      className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text)]/48"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      документы
+                    </p>
+
+                    <div className="mt-4 grid gap-3">
+                      {legalLinks.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={closeMenu}
+                          className="header-link-hover text-[15px] font-medium lowercase leading-[1.2] tracking-[-0.014em] text-[var(--text)]"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Container>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }
