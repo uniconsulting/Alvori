@@ -150,7 +150,7 @@ export function HeroServicesStage() {
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-x-0 top-[64px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
+            <div className="absolute inset-x-0 top-[56px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
               <div className="pointer-events-none absolute inset-0 z-10">
                 <div
                   className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
