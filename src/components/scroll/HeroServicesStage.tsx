@@ -248,9 +248,9 @@ export function HeroServicesStage() {
             <About revealProgress={transforms.aboutReveal} />
           </div>
 
-          <div className="absolute inset-x-0 bottom-[28px] z-50 md:bottom-[32px] xl:bottom-[36px]">
-            <SceneIndicator progress={progress} />
-          </div>
+<div className="absolute inset-x-0 bottom-[72px] z-50 md:bottom-[32px] xl:bottom-[36px]">
+  <SceneIndicator progress={progress} />
+</div>
         </div>
       </div>
     </section>
