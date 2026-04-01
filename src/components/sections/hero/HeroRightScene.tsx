@@ -54,9 +54,17 @@ export function HeroRightScene() {
   return (
     <>
       <div className="xl:hidden">
-        <div className="pl-4 sm:pl-5">
-          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pr-[2px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            <div className="w-[232px] shrink-0 snap-start sm:w-[248px]">
+        <div
+          className="px-4 sm:px-5"
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+            maskImage:
+              'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+          }}
+        >
+          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-2 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
               <BentoCard
                 title={
                   <>
@@ -69,13 +77,13 @@ export function HeroRightScene() {
                 imageSrc={assets.request}
                 theme={theme}
                 variant="accent"
-                heightClassName="h-[220px] w-full sm:h-[236px]"
+                heightClassName="h-[236px] w-full sm:h-[252px]"
                 visible={card1Ready}
                 mobileSquare
               />
             </div>
 
-            <div className="w-[232px] shrink-0 snap-start sm:w-[248px]">
+            <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
               <BentoCard
                 title={
                   <>
@@ -88,14 +96,14 @@ export function HeroRightScene() {
                 imageSrc={assets.principles}
                 theme={theme}
                 variant="dark"
-                heightClassName="h-[220px] w-full sm:h-[236px]"
+                heightClassName="h-[236px] w-full sm:h-[252px]"
                 visible={card3Ready}
                 specialButton
                 mobileSquare
               />
             </div>
 
-            <div className="w-[232px] shrink-0 snap-start sm:w-[248px]">
+            <div className="w-[236px] shrink-0 snap-start sm:w-[252px]">
               <BentoCard
                 title={
                   <>
@@ -108,7 +116,7 @@ export function HeroRightScene() {
                 imageSrc={assets.calc}
                 theme={theme}
                 variant="light"
-                heightClassName="h-[220px] w-full sm:h-[236px]"
+                heightClassName="h-[236px] w-full sm:h-[252px]"
                 visible={card2Ready}
                 mobileSquare
               />
@@ -392,7 +400,7 @@ function BentoCard({
             <div
               className={cn(
                 'pointer-events-none absolute bottom-0 left-0 right-0',
-                mobileSquare ? 'h-[110px]' : 'h-[132px]',
+                mobileSquare ? 'h-[116px]' : 'h-[132px]',
                 bottomMaskClass,
               )}
             />
