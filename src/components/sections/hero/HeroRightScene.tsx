@@ -195,16 +195,14 @@ function BentoCard({
     };
   }, []);
 
-  const textClass =
-    theme === 'light' ? 'text-[#26292e]' : 'text-[#f6f6f6]';
+const textClass = 'text-[#f6f6f6]';
 
-  const buttonClass = specialButton
-    ? theme === 'light'
-      ? 'bg-[#26292e] text-white'
-      : 'bg-white text-black'
-    : theme === 'light'
-      ? 'bg-white text-[#26292e]'
-      : 'bg-[#222429] text-white';
+const buttonClass = specialButton
+  ? 'bg-white text-black'
+  : 'bg-[#222429] text-white';
+
+const bottomMaskClass =
+  'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
 
   const bottomMaskClass =
     theme === 'light'
