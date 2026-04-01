@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Calculator, FileText, Menu, Moon, Sun, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
@@ -34,6 +35,9 @@ function scrollToHeroScene(scene: 'services' | 'about') {
 export function Header() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const pathname = usePathname();
+  const router = useRouter();
 
   const lastYRef = useRef(0);
   const hiddenRef = useRef(false);
@@ -151,20 +155,33 @@ export function Header() {
     setTheme(next);
   };
 
+  const navigateToHomeScene = (scene: 'services' | 'about') => {
+    if (pathname !== '/') {
+      router.push(scene === 'services' ? '/#services' : '/#about');
+      return;
+    }
+
+    scrollToHeroScene(scene);
+  };
+
   return (
-<header
-  className="site-header fixed inset-x-0 top-0 z-50"
-  style={{
-    background: 'color-mix(in oklab, var(--bg) 72%, transparent)',
-    backdropFilter: 'blur(14px) saturate(1.03)',
-    WebkitBackdropFilter: 'blur(14px) saturate(1.03)',
-  }}
->
+    <header
+      className="site-header fixed inset-x-0 top-0 z-50"
+      style={{
+        background: 'color-mix(in oklab, var(--bg) 72%, transparent)',
+        backdropFilter: 'blur(14px) saturate(1.03)',
+        WebkitBackdropFilter: 'blur(14px) saturate(1.03)',
+      }}
+    >
       <Container>
         <div className="hidden items-center py-4 xl:flex">
           <LogoBlock />
           <OuterDivider className="ml-[36px]" />
-          <AnchorNav className="ml-[36px]" />
+          <AnchorNav
+            className="ml-[36px]"
+            pathname={pathname}
+            onNavigateHomeScene={navigateToHomeScene}
+          />
           <OuterDivider className="ml-[36px]" />
           <PhoneBlock className="ml-[36px]" />
           <UtilityCluster
@@ -231,8 +248,8 @@ export function Header() {
             <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
               <div className="flex flex-col gap-4">
                 {homeNavigation.map((item) => {
-                  const isServices = item.href === '#services';
-                  const isAbout = item.href === '#about';
+                  const isServices = item.href.includes('services');
+                  const isAbout = item.href.includes('about');
 
                   if (isServices || isAbout) {
                     return (
@@ -241,7 +258,7 @@ export function Header() {
                         type="button"
                         onClick={() => {
                           setMenuOpen(false);
-                          scrollToHeroScene(isServices ? 'services' : 'about');
+                          navigateToHomeScene(isServices ? 'services' : 'about');
                         }}
                         className="header-link-hover text-left text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
                       >
@@ -309,7 +326,15 @@ function OuterDivider({ className }: { className?: string }) {
   );
 }
 
-function AnchorNav({ className }: { className?: string }) {
+function AnchorNav({
+  className,
+  pathname,
+  onNavigateHomeScene,
+}: {
+  className?: string;
+  pathname: string;
+  onNavigateHomeScene: (scene: 'services' | 'about') => void;
+}) {
   return (
     <nav
       className={cn(
@@ -318,15 +343,15 @@ function AnchorNav({ className }: { className?: string }) {
       )}
     >
       {homeNavigation.map((item, index) => {
-        const isServices = item.href === '#services';
-        const isAbout = item.href === '#about';
+        const isServices = item.href.includes('services');
+        const isAbout = item.href.includes('about');
 
         return (
           <div key={item.href} className="flex shrink-0 items-center">
             {isServices || isAbout ? (
               <button
                 type="button"
-                onClick={() => scrollToHeroScene(isServices ? 'services' : 'about')}
+                onClick={() => onNavigateHomeScene(isServices ? 'services' : 'about')}
                 className="header-link-hover text-[17px] font-medium lowercase leading-none tracking-[-0.01em] text-[var(--text)]"
               >
                 {item.label}
