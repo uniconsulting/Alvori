@@ -54,63 +54,65 @@ export function HeroRightScene() {
   return (
     <>
       <div className="xl:hidden">
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-[2px] pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="w-[248px] shrink-0 snap-start sm:w-[272px]">
-            <BentoCard
-              title={
-                <>
-                  единая форма
-                  <br />
-                  запроса и отправки кп
-                </>
-              }
-              href={appRoutes.request}
-              imageSrc={assets.request}
-              theme={theme}
-              variant="accent"
-              heightClassName="aspect-square w-full"
-              visible={card1Ready}
-              mobileSquare
-            />
-          </div>
+        <div className="pl-4 sm:pl-5">
+          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pr-[2px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="w-[232px] shrink-0 snap-start sm:w-[248px]">
+              <BentoCard
+                title={
+                  <>
+                    единая форма
+                    <br />
+                    запроса и отправки кп
+                  </>
+                }
+                href={appRoutes.request}
+                imageSrc={assets.request}
+                theme={theme}
+                variant="accent"
+                heightClassName="h-[220px] w-full sm:h-[236px]"
+                visible={card1Ready}
+                mobileSquare
+              />
+            </div>
 
-          <div className="w-[248px] shrink-0 snap-start sm:w-[272px]">
-            <BentoCard
-              title={
-                <>
-                  ознакомиться
-                  <br />
-                  с нашими принципами
-                </>
-              }
-              href={homeAnchorHrefs.about}
-              imageSrc={assets.principles}
-              theme={theme}
-              variant="dark"
-              heightClassName="aspect-square w-full"
-              visible={card3Ready}
-              specialButton
-              mobileSquare
-            />
-          </div>
+            <div className="w-[232px] shrink-0 snap-start sm:w-[248px]">
+              <BentoCard
+                title={
+                  <>
+                    ознакомиться
+                    <br />
+                    с нашими принципами
+                  </>
+                }
+                href={homeAnchorHrefs.about}
+                imageSrc={assets.principles}
+                theme={theme}
+                variant="dark"
+                heightClassName="h-[220px] w-full sm:h-[236px]"
+                visible={card3Ready}
+                specialButton
+                mobileSquare
+              />
+            </div>
 
-          <div className="w-[248px] shrink-0 snap-start sm:w-[272px]">
-            <BentoCard
-              title={
-                <>
-                  сделать расчёт
-                  <br />
-                  вашей грузоперевозки
-                </>
-              }
-              href={appRoutes.calculator}
-              imageSrc={assets.calc}
-              theme={theme}
-              variant="light"
-              heightClassName="aspect-square w-full"
-              visible={card2Ready}
-              mobileSquare
-            />
+            <div className="w-[232px] shrink-0 snap-start sm:w-[248px]">
+              <BentoCard
+                title={
+                  <>
+                    сделать расчёт
+                    <br />
+                    вашей грузоперевозки
+                  </>
+                }
+                href={appRoutes.calculator}
+                imageSrc={assets.calc}
+                theme={theme}
+                variant="light"
+                heightClassName="h-[220px] w-full sm:h-[236px]"
+                visible={card2Ready}
+                mobileSquare
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -340,7 +342,7 @@ function BentoCard({
           href={href}
           className={cn(
             'hero-card-tilt group relative block h-full overflow-hidden p-[2px]',
-            mobileSquare ? 'rounded-[26px]' : 'rounded-[32px]',
+            mobileSquare ? 'rounded-[24px]' : 'rounded-[32px]',
           )}
           style={{
             transform: isDesktop
@@ -351,7 +353,7 @@ function BentoCard({
           <div
             className={cn(
               'pointer-events-none absolute inset-0',
-              mobileSquare ? 'rounded-[26px]' : 'rounded-[32px]',
+              mobileSquare ? 'rounded-[24px]' : 'rounded-[32px]',
               borderClass,
             )}
           />
@@ -359,7 +361,7 @@ function BentoCard({
           <div
             className={cn(
               'relative h-full overflow-hidden',
-              mobileSquare ? 'rounded-[24px]' : 'rounded-[30px]',
+              mobileSquare ? 'rounded-[22px]' : 'rounded-[30px]',
               variant === 'accent'
                 ? 'bg-[var(--accent-1)]'
                 : variant === 'light'
@@ -390,7 +392,7 @@ function BentoCard({
             <div
               className={cn(
                 'pointer-events-none absolute bottom-0 left-0 right-0',
-                mobileSquare ? 'h-[124px]' : 'h-[132px]',
+                mobileSquare ? 'h-[110px]' : 'h-[132px]',
                 bottomMaskClass,
               )}
             />
@@ -398,7 +400,7 @@ function BentoCard({
             <div
               className={cn(
                 'relative flex h-full flex-col justify-between',
-                mobileSquare ? 'p-4' : 'p-5',
+                mobileSquare ? 'p-3.5' : 'p-5',
               )}
               style={{
                 transform: isDesktop
@@ -410,12 +412,12 @@ function BentoCard({
                 <div
                   className={cn(
                     'inline-flex shrink-0 items-center justify-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
-                    'h-[38px] w-[38px] rounded-[14px]',
+                    mobileSquare ? 'h-[34px] w-[34px] rounded-[12px]' : 'h-[38px] w-[38px] rounded-[14px]',
                     buttonClass,
                   )}
                   style={{ transform: isDesktop ? 'translateZ(12px)' : undefined }}
                 >
-                  <ArrowRight size={19} strokeWidth={2.1} />
+                  <ArrowRight size={mobileSquare ? 17 : 19} strokeWidth={2.1} />
                 </div>
               </div>
 
@@ -423,7 +425,7 @@ function BentoCard({
                 <div
                   className={cn(
                     'font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'max-w-[176px] text-[14px]' : 'max-w-[152px] text-[12px]',
+                    mobileSquare ? 'max-w-[162px] text-[13px]' : 'max-w-[152px] text-[12px]',
                     textClass,
                   )}
                 >
