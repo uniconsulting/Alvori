@@ -315,8 +315,8 @@ export function HeroLeftScene() {
     <div className="relative w-full xl:-ml-[60px] min-[1920px]:xl:ml-[24px]">
 <div
   className={cn(
-    'hero-trailer-shell relative w-[118%] max-w-none',
-    'h-[238px] sm:h-[282px] md:h-[372px] xl:h-[550px] xl:w-[840px] min-[1920px]:xl:w-[910px]',
+    'hero-trailer-shell relative w-[124%] max-w-none',
+    'h-[246px] sm:h-[292px] md:h-[386px] xl:h-[550px] xl:w-[840px] min-[1920px]:xl:w-[910px]',
     trailerReady && 'hero-trailer-shell--ready',
   )}
 >
