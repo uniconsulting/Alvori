@@ -359,7 +359,7 @@ export function HeroLeftScene() {
         </div>
 
         <div className="pointer-events-none absolute inset-0 xl:hidden">
-          <div className="absolute left-[96px] top-[40px] w-[236px]">
+          <div className="absolute left-[112px] top-[40px] w-[252px]">
             <div
               key={activeSlide}
               className={cn(
@@ -388,7 +388,7 @@ function HeroActionButton({
   external?: boolean;
 }) {
   const className =
-    'hero-cta-lift inline-flex h-[42px] w-[182px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[13px] font-medium lowercase text-[var(--accent-1-text)] sm:h-[44px] sm:w-[192px] sm:text-[14px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
+    'hero-cta-lift inline-flex h-[42px] w-[208px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[13px] font-medium lowercase whitespace-nowrap text-[var(--accent-1-text)] sm:h-[44px] sm:w-[220px] sm:text-[14px] xl:h-[48px] xl:w-[284px] xl:rounded-[20px] xl:px-8 xl:text-[17px]';
 
   if (label.trim().toLowerCase() === 'познакомиться') {
     return (
