@@ -235,6 +235,19 @@ function BentoCard({
     glowOpacity: 0,
   });
 
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const updateViewportMode = () => {
+      setIsDesktop(window.innerWidth >= 1280);
+    };
+
+    updateViewportMode();
+    window.addEventListener('resize', updateViewportMode);
+
+    return () => window.removeEventListener('resize', updateViewportMode);
+  }, []);
+
   useEffect(() => {
     const stiffness = 0.125;
     const damping = 0.8;
@@ -276,7 +289,7 @@ function BentoCard({
       : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.06)_24%,rgba(255,255,255,0.12)_48%,rgba(255,255,255,0.05)_74%,rgba(255,255,255,0.18)_100%)] opacity-50';
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (window.innerWidth < 1280) return;
+    if (!isDesktop) return;
 
     const rect = event.currentTarget.getBoundingClientRect();
     const px = (event.clientX - rect.left) / rect.width;
@@ -330,10 +343,9 @@ function BentoCard({
             mobileSquare ? 'rounded-[26px]' : 'rounded-[32px]',
           )}
           style={{
-            transform:
-              window.innerWidth >= 1280
-                ? `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`
-                : 'none',
+            transform: isDesktop
+              ? `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`
+              : undefined,
           }}
         >
           <div
@@ -360,10 +372,9 @@ function BentoCard({
               alt=""
               className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{
-                transform:
-                  window.innerWidth >= 1280
-                    ? `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`
-                    : 'scale(1.025)',
+                transform: isDesktop
+                  ? `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`
+                  : 'scale(1.025)',
               }}
             />
 
@@ -390,22 +401,19 @@ function BentoCard({
                 mobileSquare ? 'p-4' : 'p-5',
               )}
               style={{
-                transform:
-                  window.innerWidth >= 1280
-                    ? `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`
-                    : 'none',
+                transform: isDesktop
+                  ? `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`
+                  : undefined,
               }}
             >
               <div className="flex justify-end">
                 <div
                   className={cn(
                     'inline-flex shrink-0 items-center justify-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[1px]',
-                    mobileSquare
-                      ? 'h-[38px] w-[38px] rounded-[14px]'
-                      : 'h-[38px] w-[38px] rounded-[14px]',
+                    'h-[38px] w-[38px] rounded-[14px]',
                     buttonClass,
                   )}
-                  style={{ transform: 'translateZ(12px)' }}
+                  style={{ transform: isDesktop ? 'translateZ(12px)' : undefined }}
                 >
                   <ArrowRight size={19} strokeWidth={2.1} />
                 </div>
@@ -414,8 +422,8 @@ function BentoCard({
               <div className="relative">
                 <div
                   className={cn(
-                    'max-w-[176px] font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'text-[14px]' : 'max-w-[152px] text-[12px]',
+                    'font-semibold leading-[1.15] tracking-[-0.01em]',
+                    mobileSquare ? 'max-w-[176px] text-[14px]' : 'max-w-[152px] text-[12px]',
                     textClass,
                   )}
                 >
