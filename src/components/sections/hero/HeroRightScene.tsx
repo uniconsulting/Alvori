@@ -203,12 +203,7 @@ const buttonClass = specialButton
 
 const bottomMaskClass =
   'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
-
-  const bottomMaskClass =
-    theme === 'light'
-      ? 'bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.12)_18%,rgba(255,255,255,0.34)_38%,rgba(255,255,255,0.68)_62%,rgba(255,255,255,0.93)_100%)]'
-      : 'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
-
+  
   const borderClass =
     theme === 'light'
       ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.42)_24%,rgba(255,255,255,0.88)_48%,rgba(255,255,255,0.36)_74%,rgba(255,255,255,0.98)_100%)] opacity-100'
