@@ -310,7 +310,7 @@ export function Header() {
                   href={contacts.phoneHref}
                   className="header-phone-hover flex items-center gap-3 text-[20px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
                 >
-                  <span className="inline-flex h-[24px] w-[24px] items-center justify-center text-[var(--accent-1)]">
+                  <span className="inline-flex h-[24px] w-[24px] items-center justify-center text-[var(--text)]">
                     <Phone size={18} strokeWidth={2} />
                   </span>
                   <span>{contacts.phoneDisplay}</span>
