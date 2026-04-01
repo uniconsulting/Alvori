@@ -151,48 +151,64 @@ export function HeroServicesStage() {
         <div className="relative h-full w-full">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-x-0 top-[56px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
-              <div className="pointer-events-none absolute inset-0 z-10">
-                <div
-                  className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
-                  style={{
-                    transform: `translateX(${transforms.heroLeftX})`,
-                    filter: `blur(${transforms.heroLeftBlur})`,
-                    opacity: transforms.heroLeftOpacity,
-                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                  }}
-                >
-                  <HeroLeftScene />
-                </div>
+<div className="pointer-events-none absolute inset-0 z-10">
+  <div className="xl:hidden">
+    <Container className="pointer-events-none relative h-full">
+      <div
+        className="pointer-events-auto absolute left-0 top-[-28px] w-full"
+        style={{
+          transform: `translateX(${transforms.heroLeftX})`,
+          filter: `blur(${transforms.heroLeftBlur})`,
+          opacity: transforms.heroLeftOpacity,
+          transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+        }}
+      >
+        <HeroLeftScene />
+      </div>
 
-                <Container className="pointer-events-none relative h-full">
-                  <div
-                    className="pointer-events-auto absolute bottom-[44px] left-0 right-0 w-full xl:hidden"
-                    style={{
-                      transform: `translateX(${transforms.heroRightX})`,
-                      filter: `blur(${transforms.heroRightBlur})`,
-                      opacity: transforms.heroRightOpacity,
-                      transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                    }}
-                  >
-                    <HeroRightScene />
-                  </div>
+      <div
+        className="pointer-events-auto absolute left-0 right-0 top-[292px] w-full"
+        style={{
+          transform: `translateX(${transforms.heroRightX})`,
+          filter: `blur(${transforms.heroRightBlur})`,
+          opacity: transforms.heroRightOpacity,
+          transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+        }}
+      >
+        <HeroRightScene />
+      </div>
+    </Container>
+  </div>
 
-                  <div
-                    className="pointer-events-auto absolute top-[10px] hidden w-[540px] xl:block"
-                    style={{
-                      right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
-                      transform: `translateX(${transforms.heroRightX})`,
-                      filter: `blur(${transforms.heroRightBlur})`,
-                      opacity: transforms.heroRightOpacity,
-                      transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                    }}
-                  >
-                    <HeroRightScene />
-                  </div>
-                </Container>
-              </div>
-            </div>
-          </div>
+  <div className="hidden xl:block">
+    <div
+      className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
+      style={{
+        transform: `translateX(${transforms.heroLeftX})`,
+        filter: `blur(${transforms.heroLeftBlur})`,
+        opacity: transforms.heroLeftOpacity,
+        transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+      }}
+    >
+      <HeroLeftScene />
+    </div>
+
+    <Container className="pointer-events-none relative h-full">
+      <div
+        className="pointer-events-auto absolute top-[10px] w-[540px]"
+        style={{
+          right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+          transform: `translateX(${transforms.heroRightX})`,
+          filter: `blur(${transforms.heroRightBlur})`,
+          opacity: transforms.heroRightOpacity,
+          transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+        }}
+      >
+        <HeroRightScene />
+      </div>
+    </Container>
+  </div>
+</div>
 
           <div
             className={cn(
