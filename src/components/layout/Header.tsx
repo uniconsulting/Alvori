@@ -10,6 +10,7 @@ import { contacts } from '@/content/contacts';
 import { homeNavigation } from '@/config/anchors';
 import { ctaRoutes } from '@/config/routes';
 import { cn } from '@/lib/cn';
+import { sitePath } from '@/lib/site-path';
 
 type ThemeMode = 'light' | 'dark';
 type HeroScene = 'services' | 'about';
@@ -146,41 +147,43 @@ export function Header() {
     };
   }, []);
 
-  // Обработка перехода на нужную стадию scroll-scene после входа на главную
-useEffect(() => {
-  if (pathname !== '/') return;
-  if (typeof window === 'undefined') return;
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-  const params = new URLSearchParams(window.location.search);
-  const scene = params.get('scene');
+    const isHomePath =
+      pathname === '/' ||
+      pathname === sitePath ||
+      pathname === `${sitePath}/`;
 
-  if (scene !== 'services' && scene !== 'about') return;
-  if (handledSceneRef.current === scene) return;
+    if (!isHomePath) return;
 
-  handledSceneRef.current = scene;
+    const params = new URLSearchParams(window.location.search);
+    const scene = params.get('scene');
 
-  let raf1 = 0;
-  let raf2 = 0;
-  let timeoutId: number | null = null;
+    if (scene !== 'services' && scene !== 'about') return;
+    if (handledSceneRef.current === scene) return;
 
-  raf1 = window.requestAnimationFrame(() => {
-    raf2 = window.requestAnimationFrame(() => {
-      timeoutId = window.setTimeout(() => {
-        scrollToHeroScene(scene);
+    handledSceneRef.current = scene;
 
-        const url = new URL(window.location.href);
-        url.searchParams.delete('scene');
-        router.replace(url.pathname + url.hash, { scroll: false });
-      }, 60);
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId: number | null = null;
+
+    raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        timeoutId = window.setTimeout(() => {
+          scrollToHeroScene(scene);
+          router.replace(sitePath || '/', { scroll: false });
+        }, 60);
+      });
     });
-  });
 
-  return () => {
-    if (raf1) window.cancelAnimationFrame(raf1);
-    if (raf2) window.cancelAnimationFrame(raf2);
-    if (timeoutId) window.clearTimeout(timeoutId);
-  };
-}, [pathname, router]);
+    return () => {
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [pathname, router]);
 
   const handleThemeToggle = () => {
     const root = document.documentElement;
@@ -193,8 +196,13 @@ useEffect(() => {
   };
 
   const navigateToHomeScene = (scene: HeroScene) => {
-    if (pathname !== '/') {
-      router.push(`/?scene=${scene}`);
+    const isHomePath =
+      pathname === '/' ||
+      pathname === sitePath ||
+      pathname === `${sitePath}/`;
+
+    if (!isHomePath) {
+      router.push(`${sitePath || ''}/?scene=${scene}`);
       return;
     }
 
@@ -229,7 +237,7 @@ useEffect(() => {
 
         <div className="py-4 xl:hidden">
           <div className="flex items-center justify-between">
-            <Link href="/" className="block h-[48px] w-[184px]">
+            <Link href={sitePath || '/'} className="block h-[48px] w-[184px]">
               <ThemeLogo
                 placement="header"
                 className="h-full w-full object-contain object-left"
@@ -284,8 +292,8 @@ useEffect(() => {
             <div className="mt-4 rounded-[28px] bg-[var(--surface)] p-5 shadow-[0_8px_20px_rgba(38,41,46,0.05)]">
               <div className="flex flex-col gap-4">
                 {homeNavigation.map((item) => {
-                  const isServices = item.href.includes('services');
-                  const isAbout = item.href.includes('about');
+                  const isServices = item.href.includes('scene=services');
+                  const isAbout = item.href.includes('scene=about');
 
                   if (isServices || isAbout) {
                     return (
@@ -342,7 +350,7 @@ useEffect(() => {
 
 function LogoBlock() {
   return (
-    <Link href="/" className="block h-[60px] w-[230px] shrink-0">
+    <Link href={sitePath || '/'} className="block h-[60px] w-[230px] shrink-0">
       <ThemeLogo
         placement="header"
         className="h-full w-full object-contain object-left"
@@ -377,8 +385,8 @@ function AnchorNav({
       )}
     >
       {homeNavigation.map((item, index) => {
-        const isServices = item.href.includes('services');
-        const isAbout = item.href.includes('about');
+        const isServices = item.href.includes('scene=services');
+        const isAbout = item.href.includes('scene=about');
 
         return (
           <div key={item.href} className="flex shrink-0 items-center">
