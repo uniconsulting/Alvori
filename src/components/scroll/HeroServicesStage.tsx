@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
@@ -19,6 +20,11 @@ function remap(value: number, inStart: number, inEnd: number) {
 
 export function HeroServicesStage() {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const handledSceneRef = useRef<string | null>(null);
+
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -44,6 +50,60 @@ export function HeroServicesStage() {
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (pathname !== '/') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const scene = params.get('scene');
+
+    if (scene !== 'services' && scene !== 'about') return;
+    if (handledSceneRef.current === scene) return;
+
+    const root = rootRef.current;
+    if (!root) return;
+
+    handledSceneRef.current = scene;
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId: number | null = null;
+    let cleanupTimeoutId: number | null = null;
+
+    const run = () => {
+      raf1 = window.requestAnimationFrame(() => {
+        raf2 = window.requestAnimationFrame(() => {
+          timeoutId = window.setTimeout(() => {
+            const rect = root.getBoundingClientRect();
+            const pageTop = window.scrollY + rect.top;
+            const maxScrollable = Math.max(root.offsetHeight - window.innerHeight, 0);
+
+            const targetProgress = scene === 'services' ? 0.24 : 0.88;
+            const targetY = pageTop + maxScrollable * targetProgress;
+
+            window.scrollTo({
+              top: targetY,
+              behavior: 'smooth',
+            });
+
+            cleanupTimeoutId = window.setTimeout(() => {
+              router.replace('/', { scroll: false });
+            }, 220);
+          }, 120);
+        });
+      });
+    };
+
+    run();
+
+    return () => {
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      if (cleanupTimeoutId) window.clearTimeout(cleanupTimeoutId);
+    };
+  }, [pathname, router]);
 
   const transforms = useMemo(() => {
     const heroToServices = remap(progress, 0, 0.16);
@@ -166,4 +226,3 @@ export function HeroServicesStage() {
     </section>
   );
 }
-
