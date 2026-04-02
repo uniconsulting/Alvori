@@ -1,699 +1,377 @@
 'use client';
 
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
-import { sitePath } from '@/lib/site-path';
-import { appRoutes } from '@/config/routes';
-import { homeAnchorHrefs } from '@/config/anchors';
-
-type ThemeMode = 'light' | 'dark';
-
-type MobileCardTransform = {
-  rotateY: number;
-  translateX: number;
-  scaleX: number;
-  scaleY: number;
-  opacity: number;
-  shadowOpacity: number;
-};
+import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
+import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
+import { ServicesSection } from '@/components/sections/ServicesSection';
+import { About } from '@/components/sections/About';
+import { SceneIndicator } from '@/components/scroll/SceneIndicator';
+import { Container } from '@/components/layout/Container';
 
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
 
-function getMobileCardTransform(
-  cardRect: DOMRect,
-  containerRect: DOMRect,
-): MobileCardTransform {
-  const containerCenter = containerRect.left + containerRect.width / 2;
-  const cardCenter = cardRect.left + cardRect.width / 2;
-
-  const distance = cardCenter - containerCenter;
-  const normalized = clamp(distance / (containerRect.width * 0.52), -1, 1);
-  const absN = Math.abs(normalized);
-
-  return {
-    rotateY: -normalized * 18,
-    translateX: -normalized * 8,
-    scaleX: 1 - absN * 0.1,
-    scaleY: 1 - absN * 0.03,
-    opacity: 1 - absN * 0.18,
-    shadowOpacity: 0.1 + (1 - absN) * 0.08,
-  };
+function remap(value: number, inStart: number, inEnd: number) {
+  return clamp((value - inStart) / (inEnd - inStart), 0, 1);
 }
 
-export function HeroRightScene() {
-  const [theme, setTheme] = useState<ThemeMode>('light');
-  const [card1Ready, setCard1Ready] = useState(false);
-  const [card2Ready, setCard2Ready] = useState(false);
-  const [card3Ready, setCard3Ready] = useState(false);
+export function HeroServicesStage() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const handledSceneRef = useRef<string | null>(null);
 
-  const mobileScrollerRef = useRef<HTMLDivElement | null>(null);
-  const mobileItemRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const frameRef = useRef<number | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const [mobileTransforms, setMobileTransforms] = useState<MobileCardTransform[]>([
-    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
-    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
-    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1, shadowOpacity: 0.18 },
-  ]);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const root = document.documentElement;
+    const handleScroll = () => {
+      const root = rootRef.current;
+      if (!root) return;
 
-    const syncTheme = () => {
-      setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
+      const rect = root.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const total = rect.height - viewportHeight;
+      const passed = clamp(-rect.top, 0, total);
+      const nextProgress = total <= 0 ? 0 : passed / total;
+
+      setProgress(clamp(nextProgress, 0, 1));
     };
 
-    syncTheme();
-
-    const observer = new MutationObserver(syncTheme);
-    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const timers: number[] = [];
-    timers.push(window.setTimeout(() => setCard1Ready(true), 6500));
-    timers.push(window.setTimeout(() => setCard2Ready(true), 7500));
-    timers.push(window.setTimeout(() => setCard3Ready(true), 8500));
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
 
     return () => {
-      timers.forEach((id) => window.clearTimeout(id));
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
   useEffect(() => {
-    const scroller = mobileScrollerRef.current;
-    if (!scroller) return;
+    if (typeof window === 'undefined') return;
+    if (pathname !== '/') return;
 
-    const updateTransforms = () => {
-      const containerRect = scroller.getBoundingClientRect();
+    const params = new URLSearchParams(window.location.search);
+    const scene = params.get('scene');
 
-      const next = mobileItemRefs.current.map((node) => {
-        if (!node) {
-          return {
-            rotateY: 0,
-            translateX: 0,
-            scaleX: 1,
-            scaleY: 1,
-            opacity: 1,
-            shadowOpacity: 0.18,
-          };
-        }
+    if (scene !== 'services' && scene !== 'about') return;
+    if (handledSceneRef.current === scene) return;
 
-        return getMobileCardTransform(node.getBoundingClientRect(), containerRect);
+    const root = rootRef.current;
+    if (!root) return;
+
+    handledSceneRef.current = scene;
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId: number | null = null;
+    let cleanupTimeoutId: number | null = null;
+
+    const run = () => {
+      raf1 = window.requestAnimationFrame(() => {
+        raf2 = window.requestAnimationFrame(() => {
+          timeoutId = window.setTimeout(() => {
+            const rect = root.getBoundingClientRect();
+            const pageTop = window.scrollY + rect.top;
+            const maxScrollable = Math.max(root.offsetHeight - window.innerHeight, 0);
+
+            const targetProgress = scene === 'services' ? 0.24 : 0.88;
+            const targetY = pageTop + maxScrollable * targetProgress;
+
+            window.scrollTo({
+              top: targetY,
+              behavior: 'smooth',
+            });
+
+            cleanupTimeoutId = window.setTimeout(() => {
+              router.replace('/', { scroll: false });
+            }, 220);
+          }, 120);
+        });
       });
-
-      setMobileTransforms(next);
-      frameRef.current = null;
     };
 
-    const requestUpdate = () => {
-      if (frameRef.current !== null) return;
-      frameRef.current = window.requestAnimationFrame(updateTransforms);
-    };
-
-    updateTransforms();
-
-    scroller.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
+    run();
 
     return () => {
-      scroller.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', requestUpdate);
-      if (frameRef.current !== null) {
-        window.cancelAnimationFrame(frameRef.current);
-      }
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      if (cleanupTimeoutId) window.clearTimeout(cleanupTimeoutId);
     };
-  }, []);
+  }, [pathname, router]);
 
-  const assets = useMemo(
-    () => ({
-      request: `${sitePath}/hero/cards/request.webp`,
-      calc: `${sitePath}/hero/cards/calc.webp`,
-      principles: `${sitePath}/hero/cards/principles.webp`,
-    }),
-    [],
-  );
+  const transforms = useMemo(() => {
+    const heroToServices = remap(progress, 0, 0.16);
+    const servicesExit = remap(progress, 0.72, 0.84);
+    const aboutEnter = remap(progress, 0.82, 0.94);
 
-  const mobileLeftOpticalSpacer = 16;
-  const mobileCardWidth = 248;
-  const mobileCardWidthSm = 260;
+    const servicesHeaderProgress = remap(progress, 0.1, 0.22);
+    const servicesCardsProgress = remap(progress, 0.2, 0.7);
+
+    const aboutReveal = remap(progress, 0.82, 0.96);
+
+    return {
+      heroLeftX: `${-120 * heroToServices}vw`,
+      heroLeftBlur: `${12 * heroToServices}px`,
+      heroLeftOpacity: 1 - 0.55 * heroToServices,
+
+      heroRightX: `${120 * heroToServices}vw`,
+      heroRightBlur: `${12 * heroToServices}px`,
+      heroRightOpacity: 1 - 0.55 * heroToServices,
+
+      servicesOpacity:
+        clamp(heroToServices * 1.12, 0, 1) *
+        (1 - Math.pow(servicesExit, 1.35)),
+      servicesY: `${18 - 18 * heroToServices - 240 * servicesExit}px`,
+      servicesBlur: `${10 * (1 - heroToServices) + 18 * servicesExit}px`,
+
+      servicesHeaderProgress,
+      servicesCardsProgress,
+      servicesExit,
+
+      aboutOpacity: clamp(aboutEnter * 1.06, 0, 1),
+      aboutY: `${34 - 34 * aboutEnter}px`,
+      aboutBlur: `${8 - 8 * aboutEnter}px`,
+      aboutReveal,
+    };
+  }, [progress]);
 
   return (
     <>
-      <div className="xl:hidden">
-        <div className="relative left-1/2 w-screen -translate-x-1/2">
-          <div
-            ref={mobileScrollerRef}
-            className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            style={{
-              paddingLeft: `${mobileLeftOpticalSpacer}px`,
-              paddingRight: 0,
-              scrollPaddingLeft: `${mobileLeftOpticalSpacer}px`,
-              scrollPaddingRight: 0,
-              WebkitOverflowScrolling: 'touch',
-            }}
-          >
-            <div
-              className="h-px shrink-0"
-              style={{ width: 0 }}
-              aria-hidden="true"
-            />
-
-            <div
-              ref={(node) => {
-                mobileItemRefs.current[0] = node;
-              }}
-              className="shrink-0 snap-start"
-              style={{ width: `${mobileCardWidth}px` }}
-            >
-              <div className="sm:hidden">
-                <BentoCard
-                  title={
-                    <>
-                      единая форма
-                      <br />
-                      запроса и отправки кп
-                    </>
-                  }
-                  href={appRoutes.request}
-                  imageSrc={assets.request}
-                  theme={theme}
-                  variant="accent"
-                  heightClassName="h-[264px] w-full"
-                  visible={card1Ready}
-                  mobileSquare
-                  mobileTransform={mobileTransforms[0]}
-                />
-              </div>
-
-              <div className="hidden sm:block">
-                <BentoCard
-                  title={
-                    <>
-                      единая форма
-                      <br />
-                      запроса и отправки кп
-                    </>
-                  }
-                  href={appRoutes.request}
-                  imageSrc={assets.request}
-                  theme={theme}
-                  variant="accent"
-                  heightClassName="h-[276px] w-full"
-                  visible={card1Ready}
-                  mobileSquare
-                  mobileTransform={mobileTransforms[0]}
-                  mobileFixedWidth={mobileCardWidthSm}
-                />
-              </div>
-            </div>
-
-            <div
-              ref={(node) => {
-                mobileItemRefs.current[1] = node;
-              }}
-              className="shrink-0 snap-start"
-              style={{ width: `${mobileCardWidth}px` }}
-            >
-              <div className="sm:hidden">
-                <BentoCard
-                  title={
-                    <>
-                      ознакомиться
-                      <br />
-                      с нашими принципами
-                    </>
-                  }
-                  href={homeAnchorHrefs.about}
-                  imageSrc={assets.principles}
-                  theme={theme}
-                  variant="dark"
-                  heightClassName="h-[264px] w-full"
-                  visible={card3Ready}
-                  specialButton
-                  mobileSquare
-                  mobileTransform={mobileTransforms[1]}
-                />
-              </div>
-
-              <div className="hidden sm:block">
-                <BentoCard
-                  title={
-                    <>
-                      ознакомиться
-                      <br />
-                      с нашими принципами
-                    </>
-                  }
-                  href={homeAnchorHrefs.about}
-                  imageSrc={assets.principles}
-                  theme={theme}
-                  variant="dark"
-                  heightClassName="h-[276px] w-full"
-                  visible={card3Ready}
-                  specialButton
-                  mobileSquare
-                  mobileTransform={mobileTransforms[1]}
-                  mobileFixedWidth={mobileCardWidthSm}
-                />
-              </div>
-            </div>
-
-            <div
-              ref={(node) => {
-                mobileItemRefs.current[2] = node;
-              }}
-              className="shrink-0 snap-start"
-              style={{ width: `${mobileCardWidth}px` }}
-            >
-              <div className="sm:hidden">
-                <BentoCard
-                  title={
-                    <>
-                      сделать расчёт
-                      <br />
-                      вашей грузоперевозки
-                    </>
-                  }
-                  href={appRoutes.calculator}
-                  imageSrc={assets.calc}
-                  theme={theme}
-                  variant="light"
-                  heightClassName="h-[264px] w-full"
-                  visible={card2Ready}
-                  mobileSquare
-                  mobileTransform={mobileTransforms[2]}
-                />
-              </div>
-
-              <div className="hidden sm:block">
-                <BentoCard
-                  title={
-                    <>
-                      сделать расчёт
-                      <br />
-                      вашей грузоперевозки
-                    </>
-                  }
-                  href={appRoutes.calculator}
-                  imageSrc={assets.calc}
-                  theme={theme}
-                  variant="light"
-                  heightClassName="h-[276px] w-full"
-                  visible={card2Ready}
-                  mobileSquare
-                  mobileTransform={mobileTransforms[2]}
-                  mobileFixedWidth={mobileCardWidthSm}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden w-full max-w-[540px] md:max-w-none xl:grid xl:w-full xl:grid-cols-[258px_258px] xl:gap-6 xl:-translate-y-[3px]">
-        <BentoCard
-          title={
-            <>
-              единая форма
-              <br />
-              запроса и отправки кп
-            </>
-          }
-          href={appRoutes.request}
-          imageSrc={assets.request}
-          theme={theme}
-          variant="accent"
-          heightClassName="h-[236px]"
-          visible={card1Ready}
-        />
-
-        <BentoCard
-          title={
-            <>
-              ознакомиться
-              <br />
-              с нашими принципами
-            </>
-          }
-          href={homeAnchorHrefs.about}
-          imageSrc={assets.principles}
-          theme={theme}
-          variant="dark"
-          heightClassName="h-[496px]"
-          tall
-          specialButton
-          visible={card3Ready}
-        />
-
-        <BentoCard
-          title={
-            <>
-              сделать расчёт
-              <br />
-              вашей грузоперевозки
-            </>
-          }
-          href={appRoutes.calculator}
-          imageSrc={assets.calc}
-          theme={theme}
-          variant="light"
-          heightClassName="h-[236px]"
-          visible={card2Ready}
-        />
-      </div>
+      <MobileHeroServicesStage />
+      <DesktopHeroServicesStage
+        rootRef={rootRef}
+        progress={progress}
+        transforms={transforms}
+      />
     </>
   );
 }
 
-function BentoCard({
-  title,
-  href,
-  imageSrc,
-  theme,
-  variant,
-  heightClassName,
-  tall = false,
-  specialButton = false,
-  visible,
-  mobileSquare = false,
-  mobileTransform,
-  mobileFixedWidth,
-}: {
-  title: React.ReactNode;
-  href: string;
-  imageSrc: string;
-  theme: ThemeMode;
-  variant: 'accent' | 'light' | 'dark';
-  heightClassName: string;
-  tall?: boolean;
-  specialButton?: boolean;
-  visible: boolean;
-  mobileSquare?: boolean;
-  mobileTransform?: MobileCardTransform;
-  mobileFixedWidth?: number;
-}) {
-  const currentRef = useRef({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 1,
-    glowX: 50,
-    glowY: 50,
-    glowOpacity: 0,
-  });
-
-  const targetRef = useRef({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 1,
-    glowX: 50,
-    glowY: 50,
-    glowOpacity: 0,
-  });
-
-  const velocityRef = useRef({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 0,
-    glowX: 0,
-    glowY: 0,
-    glowOpacity: 0,
-  });
-
-  const frameRef = useRef<number | null>(null);
-
-  const [view, setView] = useState({
-    rotateX: 0,
-    rotateY: 0,
-    y: 0,
-    scale: 1,
-    glowX: 50,
-    glowY: 50,
-    glowOpacity: 0,
-  });
-
-  const [isDesktop, setIsDesktop] = useState(false);
+function MobileHeroServicesStage() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const updateViewportMode = () => {
-      setIsDesktop(window.innerWidth >= 1280);
+    const handleScroll = () => {
+      const root = rootRef.current;
+      if (!root) return;
+
+      const rect = root.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const total = rect.height - viewportHeight;
+      const passed = clamp(-rect.top, 0, total);
+      const nextProgress = total <= 0 ? 0 : passed / total;
+
+      setProgress(clamp(nextProgress, 0, 1));
     };
 
-    updateViewportMode();
-    window.addEventListener('resize', updateViewportMode);
-
-    return () => window.removeEventListener('resize', updateViewportMode);
-  }, []);
-
-  useEffect(() => {
-    const stiffness = 0.125;
-    const damping = 0.8;
-
-    const step = () => {
-      const current = currentRef.current;
-      const target = targetRef.current;
-      const velocity = velocityRef.current;
-
-      (Object.keys(current) as Array<keyof typeof current>).forEach((key) => {
-        const force = (target[key] - current[key]) * stiffness;
-        velocity[key] = (velocity[key] + force) * damping;
-        current[key] = current[key] + velocity[key];
-      });
-
-      setView({ ...currentRef.current });
-      frameRef.current = requestAnimationFrame(step);
-    };
-
-    frameRef.current = requestAnimationFrame(step);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
 
     return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
-  const textClass = 'text-[#f6f6f6]';
+  const transforms = useMemo(() => {
+    const heroExit = remap(progress, 0.12, 0.34);
+    const servicesEnter = remap(progress, 0.22, 0.46);
+    const servicesExit = remap(progress, 0.58, 0.76);
+    const aboutEnter = remap(progress, 0.68, 0.92);
 
-  const buttonClass = specialButton
-    ? 'bg-white text-black'
-    : 'bg-[#222429] text-white';
+    return {
+      heroOpacity: 1 - heroExit * 0.92,
+      heroY: `${heroExit * -46}px`,
+      heroBlur: `${heroExit * 8}px`,
 
-  const bottomMaskClass =
-    'bg-[linear-gradient(180deg,rgba(38,41,46,0)_0%,rgba(38,41,46,0.14)_18%,rgba(38,41,46,0.34)_38%,rgba(38,41,46,0.68)_62%,rgba(38,41,46,0.95)_100%)]';
+      servicesOpacity: servicesEnter * (1 - servicesExit * 0.96),
+      servicesY: `${28 - servicesEnter * 28 - servicesExit * 96}px`,
+      servicesBlur: `${(1 - servicesEnter) * 10 + servicesExit * 10}px`,
 
-  const borderClass =
-    theme === 'light'
-      ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.42)_24%,rgba(255,255,255,0.88)_48%,rgba(255,255,255,0.36)_74%,rgba(255,255,255,0.98)_100%)] opacity-100'
-      : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.06)_24%,rgba(255,255,255,0.12)_48%,rgba(255,255,255,0.05)_74%,rgba(255,255,255,0.18)_100%)] opacity-50';
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDesktop) return;
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width;
-    const py = (event.clientY - rect.top) / rect.height;
-
-    const rotateY = (px - 0.5) * 3.2;
-    const rotateX = (0.5 - py) * 3.2;
-
-    targetRef.current = {
-      rotateX,
-      rotateY,
-      y: -1.5,
-      scale: 1.004,
-      glowX: px * 100,
-      glowY: py * 100,
-      glowOpacity: 0.42,
+      aboutOpacity: aboutEnter,
+      aboutY: `${34 - aboutEnter * 34}px`,
+      aboutBlur: `${(1 - aboutEnter) * 10}px`,
     };
-  };
-
-  const handleMouseLeave = () => {
-    targetRef.current = {
-      rotateX: 0,
-      rotateY: 0,
-      y: 0,
-      scale: 1,
-      glowX: 50,
-      glowY: 50,
-      glowOpacity: 0,
-    };
-  };
+  }, [progress]);
 
   return (
-    <div
-      className={cn(
-        !visible && 'opacity-0 translate-y-[18px] scale-[0.985]',
-        visible &&
-          'opacity-100 translate-y-0 scale-100 transition-all duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
-        heightClassName,
-        tall && 'xl:row-span-2',
-      )}
-      style={{
-        perspective: mobileSquare ? '1200px' : undefined,
-        width: mobileSquare && mobileFixedWidth ? `${mobileFixedWidth}px` : undefined,
-      }}
-    >
-      <div
-        className="h-full"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-        <Link
-          href={href}
-          className={cn(
-            isDesktop ? 'hero-card-tilt hero-card-shell' : '',
-            'group relative block h-full overflow-hidden p-[2px]',
-            mobileSquare ? 'rounded-[24px]' : 'rounded-[32px]',
-          )}
-          style={{
-            transform: isDesktop
-              ? `perspective(1600px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`
-              : mobileSquare && mobileTransform
-                ? `translateX(${mobileTransform.translateX}px) rotateY(${mobileTransform.rotateY}deg) scaleX(${mobileTransform.scaleX}) scaleY(${mobileTransform.scaleY})`
-                : undefined,
-            transformStyle: 'preserve-3d',
-            transformOrigin:
-              mobileSquare && mobileTransform
-                ? mobileTransform.rotateY > 0
-                  ? 'left center'
-                  : 'right center'
-                : undefined,
-            opacity: mobileSquare && mobileTransform ? mobileTransform.opacity : undefined,
-            WebkitTapHighlightColor: 'transparent',
-            transition: isDesktop
-              ? undefined
-              : 'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
-          }}
-        >
-          <div
-            className={cn(
-              'pointer-events-none absolute inset-0',
-              mobileSquare ? 'rounded-[24px]' : 'rounded-[32px]',
-              borderClass,
-            )}
-          />
+    <section ref={rootRef} className="relative h-[230vh] xl:hidden">
+      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
+        <div className="relative h-full w-full">
+          <div className="absolute inset-x-0 top-0 z-40 px-[14px]">
+            <div className="pt-2">
+              <SceneIndicator progress={progress} />
+            </div>
+          </div>
 
           <div
-            className={cn(
-              'relative h-full overflow-hidden',
-              mobileSquare ? 'rounded-[22px]' : 'rounded-[30px]',
-              variant === 'accent'
-                ? 'bg-[var(--accent-1)]'
-                : variant === 'light'
-                  ? 'bg-[var(--surface)]'
-                  : 'bg-[var(--accent-2)]',
-            )}
+            className="absolute inset-x-0 top-[44px] z-10"
             style={{
-              boxShadow:
-                mobileSquare && mobileTransform
-                  ? `0 10px 26px rgba(38,41,46,${mobileTransform.shadowOpacity})`
-                  : undefined,
+              opacity: transforms.heroOpacity,
+              transform: `translateY(${transforms.heroY})`,
+              filter: `blur(${transforms.heroBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
             }}
           >
-            <img
-              src={imageSrc}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{
-                transform: isDesktop
-                  ? `translate3d(${(view.glowX - 50) * -0.038}px, ${(view.glowY - 50) * -0.038}px, 8px) scale(1.025)`
-                  : mobileSquare && mobileTransform
-                    ? `scale(${1.02 + (1 - mobileTransform.scaleX) * 0.08})`
-                    : 'scale(1.02)',
-              }}
-            />
-
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                opacity: isDesktop ? view.glowOpacity : 0,
-                background: `radial-gradient(260px circle at ${view.glowX}% ${view.glowY}%, rgba(255,255,255,0.08), transparent 62%)`,
-                transition: 'opacity 180ms cubic-bezier(0.22,1,0.36,1)',
-              }}
-            />
-
-            {mobileSquare && mobileTransform ? (
-              <div
-                className="pointer-events-none absolute inset-y-0 right-0 w-[24%]"
-                style={{
-                  opacity: Math.abs(mobileTransform.rotateY) / 18,
-                  background:
-                    mobileTransform.rotateY < 0
-                      ? 'linear-gradient(270deg, rgba(38,41,46,0.24) 0%, rgba(38,41,46,0.08) 45%, transparent 100%)'
-                      : 'transparent',
-                }}
-              />
-            ) : null}
-
-            {mobileSquare && mobileTransform ? (
-              <div
-                className="pointer-events-none absolute inset-y-0 left-0 w-[24%]"
-                style={{
-                  opacity: Math.abs(mobileTransform.rotateY) / 18,
-                  background:
-                    mobileTransform.rotateY > 0
-                      ? 'linear-gradient(90deg, rgba(38,41,46,0.24) 0%, rgba(38,41,46,0.08) 45%, transparent 100%)'
-                      : 'transparent',
-                }}
-              />
-            ) : null}
-
-            <div
-              className={cn(
-                'pointer-events-none absolute bottom-0 left-0 right-0',
-                mobileSquare ? 'h-[122px]' : 'h-[132px]',
-                bottomMaskClass,
-              )}
-            />
-
-            <div
-              className={cn(
-                'relative flex h-full flex-col justify-between',
-                mobileSquare ? 'p-3.5' : 'p-5',
-              )}
-              style={{
-                transform: isDesktop
-                  ? `translate3d(${(view.glowX - 50) * 0.022}px, ${(view.glowY - 50) * 0.022}px, 10px)`
-                  : undefined,
-              }}
-            >
-              <div className="flex justify-end">
-                <div
-                  className={cn(
-                    'inline-flex shrink-0 items-center justify-center transition-transform duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]',
-                    mobileSquare ? 'h-[34px] w-[34px] rounded-[12px]' : 'h-[38px] w-[38px] rounded-[14px]',
-                    buttonClass,
-                    isDesktop ? 'group-hover:translate-x-[1px]' : '',
-                  )}
-                  style={{ transform: isDesktop ? 'translateZ(12px)' : undefined }}
-                >
-                  <ArrowRight size={mobileSquare ? 17 : 19} strokeWidth={2.1} />
-                </div>
+            <Container>
+              <div className="flex flex-col gap-6">
+                <HeroLeftScene />
+                <HeroRightScene />
               </div>
+            </Container>
+          </div>
 
-              <div className="relative">
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[36px] z-20',
+              transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.servicesOpacity,
+              transform: `translateY(${transforms.servicesY})`,
+              filter: `blur(${transforms.servicesBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+            }}
+          >
+            <ServicesSection headerProgress={1} cardsProgress={1} />
+          </div>
+
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[36px] z-30',
+              transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.aboutOpacity,
+              transform: `translateY(${transforms.aboutY})`,
+              filter: `blur(${transforms.aboutBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+            }}
+          >
+            <About revealProgress={1} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DesktopHeroServicesStage({
+  rootRef,
+  progress,
+  transforms,
+}: {
+  rootRef: React.RefObject<HTMLDivElement | null>;
+  progress: number;
+  transforms: {
+    heroLeftX: string;
+    heroLeftBlur: string;
+    heroLeftOpacity: number;
+    heroRightX: string;
+    heroRightBlur: string;
+    heroRightOpacity: number;
+    servicesOpacity: number;
+    servicesY: string;
+    servicesBlur: string;
+    servicesHeaderProgress: number;
+    servicesCardsProgress: number;
+    servicesExit: number;
+    aboutOpacity: number;
+    aboutY: string;
+    aboutBlur: string;
+    aboutReveal: number;
+  };
+}) {
+  return (
+    <section
+      id="hero-services-stage"
+      ref={rootRef}
+      className="relative hidden h-[300vh] xl:block"
+    >
+      <div className="sticky top-[116px] h-[calc(100vh-116px)] overflow-visible">
+        <div className="relative h-full w-full">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-x-0 top-[76px] bottom-[104px]">
+              <div className="pointer-events-none absolute inset-0 z-10">
                 <div
-                  className={cn(
-                    'font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'max-w-[168px] text-[15px]' : 'max-w-[152px] text-[12px]',
-                    textClass,
-                  )}
+                  className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
+                  style={{
+                    transform: `translateX(${transforms.heroLeftX})`,
+                    filter: `blur(${transforms.heroLeftBlur})`,
+                    opacity: transforms.heroLeftOpacity,
+                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                  }}
                 >
-                  {title}
+                  <HeroLeftScene />
                 </div>
+
+                <Container className="pointer-events-none relative h-full">
+                  <div
+                    className="pointer-events-auto absolute top-[10px] w-[540px]"
+                    style={{
+                      right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+                      transform: `translateX(${transforms.heroRightX})`,
+                      filter: `blur(${transforms.heroRightBlur})`,
+                      opacity: transforms.heroRightOpacity,
+                      transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                    }}
+                  >
+                    <HeroRightScene />
+                  </div>
+                </Container>
               </div>
             </div>
           </div>
-        </Link>
+
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[-72px] bottom-[112px] z-20',
+              transforms.servicesOpacity > 0.02 && transforms.servicesExit < 0.98
+                ? 'pointer-events-auto'
+                : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.servicesExit >= 0.98 ? 0 : transforms.servicesOpacity,
+              transform: `translateY(${transforms.servicesY})`,
+              filter: `blur(${transforms.servicesBlur})`,
+              transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+              visibility: transforms.servicesExit >= 0.98 ? 'hidden' : 'visible',
+            }}
+          >
+            <ServicesSection
+              headerProgress={transforms.servicesHeaderProgress}
+              cardsProgress={transforms.servicesCardsProgress}
+            />
+          </div>
+
+          <div
+            className={cn(
+              'absolute inset-x-0 top-[-72px] bottom-[112px] z-30',
+              transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+            )}
+            style={{
+              opacity: transforms.aboutOpacity,
+              transform: `translateY(${transforms.aboutY})`,
+              filter: `blur(${transforms.aboutBlur})`,
+              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+            }}
+          >
+            <About revealProgress={transforms.aboutReveal} />
+          </div>
+
+          <div className="absolute inset-x-0 bottom-[36px] z-50">
+            <SceneIndicator progress={progress} />
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
