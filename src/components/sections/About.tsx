@@ -256,7 +256,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                     />
 
                     <p
-                      className="about-quote-text whitespace-pre-line text-[16px] font-semibold leading-[1.2] tracking-[-0.022em] text-[var(--text)] md:text-[17px]"
+                      className="about-quote-text whitespace-pre-line text-[17px] font-semibold leading-[1.2] tracking-[-0.022em] text-[var(--text)] md:text-[17px]"
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
                       {typedMobileQuote}
