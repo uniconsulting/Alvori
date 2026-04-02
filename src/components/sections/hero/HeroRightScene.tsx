@@ -228,6 +228,8 @@ export function HeroRightScene() {
               />
             </div>
           </div>
+        </div>
+      </div>
 
       <div className="hidden w-full max-w-[540px] md:max-w-none xl:grid xl:w-full xl:grid-cols-[258px_258px] xl:gap-6 xl:-translate-y-[3px]">
         <BentoCard
@@ -592,7 +594,7 @@ function BentoCard({
                 <div
                   className={cn(
                     'font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'max-w-[168px] text-[13px]' : 'max-w-[152px] text-[12px]',
+                    mobileSquare ? 'max-w-[168px] text-[15px]' : 'max-w-[152px] text-[12px]',
                     textClass,
                   )}
                 >
