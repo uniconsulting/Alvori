@@ -646,44 +646,36 @@ function ServiceCard({
             : 'relative flex h-full flex-col px-8 py-8',
         )}
       >
-        {mobile ? (
-          <>
-            <div className="w-full">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex min-w-0 items-start gap-[10px]">
-                  <Icon
-                    size={19}
-                    strokeWidth={2.05}
-                    className="mt-[1px] shrink-0 text-[var(--text)]"
-                  />
+{mobile ? (
+  <>
+    <div className="w-full">
+      <div className="flex min-w-0 items-start gap-[10px]">
+        <Icon
+          size={19}
+          strokeWidth={2.05}
+          className="mt-[1px] shrink-0 text-white"
+        />
 
-                  <h3 className="min-w-0 truncate whitespace-nowrap font-heading text-[18px] leading-[1.04] tracking-[-0.025em] text-[var(--text)]">
-                    {title}
-                  </h3>
-                </div>
+        <h3 className="min-w-0 truncate whitespace-nowrap font-heading text-[18px] leading-[1.04] tracking-[-0.025em] text-white">
+          {title}
+        </h3>
+      </div>
+    </div>
 
-                {accentLabel ? (
-                  <div className="shrink-0 pt-[1px] text-[16px] font-semibold leading-none tracking-[-0.02em] text-[var(--accent-1)]">
-                    {accentLabel}
-                  </div>
-                ) : null}
-              </div>
-            </div>
+    <div className="flex items-start pt-[18px]">
+      <div
+        className="h-[66px] w-full text-[17px] font-normal leading-[1.28] tracking-[-0.012em] text-white/88"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        {description}
+      </div>
+    </div>
 
-            <div className="flex items-center">
-              <div
-                className="h-[66px] w-full text-[17px] font-normal leading-[1.28] tracking-[-0.012em] text-[var(--text-muted)]"
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                {description}
-              </div>
-            </div>
-
-            <div>
-              <CardCTA label={ctaLabel} darkButton={false} mobile />
-            </div>
-          </>
-        ) : (
+    <div className="pt-[12px]">
+      <CardCTA label={ctaLabel} darkButton mobile />
+    </div>
+  </>
+) : (
           <>
             <div className="flex items-start justify-between gap-4">
               <div className="flex min-w-0 items-start gap-[10px]">
