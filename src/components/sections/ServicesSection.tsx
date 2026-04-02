@@ -639,62 +639,64 @@ function ServiceCard({
         )}
       />
 
-<div
-  className={cn(
-    mobile
-      ? 'relative flex h-full flex-col px-5 py-5'
-      : 'relative flex h-full flex-col px-8 py-8',
-  )}
->
-  <div>
-    <div className="flex items-start justify-between gap-4">
-      <div className="flex min-w-0 items-start gap-[10px]">
-        <Icon
-          size={mobile ? 19 : 18}
-          strokeWidth={2.05}
-          className="mt-[1px] shrink-0 text-[var(--text)]"
-        />
+      <div
+        className={cn(
+          mobile
+            ? 'relative flex h-full flex-col px-5 py-5'
+            : 'relative flex h-full flex-col px-8 py-8',
+        )}
+      >
+        <div>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex min-w-0 items-start gap-[10px]">
+              <Icon
+                size={mobile ? 19 : 18}
+                strokeWidth={2.05}
+                className="mt-[1px] shrink-0 text-[var(--text)]"
+              />
 
-        <h3
-          className={cn(
-            'min-w-0 truncate font-heading tracking-[-0.025em] text-[var(--text)]',
-            mobile ? 'text-[18px] leading-[1.04] whitespace-nowrap' : 'text-[19px] leading-[1.08]',
-          )}
-        >
-          {title}
-        </h3>
-      </div>
+              <h3
+                className={cn(
+                  'min-w-0 truncate font-heading tracking-[-0.025em] text-[var(--text)]',
+                  mobile ? 'text-[18px] leading-[1.04] whitespace-nowrap' : 'text-[19px] leading-[1.08]',
+                )}
+              >
+                {title}
+              </h3>
+            </div>
 
-      {accentLabel ? (
-        <div
-          className={cn(
-            'shrink-0 pt-[1px] font-semibold leading-none tracking-[-0.02em] text-[var(--accent-1)]',
-            mobile ? 'text-[16px]' : 'text-[15px]',
-          )}
-        >
-          {accentLabel}
+            {accentLabel ? (
+              <div
+                className={cn(
+                  'shrink-0 pt-[1px] font-semibold leading-none tracking-[-0.02em] text-[var(--accent-1)]',
+                  mobile ? 'text-[16px]' : 'text-[15px]',
+                )}
+              >
+                {accentLabel}
+              </div>
+            ) : null}
+          </div>
+
+          <div
+            className={cn(
+              'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
+              mobile
+                ? 'mt-[12px] min-h-[66px] max-w-[258px] text-[17px] leading-[1.28]'
+                : 'mt-[32px] text-[16px] leading-[1.34]',
+            )}
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            {description}
+          </div>
         </div>
-      ) : null}
-    </div>
 
-    <div
-      className={cn(
-        'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
-        mobile
-          ? 'mt-[12px] min-h-[66px] max-w-[258px] text-[17px] leading-[1.28]'
-          : 'mt-[32px] text-[16px] leading-[1.34]',
-      )}
-      style={{ fontFamily: 'var(--font-body-text)' }}
-    >
-      {description}
+        <div className={cn(mobile ? 'mt-auto pt-[12px]' : 'mt-auto pt-[32px]')}>
+          <CardCTA label={ctaLabel} darkButton={false} mobile={mobile} />
+        </div>
+      </div>
     </div>
-  </div>
+  );
 
-  <div className={cn(mobile ? 'mt-auto pt-[12px]' : 'mt-auto pt-[32px]')}>
-    <CardCTA label={ctaLabel} darkButton={false} mobile={mobile} />
-  </div>
-</div>
-      
   const wrapped = isAdr ? (
     <div className={cn('relative p-[2px]', mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>
       <div
@@ -711,25 +713,25 @@ function ServiceCard({
     <div className={cn(mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>{cardBody}</div>
   );
 
-return (
-  <TiltCardShell mobile={mobile}>
-    <Link href={href} className="block h-full">
-      <div
-        style={
-          mobile
-            ? {
-                transform: `perspective(1400px) rotateY(${(1 - mobileDepth) * -18}deg) translateX(${(1 - mobileDepth) * -14}px) scale(${0.94 + mobileDepth * 0.06})`,
-                opacity: 0.72 + mobileDepth * 0.28,
-                transformOrigin: 'center center',
-              }
-            : undefined
-        }
-      >
-        {wrapped}
-      </div>
-    </Link>
-  </TiltCardShell>
-);
+  return (
+    <TiltCardShell mobile={mobile}>
+      <Link href={href} className="block h-full">
+        <div
+          style={
+            mobile
+              ? {
+                  transform: `perspective(1400px) rotateY(${(1 - mobileDepth) * -18}deg) translateX(${(1 - mobileDepth) * -14}px) scale(${0.94 + mobileDepth * 0.06})`,
+                  opacity: 0.72 + mobileDepth * 0.28,
+                  transformOrigin: 'center center',
+                }
+              : undefined
+          }
+        >
+          {wrapped}
+        </div>
+      </Link>
+    </TiltCardShell>
+  );
 }
 
 function ServiceTallCard({
@@ -794,17 +796,17 @@ function ServiceTallCard({
                 </h3>
               </div>
 
-<div
-  className={cn(
-    'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
-    mobile
-      ? 'mt-[14px] max-w-[240px] text-[17px] leading-[1.28] sm:max-w-[252px]'
-      : 'mt-[32px] text-[16px] leading-[1.34]',
-  )}
-  style={{ fontFamily: 'var(--font-body-text)' }}
->
-  {description}
-</div>
+              <div
+                className={cn(
+                  'font-normal tracking-[-0.012em] text-white/88',
+                  mobile
+                    ? 'mt-[14px] max-w-[240px] text-[17px] leading-[1.28] sm:max-w-[252px]'
+                    : 'mt-[32px] text-[16px] leading-[1.34]',
+                )}
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                {description}
+              </div>
 
               <div className={cn(mobile ? 'pt-6' : 'pt-[32px]')}>
                 <CardCTA label={ctaLabel} darkButton mobile={mobile} />
