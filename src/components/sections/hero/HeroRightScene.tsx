@@ -92,6 +92,7 @@ export function HeroRightScene() {
 
     const updateTransforms = () => {
       const containerRect = scroller.getBoundingClientRect();
+
       const next = mobileItemRefs.current.map((node) => {
         if (!node) {
           return {
@@ -139,93 +140,178 @@ export function HeroRightScene() {
     [],
   );
 
+  const mobileLeftOpticalSpacer = 16;
+  const mobileCardWidth = 248;
+  const mobileCardWidthSm = 260;
+
   return (
     <>
       <div className="xl:hidden">
-        <div className="relative">
+        <div className="relative left-1/2 w-screen -translate-x-1/2">
           <div
             ref={mobileScrollerRef}
-            className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-5"
+            className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             style={{
-              scrollPaddingLeft: '16px',
-              scrollPaddingRight: '16px',
+              paddingLeft: `${mobileLeftOpticalSpacer}px`,
+              paddingRight: 0,
+              scrollPaddingLeft: `${mobileLeftOpticalSpacer}px`,
+              scrollPaddingRight: 0,
               WebkitOverflowScrolling: 'touch',
             }}
           >
             <div
+              className="h-px shrink-0"
+              style={{ width: 0 }}
+              aria-hidden="true"
+            />
+
+            <div
               ref={(node) => {
                 mobileItemRefs.current[0] = node;
               }}
-              className="w-[248px] shrink-0 snap-start sm:w-[260px]"
+              className="shrink-0 snap-start"
+              style={{ width: `${mobileCardWidth}px` }}
             >
-              <BentoCard
-                title={
-                  <>
-                    единая форма
-                    <br />
-                    запроса и отправки кп
-                  </>
-                }
-                href={appRoutes.request}
-                imageSrc={assets.request}
-                theme={theme}
-                variant="accent"
-                heightClassName="h-[264px] w-full sm:h-[276px]"
-                visible={card1Ready}
-                mobileSquare
-                mobileTransform={mobileTransforms[0]}
-              />
+              <div className="sm:hidden">
+                <BentoCard
+                  title={
+                    <>
+                      единая форма
+                      <br />
+                      запроса и отправки кп
+                    </>
+                  }
+                  href={appRoutes.request}
+                  imageSrc={assets.request}
+                  theme={theme}
+                  variant="accent"
+                  heightClassName="h-[264px] w-full"
+                  visible={card1Ready}
+                  mobileSquare
+                  mobileTransform={mobileTransforms[0]}
+                />
+              </div>
+
+              <div className="hidden sm:block">
+                <BentoCard
+                  title={
+                    <>
+                      единая форма
+                      <br />
+                      запроса и отправки кп
+                    </>
+                  }
+                  href={appRoutes.request}
+                  imageSrc={assets.request}
+                  theme={theme}
+                  variant="accent"
+                  heightClassName="h-[276px] w-full"
+                  visible={card1Ready}
+                  mobileSquare
+                  mobileTransform={mobileTransforms[0]}
+                  mobileFixedWidth={mobileCardWidthSm}
+                />
+              </div>
             </div>
 
             <div
               ref={(node) => {
                 mobileItemRefs.current[1] = node;
               }}
-              className="w-[248px] shrink-0 snap-start sm:w-[260px]"
+              className="shrink-0 snap-start"
+              style={{ width: `${mobileCardWidth}px` }}
             >
-              <BentoCard
-                title={
-                  <>
-                    ознакомиться
-                    <br />
-                    с нашими принципами
-                  </>
-                }
-                href={homeAnchorHrefs.about}
-                imageSrc={assets.principles}
-                theme={theme}
-                variant="dark"
-                heightClassName="h-[264px] w-full sm:h-[276px]"
-                visible={card3Ready}
-                specialButton
-                mobileSquare
-                mobileTransform={mobileTransforms[1]}
-              />
+              <div className="sm:hidden">
+                <BentoCard
+                  title={
+                    <>
+                      ознакомиться
+                      <br />
+                      с нашими принципами
+                    </>
+                  }
+                  href={homeAnchorHrefs.about}
+                  imageSrc={assets.principles}
+                  theme={theme}
+                  variant="dark"
+                  heightClassName="h-[264px] w-full"
+                  visible={card3Ready}
+                  specialButton
+                  mobileSquare
+                  mobileTransform={mobileTransforms[1]}
+                />
+              </div>
+
+              <div className="hidden sm:block">
+                <BentoCard
+                  title={
+                    <>
+                      ознакомиться
+                      <br />
+                      с нашими принципами
+                    </>
+                  }
+                  href={homeAnchorHrefs.about}
+                  imageSrc={assets.principles}
+                  theme={theme}
+                  variant="dark"
+                  heightClassName="h-[276px] w-full"
+                  visible={card3Ready}
+                  specialButton
+                  mobileSquare
+                  mobileTransform={mobileTransforms[1]}
+                  mobileFixedWidth={mobileCardWidthSm}
+                />
+              </div>
             </div>
 
             <div
               ref={(node) => {
                 mobileItemRefs.current[2] = node;
               }}
-              className="w-[248px] shrink-0 snap-start sm:w-[260px]"
+              className="shrink-0 snap-start"
+              style={{ width: `${mobileCardWidth}px` }}
             >
-              <BentoCard
-                title={
-                  <>
-                    сделать расчёт
-                    <br />
-                    вашей грузоперевозки
-                  </>
-                }
-                href={appRoutes.calculator}
-                imageSrc={assets.calc}
-                theme={theme}
-                variant="light"
-                heightClassName="h-[264px] w-full sm:h-[276px]"
-                visible={card2Ready}
-                mobileSquare
-                mobileTransform={mobileTransforms[2]}
-              />
+              <div className="sm:hidden">
+                <BentoCard
+                  title={
+                    <>
+                      сделать расчёт
+                      <br />
+                      вашей грузоперевозки
+                    </>
+                  }
+                  href={appRoutes.calculator}
+                  imageSrc={assets.calc}
+                  theme={theme}
+                  variant="light"
+                  heightClassName="h-[264px] w-full"
+                  visible={card2Ready}
+                  mobileSquare
+                  mobileTransform={mobileTransforms[2]}
+                />
+              </div>
+
+              <div className="hidden sm:block">
+                <BentoCard
+                  title={
+                    <>
+                      сделать расчёт
+                      <br />
+                      вашей грузоперевозки
+                    </>
+                  }
+                  href={appRoutes.calculator}
+                  imageSrc={assets.calc}
+                  theme={theme}
+                  variant="light"
+                  heightClassName="h-[276px] w-full"
+                  visible={card2Ready}
+                  mobileSquare
+                  mobileTransform={mobileTransforms[2]}
+                  mobileFixedWidth={mobileCardWidthSm}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -298,6 +384,7 @@ function BentoCard({
   visible,
   mobileSquare = false,
   mobileTransform,
+  mobileFixedWidth,
 }: {
   title: React.ReactNode;
   href: string;
@@ -310,6 +397,7 @@ function BentoCard({
   visible: boolean;
   mobileSquare?: boolean;
   mobileTransform?: MobileCardTransform;
+  mobileFixedWidth?: number;
 }) {
   const currentRef = useRef({
     rotateX: 0,
@@ -450,6 +538,7 @@ function BentoCard({
       )}
       style={{
         perspective: mobileSquare ? '1200px' : undefined,
+        width: mobileSquare && mobileFixedWidth ? `${mobileFixedWidth}px` : undefined,
       }}
     >
       <div
@@ -594,7 +683,7 @@ function BentoCard({
                 <div
                   className={cn(
                     'font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'max-w-[192px] text-[15px]' : 'max-w-[152px] text-[12px]',
+                    mobileSquare ? 'max-w-[168px] text-[15px]' : 'max-w-[152px] text-[12px]',
                     textClass,
                   )}
                 >
