@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import {
   Calculator,
   CheckCheck,
@@ -18,6 +19,7 @@ type ProcessStep = {
   id: string;
   title: string;
   description: string;
+  mobileDescription: string;
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
 };
 
@@ -27,6 +29,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: 'запрос',
     description:
       'Фиксируем задачу, маршрут, сроки, требования к транспорту и документы по заявке.',
+    mobileDescription:
+      'Фиксируем задачу, маршрут, сроки,\nтребования к транспорту\nи документы по заявке.',
     icon: Send,
   },
   {
@@ -34,6 +38,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: 'расчёт',
     description:
       'Подбираем формат перевозки, считаем стоимость, сроки и оптимальный сценарий исполнения.',
+    mobileDescription:
+      'Подбираем формат перевозки,\nсчитаем сроки, стоимость и оптимальный\nсценарий исполнения.',
     icon: Calculator,
   },
   {
@@ -41,6 +47,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: 'согласование',
     description:
       'Подтверждаем условия, детали маршрута, формат работы и запускаем перевозку в работу.',
+    mobileDescription:
+      'Подтверждаем условия, детали маршрута,\nформат и запускаем\nперевозку в работу.',
     icon: CheckCheck,
   },
   {
@@ -48,6 +56,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: 'перевозка',
     description:
       'Организуем исполнение, сопровождаем процесс и контролируем движение на каждом этапе.',
+    mobileDescription:
+      'Организуем исполнение, сопровождаем\nпроцесс и контролируем движение\nна каждом этапе.',
     icon: Truck,
   },
   {
@@ -55,6 +65,8 @@ const PROCESS_STEPS: ProcessStep[] = [
     title: 'документы',
     description:
       'Формируем закрывающий контур: подтверждение исполнения, комплект документов и завершение сделки.',
+    mobileDescription:
+      'Формируем закрывающий контур,\nподтверждение исполнения, комплект\nдокументов и завершение сделки.',
     icon: FileText,
   },
 ];
@@ -78,9 +90,7 @@ function useTypewriter(text: string, isActive: boolean, duration = 3200) {
       const length = Math.floor(text.length * progress);
       setDisplayed(text.slice(0, length));
 
-      if (progress < 1) {
-        frame = requestAnimationFrame(tick);
-      }
+      if (progress < 1) frame = requestAnimationFrame(tick);
     };
 
     setDisplayed('');
@@ -110,7 +120,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
     <div id={homeAnchorIds.about} className="h-full scroll-mt-[120px]">
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
-          <div className="flex flex-col gap-8 xl:gap-10">
+          <div className="flex flex-col gap-0 xl:gap-10">
             <div className="flex items-start justify-between gap-4 xl:items-center xl:gap-6">
               <h2
                 className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] transition-all duration-500 md:text-[42px] xl:text-[52px]"
@@ -137,7 +147,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             </div>
 
             <div
-              className="mt-1 flex flex-col gap-6 transition-all duration-500 xl:mt-2 xl:gap-6"
+              className="mt-8 flex flex-col gap-6 transition-all duration-500 xl:mt-2 xl:gap-6"
               style={{
                 opacity: introReveal,
                 transform: `translateY(${20 - 20 * introReveal}px)`,
@@ -166,7 +176,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             </div>
 
             <div
-              className="h-[2px] rounded-full bg-[rgba(38,41,46,0.10)] transition-all duration-500"
+              className="mt-6 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)] transition-all duration-500"
               style={{
                 opacity: introReveal,
                 transform: `scaleX(${0.72 + 0.28 * introReveal})`,
@@ -175,7 +185,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             />
 
             <div
-              className="pt-6 transition-all duration-[650ms] xl:pt-0"
+              className="mt-6 transition-all duration-[650ms] xl:mt-0"
               style={{
                 opacity: quoteReveal,
                 transform: `translateY(${24 - 24 * quoteReveal}px)`,
@@ -213,7 +223,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                 <div className="flex flex-col gap-4">
                   <div className="flex items-start gap-3">
                     <Quote
-                      size={32}
+                      size={36}
                       strokeWidth={2}
                       className="mt-[2px] shrink-0 text-[var(--accent-1)]"
                     />
@@ -228,7 +238,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                   </div>
 
                   <p
-                    className="text-right text-[16px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)] md:text-[17px]"
+                    className="text-left text-[16px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)] md:text-[17px]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
                   >
                     — Алик, руководитель АЛВОРИ
@@ -415,7 +425,22 @@ function ProcessFlowNodesMobile() {
 
   return (
     <div className="rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-      <div className="mb-3 flex justify-end">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <ActiveIcon
+            size={20}
+            strokeWidth={2.05}
+            className="shrink-0 text-[var(--accent-1)]"
+          />
+
+          <h3
+            className="text-[18px] font-semibold lowercase leading-[1.08] tracking-[-0.022em] text-[var(--text)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            {activeStep.title}
+          </h3>
+        </div>
+
         <div className="flex items-center gap-2">
           {PROCESS_STEPS.map((step, index) => {
             const isActive = index === activeIndex;
@@ -427,7 +452,7 @@ function ProcessFlowNodesMobile() {
                 onClick={() => setActiveIndex(index)}
                 aria-label={step.title}
                 className={cn(
-                  'rounded-full transition-all duration-300 ease-out',
+                  'rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
                   isActive
                     ? 'h-[3px] w-[34px] bg-[var(--accent-1)]'
                     : 'h-[3px] w-[18px] bg-[var(--accent-2)]',
@@ -440,35 +465,18 @@ function ProcessFlowNodesMobile() {
 
       <div
         className={cn(
-          'transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'mt-4 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
           textVisible
             ? 'translate-y-0 opacity-100 blur-0'
             : 'translate-y-[10px] opacity-0 blur-[2px]',
         )}
       >
-        <div className="flex flex-col gap-3">
-          <div className="flex items-start gap-3">
-            <ActiveIcon
-              size={20}
-              strokeWidth={2.05}
-              className="mt-[2px] shrink-0 text-[var(--accent-1)]"
-            />
-
-            <h3
-              className="text-[18px] font-semibold lowercase leading-[1.08] tracking-[-0.022em] text-[var(--text)]"
-              style={{ fontFamily: 'var(--font-body-text)' }}
-            >
-              {activeStep.title}
-            </h3>
-          </div>
-
-          <p
-            className="text-left text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
-            style={{ fontFamily: 'var(--font-body-text)' }}
-          >
-            {activeStep.description}
-          </p>
-        </div>
+        <p
+          className="whitespace-pre-line text-left text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          {activeStep.mobileDescription}
+        </p>
       </div>
     </div>
   );
