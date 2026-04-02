@@ -499,7 +499,7 @@ function ServicesMobileRail({
     <div className="flex justify-center">
       <div
         ref={railRef}
-        className="relative flex items-end gap-[8px] rounded-[18px] px-1 py-2 touch-pan-x"
+        className="relative flex h-[52px] items-end gap-[8px] rounded-[18px] px-1 py-2 touch-pan-x"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -525,7 +525,7 @@ function ServicesMobileRail({
             opacity = 0.95;
           }
 
-          const height = isMain ? (isActiveMain ? 38 : 28) : 20;
+          const height = isMain ? (isActiveMain ? 42 : 31) : 22;
           const background = isActiveMain || isTrail ? 'var(--accent-1)' : 'var(--accent-2)';
 
           return (
@@ -542,7 +542,7 @@ function ServicesMobileRail({
               )}
             >
               <span
-                className="services-mobile-rail-tick block w-[6px] rounded-full"
+                className="services-mobile-rail-tick block w-[2px] rounded-full"
                 style={{
                   height: `${height}px`,
                   opacity,
