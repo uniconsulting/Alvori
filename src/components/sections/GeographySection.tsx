@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Calculator, Route } from 'lucide-react';
+import { Calculator, Dot, Route } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { GeographyGlobe } from '@/components/sections/GeographyGlobe';
