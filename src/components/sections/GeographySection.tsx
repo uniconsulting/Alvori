@@ -173,9 +173,9 @@ export function GeographySection() {
                 className="text-[18px] font-normal leading-[1.28] tracking-[-0.018em] text-[var(--text)] md:text-[19px]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
-                Работаем по ключевым направлениям внутри РФ,
+                Работаем по ключевым направлениям
                 <br />
-                выстраивая устойчивую
+                внутри РФ, выстраивая устойчивую 
                 <br />
                 логистику под задачу клиента.
               </p>
