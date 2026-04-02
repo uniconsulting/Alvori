@@ -110,8 +110,8 @@ export function HeroServicesStage() {
     const servicesExit = remap(progress, 0.72, 0.84);
     const aboutEnter = remap(progress, 0.82, 0.94);
 
-    const servicesHeaderProgress = remap(progress, 0.10, 0.22);
-    const servicesCardsProgress = remap(progress, 0.20, 0.70);
+    const servicesHeaderProgress = remap(progress, 0.1, 0.22);
+    const servicesCardsProgress = remap(progress, 0.2, 0.7);
 
     const aboutReveal = remap(progress, 0.82, 0.96);
 
@@ -142,85 +142,117 @@ export function HeroServicesStage() {
   }, [progress]);
 
   return (
+    <>
+      <MobileHeroServicesStage progress={progress} />
+
+      <DesktopHeroServicesStage
+        rootRef={rootRef}
+        progress={progress}
+        transforms={transforms}
+      />
+    </>
+  );
+}
+
+function MobileHeroServicesStage({ progress }: { progress: number }) {
+  return (
+    <section className="relative xl:hidden">
+      <div className="relative">
+        <div className="sticky top-[92px] z-30 px-[14px] pt-2">
+          <SceneIndicator progress={progress} />
+        </div>
+
+        <div className="pt-4">
+          <Container>
+            <div className="flex flex-col gap-6">
+              <HeroLeftScene />
+              <HeroRightScene />
+            </div>
+          </Container>
+        </div>
+
+        <div className="pt-8">
+          <ServicesSection headerProgress={1} cardsProgress={1} />
+        </div>
+
+        <div className="pt-8">
+          <About revealProgress={1} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DesktopHeroServicesStage({
+  rootRef,
+  progress,
+  transforms,
+}: {
+  rootRef: React.RefObject<HTMLDivElement | null>;
+  progress: number;
+  transforms: {
+    heroLeftX: string;
+    heroLeftBlur: string;
+    heroLeftOpacity: number;
+    heroRightX: string;
+    heroRightBlur: string;
+    heroRightOpacity: number;
+    servicesOpacity: number;
+    servicesY: string;
+    servicesBlur: string;
+    servicesHeaderProgress: number;
+    servicesCardsProgress: number;
+    servicesExit: number;
+    aboutOpacity: number;
+    aboutY: string;
+    aboutBlur: string;
+    aboutReveal: number;
+  };
+}) {
+  return (
     <section
       id="hero-services-stage"
       ref={rootRef}
-      className="relative h-[300vh]"
+      className="relative hidden h-[300vh] xl:block"
     >
-      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-visible md:top-[104px] md:h-[calc(100vh-104px)] xl:top-[116px] xl:h-[calc(100vh-116px)]">
+      <div className="sticky top-[116px] h-[calc(100vh-116px)] overflow-visible">
         <div className="relative h-full w-full">
-          <div className="absolute inset-x-0 top-0 z-50 px-[14px] md:hidden">
-            <div className="pt-2">
-              <SceneIndicator progress={progress} />
-            </div>
-          </div>
-
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-x-0 top-[56px] bottom-[88px] md:top-[72px] md:bottom-[96px] xl:top-[76px] xl:bottom-[104px]">
+            <div className="absolute inset-x-0 top-[76px] bottom-[104px]">
               <div className="pointer-events-none absolute inset-0 z-10">
-                <div className="xl:hidden">
-                  <Container className="pointer-events-none relative h-full">
-                    <div
-                      className="pointer-events-auto absolute left-0 top-[-28px] w-full"
-                      style={{
-                        transform: `translateX(${transforms.heroLeftX})`,
-                        filter: `blur(${transforms.heroLeftBlur})`,
-                        opacity: transforms.heroLeftOpacity,
-                        transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                      }}
-                    >
-                      <HeroLeftScene />
-                    </div>
-
-                    <div
-                      className="pointer-events-auto absolute left-0 right-0 top-[292px] w-full"
-                      style={{
-                        transform: `translateX(${transforms.heroRightX})`,
-                        filter: `blur(${transforms.heroRightBlur})`,
-                        opacity: transforms.heroRightOpacity,
-                        transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                      }}
-                    >
-                      <HeroRightScene />
-                    </div>
-                  </Container>
+                <div
+                  className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
+                  style={{
+                    transform: `translateX(${transforms.heroLeftX})`,
+                    filter: `blur(${transforms.heroLeftBlur})`,
+                    opacity: transforms.heroLeftOpacity,
+                    transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
+                  }}
+                >
+                  <HeroLeftScene />
                 </div>
 
-                <div className="hidden xl:block">
+                <Container className="pointer-events-none relative h-full">
                   <div
-                    className="pointer-events-auto absolute left-0 top-[-28px] w-[56vw] min-w-[780px]"
+                    className="pointer-events-auto absolute top-[10px] w-[540px]"
                     style={{
-                      transform: `translateX(${transforms.heroLeftX})`,
-                      filter: `blur(${transforms.heroLeftBlur})`,
-                      opacity: transforms.heroLeftOpacity,
+                      right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
+                      transform: `translateX(${transforms.heroRightX})`,
+                      filter: `blur(${transforms.heroRightBlur})`,
+                      opacity: transforms.heroRightOpacity,
                       transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
                     }}
                   >
-                    <HeroLeftScene />
+                    <HeroRightScene />
                   </div>
-
-                  <Container className="pointer-events-none relative h-full">
-                    <div
-                      className="pointer-events-auto absolute top-[10px] w-[540px]"
-                      style={{
-                        right: 'max(16px, calc((100vw - 1440px) / 2 + 40px))',
-                        transform: `translateX(${transforms.heroRightX})`,
-                        filter: `blur(${transforms.heroRightBlur})`,
-                        opacity: transforms.heroRightOpacity,
-                        transition: 'transform 80ms linear, filter 80ms linear, opacity 80ms linear',
-                      }}
-                    >
-                      <HeroRightScene />
-                    </div>
-                  </Container>
-                </div>
+                </Container>
               </div>
             </div>
           </div>
 
           <div
             className={cn(
-              'absolute inset-x-0 top-[-56px] bottom-[96px] z-20 md:top-[-64px] md:bottom-[104px] xl:top-[-72px] xl:bottom-[112px]',
+              'absolute inset-x-0 top-[-72px] bottom-[112px] z-20',
               transforms.servicesOpacity > 0.02 && transforms.servicesExit < 0.98
                 ? 'pointer-events-auto'
                 : 'pointer-events-none',
@@ -241,7 +273,7 @@ export function HeroServicesStage() {
 
           <div
             className={cn(
-              'absolute inset-x-0 top-[-56px] bottom-[96px] z-30 md:top-[-64px] md:bottom-[104px] xl:top-[-72px] xl:bottom-[112px]',
+              'absolute inset-x-0 top-[-72px] bottom-[112px] z-30',
               transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
@@ -254,7 +286,7 @@ export function HeroServicesStage() {
             <About revealProgress={transforms.aboutReveal} />
           </div>
 
-          <div className="absolute inset-x-0 bottom-[28px] z-50 hidden md:block md:bottom-[32px] xl:bottom-[36px]">
+          <div className="absolute inset-x-0 bottom-[36px] z-50">
             <SceneIndicator progress={progress} />
           </div>
         </div>
