@@ -681,7 +681,7 @@ function ServiceCard({
     className={cn(
       'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
       mobile
-        ? 'mt-[12px] h-[66px] w-full text-[17px] leading-[1.28]'
+        ? 'mt-[18px] h-[66px] w-full text-[17px] leading-[1.28]'
         : 'mt-[32px] text-[16px] leading-[1.34]',
     )}
     style={{ fontFamily: 'var(--font-body-text)' }}
@@ -778,7 +778,7 @@ function ServiceTallCard({
               mobile ? 'px-5 pt-5 pb-6' : 'px-8 pt-8 pb-[30px]',
             )}
           >
-            <div className="mt-auto">
+            <div className="mt-auto w-full">
               <div className="flex min-w-0 items-start gap-[10px]">
                 <Icon
                   size={mobile ? 19 : 18}
@@ -800,7 +800,7 @@ function ServiceTallCard({
                 className={cn(
                   'font-normal tracking-[-0.012em] text-white/88',
                   mobile
-                    ? 'mt-[14px] max-w-[240px] text-[17px] leading-[1.28] sm:max-w-[252px]'
+                    ? 'mt-[14px] h-[66px] w-full text-[17px] leading-[1.28]'
                     : 'mt-[32px] text-[16px] leading-[1.34]',
                 )}
                 style={{ fontFamily: 'var(--font-body-text)' }}
