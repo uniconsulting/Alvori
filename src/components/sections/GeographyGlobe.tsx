@@ -308,7 +308,7 @@ export function GeographyGlobe({
     >
       {mobile ? (
         <div className="relative h-full w-full overflow-visible" style={{ touchAction: 'none' }}>
-<div className="absolute top-1/2 right-[-38%] w-[88vw] -translate-y-1/2">
+<div className="absolute top-1/2 right-[-26%] w-[68vw] -translate-y-1/2">
   <canvas
     ref={canvasRef}
     className="aspect-square w-full h-auto cursor-grab"
