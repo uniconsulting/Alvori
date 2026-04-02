@@ -346,7 +346,7 @@ export function HeroLeftScene() {
               </div>
 
               <div className="pointer-events-none absolute inset-0">
-                <div className="absolute left-[168px] top-[40px] w-[236px] sm:left-[182px] sm:w-[244px]">
+                <div className="absolute left-[164px] top-[40px] w-[236px] sm:left-[180px] sm:w-[244px]">
                   <div
                     key={activeSlide}
                     className={cn(
