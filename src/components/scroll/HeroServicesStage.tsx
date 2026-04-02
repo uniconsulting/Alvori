@@ -7,6 +7,7 @@ import { HeroLeftScene } from '@/components/sections/hero/HeroLeftScene';
 import { HeroRightScene } from '@/components/sections/hero/HeroRightScene';
 import { ServicesSection } from '@/components/sections/ServicesSection';
 import { About } from '@/components/sections/About';
+import { GeographySection } from '@/components/sections/GeographySection';
 import { SceneIndicator } from '@/components/scroll/SceneIndicator';
 import { Container } from '@/components/layout/Container';
 
@@ -53,6 +54,7 @@ export function HeroServicesStage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (window.innerWidth < 1280) return;
     if (pathname !== '/') return;
 
     const params = new URLSearchParams(window.location.search);
@@ -154,12 +156,17 @@ export function HeroServicesStage() {
 }
 
 function MobileHeroServicesStage() {
-  const rootRef = useRef<HTMLDivElement | null>(null);
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+  const handledSceneRef = useRef<string | null>(null);
+
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      const root = rootRef.current;
+      const root = sceneRef.current;
       if (!root) return;
 
       const rect = root.getBoundingClientRect();
@@ -180,6 +187,61 @@ function MobileHeroServicesStage() {
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth >= 1280) return;
+    if (pathname !== '/') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const scene = params.get('scene');
+
+    if (scene !== 'services' && scene !== 'about') return;
+    if (handledSceneRef.current === scene) return;
+
+    const root = sceneRef.current;
+    if (!root) return;
+
+    handledSceneRef.current = scene;
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId: number | null = null;
+    let cleanupTimeoutId: number | null = null;
+
+    const run = () => {
+      raf1 = window.requestAnimationFrame(() => {
+        raf2 = window.requestAnimationFrame(() => {
+          timeoutId = window.setTimeout(() => {
+            const rect = root.getBoundingClientRect();
+            const pageTop = window.scrollY + rect.top;
+            const maxScrollable = Math.max(root.offsetHeight - window.innerHeight, 0);
+
+            const targetProgress = scene === 'services' ? 0.24 : 0.88;
+            const targetY = pageTop + maxScrollable * targetProgress;
+
+            window.scrollTo({
+              top: targetY,
+              behavior: 'smooth',
+            });
+
+            cleanupTimeoutId = window.setTimeout(() => {
+              router.replace('/', { scroll: false });
+            }, 220);
+          }, 120);
+        });
+      });
+    };
+
+    run();
+
+    return () => {
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      if (cleanupTimeoutId) window.clearTimeout(cleanupTimeoutId);
+    };
+  }, [pathname, router]);
 
   const transforms = useMemo(() => {
     const heroExit = remap(progress, 0.1, 0.28);
@@ -215,91 +277,97 @@ function MobileHeroServicesStage() {
   }, [progress]);
 
   return (
-    <section ref={rootRef} className="relative h-[235vh] xl:hidden">
-      <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="relative h-full w-full bg-[var(--bg)]">
-          <div className="absolute inset-x-0 top-0 z-50 px-[14px]">
-            <div className="pt-2">
-              <SceneIndicator progress={progress} />
-            </div>
-          </div>
-
-          <div className="absolute inset-0 z-0 bg-[var(--bg)]" />
-
-          <div className="absolute inset-x-0 top-[44px] bottom-0 z-10">
-            <Container className="h-full">
-              <div className="relative h-full">
-                <div
-                  className="absolute inset-x-0 top-0 will-change-transform will-change-opacity"
-                  style={{
-                    transform: `translate3d(${transforms.heroLeftX}, 0, 0)`,
-                    filter: `blur(${transforms.heroBlur})`,
-                    opacity: transforms.heroOpacity,
-                    transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
-                  }}
-                >
-                  <HeroLeftScene />
-                </div>
-
-                <div
-                  className="absolute inset-x-0 top-[292px] will-change-transform will-change-opacity"
-                  style={{
-                    transform: `translate3d(${transforms.heroRightX}, 0, 0)`,
-                    filter: `blur(${transforms.heroBlur})`,
-                    opacity: transforms.heroOpacity,
-                    transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
-                  }}
-                >
-                  <HeroRightScene />
-                </div>
+    <section className="xl:hidden">
+      <div ref={sceneRef} className="relative h-[235vh]">
+        <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
+          <div className="relative h-full w-full bg-[var(--bg)]">
+            <div className="absolute inset-x-0 top-0 z-50 px-[14px]">
+              <div className="pt-2">
+                <SceneIndicator progress={progress} />
               </div>
-            </Container>
-          </div>
-
-          <div
-            className={cn(
-              'absolute inset-x-0 top-[36px] bottom-0 z-20',
-              transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
-            )}
-            style={{
-              opacity: transforms.servicesOpacity,
-              transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
-            }}
-          >
-            <div className="absolute inset-0 bg-[var(--bg)]" />
-            <div
-              className="relative will-change-transform will-change-opacity"
-              style={{
-                transform: `translate3d(${transforms.servicesX}, 0, 0)`,
-                filter: `blur(${transforms.servicesBlur})`,
-              }}
-            >
-              <ServicesSection headerProgress={1} cardsProgress={1} />
             </div>
-          </div>
 
-          <div
-            className={cn(
-              'absolute inset-x-0 top-[36px] bottom-0 z-30',
-              transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
-            )}
-            style={{
-              opacity: transforms.aboutOpacity,
-              transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
-            }}
-          >
-            <div className="absolute inset-0 bg-[var(--bg)]" />
+            <div className="absolute inset-0 z-0 bg-[var(--bg)]" />
+
+            <div className="absolute inset-x-0 top-[44px] bottom-0 z-10">
+              <Container className="h-full">
+                <div className="relative h-full">
+                  <div
+                    className="absolute inset-x-0 top-0 will-change-transform will-change-opacity"
+                    style={{
+                      transform: `translate3d(${transforms.heroLeftX}, 0, 0)`,
+                      filter: `blur(${transforms.heroBlur})`,
+                      opacity: transforms.heroOpacity,
+                      transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                    }}
+                  >
+                    <HeroLeftScene />
+                  </div>
+
+                  <div
+                    className="absolute inset-x-0 top-[292px] will-change-transform will-change-opacity"
+                    style={{
+                      transform: `translate3d(${transforms.heroRightX}, 0, 0)`,
+                      filter: `blur(${transforms.heroBlur})`,
+                      opacity: transforms.heroOpacity,
+                      transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                    }}
+                  >
+                    <HeroRightScene />
+                  </div>
+                </div>
+              </Container>
+            </div>
+
             <div
-              className="relative will-change-transform will-change-opacity"
+              className={cn(
+                'absolute inset-x-0 top-[36px] bottom-0 z-20',
+                transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+              )}
               style={{
-                transform: `translate3d(${transforms.aboutX}, 0, 0)`,
-                filter: `blur(${transforms.aboutBlur})`,
+                opacity: transforms.servicesOpacity,
+                transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
               }}
             >
-              <About revealProgress={1} />
+              <div className="absolute inset-0 bg-[var(--bg)]" />
+              <div
+                className="relative will-change-transform will-change-opacity"
+                style={{
+                  transform: `translate3d(${transforms.servicesX}, 0, 0)`,
+                  filter: `blur(${transforms.servicesBlur})`,
+                }}
+              >
+                <ServicesSection headerProgress={1} cardsProgress={1} />
+              </div>
+            </div>
+
+            <div
+              className={cn(
+                'absolute inset-x-0 top-[36px] bottom-0 z-30',
+                transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
+              )}
+              style={{
+                opacity: transforms.aboutOpacity,
+                transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+              }}
+            >
+              <div className="absolute inset-0 bg-[var(--bg)]" />
+              <div
+                className="relative will-change-transform will-change-opacity"
+                style={{
+                  transform: `translate3d(${transforms.aboutX}, 0, 0)`,
+                  filter: `blur(${transforms.aboutBlur})`,
+                }}
+              >
+                <About revealProgress={1} />
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="relative pt-8">
+        <GeographySection />
       </div>
     </section>
   );
