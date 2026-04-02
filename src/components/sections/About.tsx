@@ -9,7 +9,7 @@ import {
   Send,
   Truck,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Container } from '@/components/layout/Container';
 import { homeAnchorIds } from '@/config/anchors';
@@ -111,9 +111,9 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
       <Container>
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-10">
-            <div className="flex items-center justify-between gap-6">
+            <div className="flex items-start justify-between gap-4 xl:items-center xl:gap-6">
               <h2
-                className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] transition-all duration-500"
+                className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] transition-all duration-500 md:text-[42px] xl:text-[52px]"
                 style={{
                   opacity: introReveal,
                   transform: `translateY(${18 - 18 * introReveal}px)`,
@@ -136,7 +136,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             </div>
 
             <div
-              className="mt-2 flex flex-col gap-6 transition-all duration-500"
+              className="mt-1 flex flex-col gap-5 transition-all duration-500 xl:mt-2 xl:gap-6"
               style={{
                 opacity: introReveal,
                 transform: `translateY(${20 - 20 * introReveal}px)`,
@@ -144,24 +144,28 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
               }}
             >
               <p
-                className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
+                className="max-w-[1120px] text-[18px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)] md:text-[20px] xl:text-[22px]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
-                «АЛВОРИ» – логистическая компания, работающая в B2B-сегменте по РФ.
+                «АЛВОРИ» – логистическая компания,
+                <br />
+                работающая в B2B-сегменте по РФ.
               </p>
 
               <p
-                className="max-w-[980px] text-[20px] font-normal leading-[1.26] tracking-[-0.02em] text-[var(--text-muted)]"
+                className="max-w-[980px] text-[16px] font-normal leading-[1.28] tracking-[-0.02em] text-[var(--text-muted)] md:text-[17px] xl:text-[20px] xl:leading-[1.26]"
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
-                Мы сочетаем собственный автопарк и экспедиционное направление,
+                Мы сочетаем собственный автопарк
                 <br />
-                чтобы подбирать оптимальный формат перевозки под задачу клиента.
+                и экспедиционное направление, чтобы
+                <br />
+                подбирать формат перевозки под задачу.
               </p>
             </div>
 
             <div
-              className="mt-6 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)] transition-all duration-500"
+              className="h-[2px] rounded-full bg-[rgba(38,41,46,0.10)] transition-all duration-500"
               style={{
                 opacity: introReveal,
                 transform: `scaleX(${0.72 + 0.28 * introReveal})`,
@@ -170,48 +174,83 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             />
 
             <div
-              className="mt-6 grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12 transition-all duration-[650ms]"
+              className="transition-all duration-[650ms]"
               style={{
                 opacity: quoteReveal,
                 transform: `translateY(${24 - 24 * quoteReveal}px)`,
                 filter: `blur(${8 - 8 * quoteReveal}px)`,
               }}
             >
-              <div className="flex items-start gap-5">
-                <Quote
-                  size={48}
-                  strokeWidth={2.15}
-                  className="mt-[2px] shrink-0 text-[var(--accent-1)]"
-                />
+              <div className="hidden grid-cols-[1.1fr_0.9fr] gap-10 xl:grid xl:gap-12">
+                <div className="flex items-start gap-5">
+                  <Quote
+                    size={48}
+                    strokeWidth={2.15}
+                    className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+                  />
 
-                <p
-                  className="about-quote-text max-w-[720px] whitespace-pre-line text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  {typedQuote}
-                  {typewriterActive ? <span className="about-quote-caret" /> : null}
-                </p>
+                  <p
+                    className="about-quote-text max-w-[720px] whitespace-pre-line text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    {typedQuote}
+                    {typewriterActive ? <span className="about-quote-caret" /> : null}
+                  </p>
+                </div>
+
+                <div className="flex justify-end">
+                  <p
+                    className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    — Алик, руководитель АЛВОРИ
+                  </p>
+                </div>
               </div>
 
-              <div className="flex justify-end">
-                <p
-                  className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  — Алик, руководитель АЛВОРИ
-                </p>
+              <div className="xl:hidden">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-start gap-4">
+                    <Quote
+                      size={34}
+                      strokeWidth={2.1}
+                      className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+                    />
+
+                    <p
+                      className="about-quote-text whitespace-pre-line text-[18px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)] md:text-[20px]"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      {typedQuote}
+                      {typewriterActive ? <span className="about-quote-caret" /> : null}
+                    </p>
+                  </div>
+
+                  <p
+                    className="text-right text-[16px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)] md:text-[17px]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    — Алик, руководитель АЛВОРИ
+                  </p>
+                </div>
               </div>
             </div>
 
             <div
-              className="pt-12 xl:pt-14 transition-all duration-[700ms]"
+              className="pt-8 transition-all duration-[700ms] xl:pt-14"
               style={{
                 opacity: processReveal,
                 transform: `translateY(${26 - 26 * processReveal}px)`,
                 filter: `blur(${8 - 8 * processReveal}px)`,
               }}
             >
-              <ProcessFlowNodes />
+              <div className="hidden xl:block">
+                <ProcessFlowNodesDesktop />
+              </div>
+
+              <div className="xl:hidden">
+                <ProcessFlowNodesMobile />
+              </div>
             </div>
           </div>
         </div>
@@ -222,18 +261,18 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
 
 function AboutBreadcrumb() {
   return (
-    <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+    <div className="inline-flex h-[38px] items-center rounded-[14px] bg-[var(--surface)] px-[14px] shadow-[0_8px_20px_rgba(38,41,46,0.04)] xl:h-[42px] xl:rounded-[16px] xl:px-[16px]">
       <span
-        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+        className="text-[13px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)] xl:text-[14px]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         главная
       </span>
 
-      <Dot size={18} className="mx-[2px] text-[var(--accent-1)]" />
+      <Dot size={16} className="mx-[2px] text-[var(--accent-1)] xl:size-[18px]" />
 
       <span
-        className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)]"
+        className="text-[13px] font-semibold lowercase tracking-[-0.02em] text-[var(--text-muted)] xl:text-[14px]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         о компании
@@ -242,7 +281,7 @@ function AboutBreadcrumb() {
   );
 }
 
-function ProcessFlowNodes() {
+function ProcessFlowNodesDesktop() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [displayedIndex, setDisplayedIndex] = useState(0);
@@ -290,14 +329,14 @@ function ProcessFlowNodes() {
                 className="group flex items-center justify-center"
               >
                 <span
-className={cn(
-  'about-process-node text-[17px] font-semibold lowercase tracking-[-0.02em]',
-  isActive
-    ? 'is-active text-[var(--text)]'
-    : isPassed
-      ? 'is-passed text-[var(--text)]'
-      : 'is-idle text-[var(--text-muted)] group-hover:text-[var(--text)]',
-)}
+                  className={cn(
+                    'about-process-node text-[17px] font-semibold lowercase tracking-[-0.02em]',
+                    isActive
+                      ? 'is-active text-[var(--text)]'
+                      : isPassed
+                        ? 'is-passed text-[var(--text)]'
+                        : 'is-idle text-[var(--text-muted)] group-hover:text-[var(--text)]',
+                  )}
                   style={{ fontFamily: 'var(--font-body-text)' }}
                 >
                   {step.title}
@@ -338,6 +377,96 @@ className={cn(
           >
             {PROCESS_STEPS[displayedIndex].description}
           </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProcessFlowNodesMobile() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [displayedIndex, setDisplayedIndex] = useState(0);
+  const [textVisible, setTextVisible] = useState(true);
+
+  const activeStep = PROCESS_STEPS[displayedIndex];
+  const ActiveIcon = activeStep.icon;
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % PROCESS_STEPS.length);
+    }, 5600);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (activeIndex === displayedIndex) return;
+
+    setTextVisible(false);
+
+    const swapTimer = window.setTimeout(() => {
+      setDisplayedIndex(activeIndex);
+      requestAnimationFrame(() => setTextVisible(true));
+    }, 220);
+
+    return () => window.clearTimeout(swapTimer);
+  }, [activeIndex, displayedIndex]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        {PROCESS_STEPS.map((step, index) => {
+          const isActive = index === activeIndex;
+
+          return (
+            <button
+              key={step.id}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              aria-label={step.title}
+              className={cn(
+                'rounded-full transition-all duration-300 ease-out',
+                isActive
+                  ? 'h-[8px] w-[34px] bg-[var(--accent-1)]'
+                  : 'h-[8px] w-[18px] bg-[var(--accent-2)]',
+              )}
+            />
+          );
+        })}
+      </div>
+
+      <div className="rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+        <div
+          className={cn(
+            'transition-all duration-300 ease-out',
+            textVisible
+              ? 'translate-y-0 opacity-100 blur-0'
+              : 'translate-y-[6px] opacity-0 blur-[4px]',
+          )}
+        >
+          <div className="flex items-start gap-3">
+            <ActiveIcon
+              size={20}
+              strokeWidth={2.05}
+              className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+            />
+
+            <div className="min-w-0">
+              <h3
+                className="text-[18px] font-semibold lowercase leading-[1.08] tracking-[-0.022em] text-[var(--text)]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                {activeStep.title}
+              </h3>
+
+              <p
+                className="mt-3 text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                {activeStep.description}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
