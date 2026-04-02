@@ -76,6 +76,15 @@ export function Header() {
     const decide = () => {
       raf = 0;
 
+      const isDesktop = window.innerWidth >= 1280;
+
+      // На mobile/tablet хедер всегда видим
+      if (!isDesktop) {
+        setHidden(false);
+        lastYRef.current = window.scrollY || 0;
+        return;
+      }
+
       if (menuOpen) {
         setHidden(false);
         return;
@@ -212,10 +221,10 @@ export function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
-const mobileLogoSrc =
-  theme === 'dark'
-    ? `${sitePath}/brand/header/dark/logo.png`
-    : `${sitePath}/brand/header/light/logo.png`;
+  const mobileLogoSrc =
+    theme === 'dark'
+      ? `${sitePath}/brand/header/dark/logo.png`
+      : `${sitePath}/brand/header/light/logo.png`;
 
   return (
     <header
@@ -244,8 +253,11 @@ const mobileLogoSrc =
         </div>
 
         <div className="py-4 xl:hidden">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="ml-[6px] block h-[48px] w-[184px] shrink-0">
+          <div className="flex items-center justify-between gap-3">
+            <Link
+              href="/"
+              className="ml-[6px] block h-[48px] w-[184px] shrink-0 grow-0 basis-[184px]"
+            >
               <img
                 src={mobileLogoSrc}
                 alt="Алвори"
@@ -254,7 +266,7 @@ const mobileLogoSrc =
               />
             </Link>
 
-            <div className="flex h-[60px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
+            <div className="flex h-[60px] w-[158px] shrink-0 grow-0 basis-[158px] items-center gap-[8px] rounded-[24px] bg-[var(--accent-2)] px-[9px]">
               <CompactAction
                 href={ctaRoutes.headerCalculator}
                 variant="accent"
@@ -269,7 +281,7 @@ const mobileLogoSrc =
                 onClick={handleThemeToggle}
                 aria-label="сменить тему"
                 className={cn(
-                  'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                  'header-utility-button header-theme-button group inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[16px]',
                   theme === 'light'
                     ? 'bg-[var(--surface)] text-[var(--text)]'
                     : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
@@ -287,7 +299,7 @@ const mobileLogoSrc =
                 onClick={() => setMenuOpen((prev) => !prev)}
                 aria-label={menuOpen ? 'закрыть меню' : 'открыть меню'}
                 className={cn(
-                  'header-utility-button group inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+                  'header-utility-button group inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[16px]',
                   theme === 'light'
                     ? 'bg-[var(--surface)] text-[var(--text)]'
                     : 'bg-[var(--accent-3)] text-[var(--accent-3-text)]',
@@ -367,7 +379,7 @@ const mobileLogoSrc =
                   <Link
                     href={ctaRoutes.headerRequest}
                     onClick={closeMenu}
-                    className="inline-flex h-[48px] w-full items-center justify-center rounded-[16px] bg-[var(--surface-soft)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)]"
+                    className="inline-flex h-[52px] w-full items-center justify-center rounded-[18px] bg-[var(--surface-soft)] px-5 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)]"
                   >
                     запросить или отправить кп
                   </Link>
@@ -595,7 +607,7 @@ function CompactAction({
       href={href}
       aria-label={ariaLabel}
       className={cn(
-        'header-utility-button inline-flex h-[42px] w-[42px] items-center justify-center rounded-[16px]',
+        'header-utility-button inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[16px]',
         variant === 'accent'
           ? 'bg-[var(--accent-1)]'
           : 'bg-[var(--surface)] text-[var(--text)]',
