@@ -805,7 +805,7 @@ function ServiceTallCard({
           >
             {mobile ? (
               <>
-                <div className="w-full pt-[42px]">
+                <div className="w-full pt-[64px]">
                   <div className="flex min-w-0 items-start gap-[10px]">
                     <Icon
                       size={19}
