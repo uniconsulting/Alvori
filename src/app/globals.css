@@ -772,14 +772,10 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   -webkit-overflow-scrolling: touch;
 }
 
-.services-mobile-rail-accent {
-  will-change: transform;
-  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.services-mobile-rail-accent span {
-  will-change: height, background-color;
+.services-mobile-rail-tick {
+  will-change: height, background-color, opacity;
   transition:
-    height 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    height 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
