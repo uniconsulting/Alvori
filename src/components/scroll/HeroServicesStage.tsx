@@ -366,9 +366,9 @@ function MobileHeroServicesStage() {
         </div>
       </div>
 
-      <div className="relative pt-8">
-        <GeographySection />
-      </div>
+<div className="relative -mt-[74vh] pt-8">
+  <GeographySection />
+</div>
     </section>
   );
 }
