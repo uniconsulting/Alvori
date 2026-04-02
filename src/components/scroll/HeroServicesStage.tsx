@@ -182,81 +182,122 @@ function MobileHeroServicesStage() {
   }, []);
 
   const transforms = useMemo(() => {
-    const heroExit = remap(progress, 0.12, 0.34);
-    const servicesEnter = remap(progress, 0.22, 0.46);
+    const heroExit = remap(progress, 0.1, 0.28);
+
+    const servicesEnter = remap(progress, 0.18, 0.34);
     const servicesExit = remap(progress, 0.58, 0.76);
-    const aboutEnter = remap(progress, 0.68, 0.92);
+
+    const aboutEnter = remap(progress, 0.68, 0.88);
+
+    const heroLeftX = -110 * heroExit;
+    const heroRightX = 110 * heroExit;
+
+    const servicesStartX = 10 * (1 - servicesEnter);
+    const servicesExitX = -110 * servicesExit;
+    const servicesX = servicesStartX + servicesExitX;
+
+    const aboutX = 110 * (1 - aboutEnter);
 
     return {
+      heroLeftX: `${heroLeftX}vw`,
+      heroRightX: `${heroRightX}vw`,
+      heroBlur: `${heroExit * 6}px`,
       heroOpacity: 1 - heroExit * 0.92,
-      heroY: `${heroExit * -46}px`,
-      heroBlur: `${heroExit * 8}px`,
 
-      servicesOpacity: servicesEnter * (1 - servicesExit * 0.96),
-      servicesY: `${28 - servicesEnter * 28 - servicesExit * 96}px`,
-      servicesBlur: `${(1 - servicesEnter) * 10 + servicesExit * 10}px`,
+      servicesX: `${servicesX}vw`,
+      servicesOpacity: clamp(servicesEnter * 1.08, 0, 1) * (1 - servicesExit * 0.96),
+      servicesBlur: `${(1 - servicesEnter) * 4 + servicesExit * 6}px`,
 
+      aboutX: `${aboutX}vw`,
       aboutOpacity: aboutEnter,
-      aboutY: `${34 - aboutEnter * 34}px`,
-      aboutBlur: `${(1 - aboutEnter) * 10}px`,
+      aboutBlur: `${(1 - aboutEnter) * 5}px`,
     };
   }, [progress]);
 
   return (
-    <section ref={rootRef} className="relative h-[230vh] xl:hidden">
+    <section ref={rootRef} className="relative h-[235vh] xl:hidden">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="relative h-full w-full">
-          <div className="absolute inset-x-0 top-0 z-40 px-[14px]">
+        <div className="relative h-full w-full bg-[var(--bg)]">
+          <div className="absolute inset-x-0 top-0 z-50 px-[14px]">
             <div className="pt-2">
               <SceneIndicator progress={progress} />
             </div>
           </div>
 
-          <div
-            className="absolute inset-x-0 top-[44px] z-10"
-            style={{
-              opacity: transforms.heroOpacity,
-              transform: `translateY(${transforms.heroY})`,
-              filter: `blur(${transforms.heroBlur})`,
-              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
-            }}
-          >
-            <Container>
-              <div className="flex flex-col gap-6">
-                <HeroLeftScene />
-                <HeroRightScene />
+          <div className="absolute inset-0 z-0 bg-[var(--bg)]" />
+
+          <div className="absolute inset-x-0 top-[44px] bottom-0 z-10">
+            <Container className="h-full">
+              <div className="relative h-full">
+                <div
+                  className="absolute inset-x-0 top-0 will-change-transform will-change-opacity"
+                  style={{
+                    transform: `translate3d(${transforms.heroLeftX}, 0, 0)`,
+                    filter: `blur(${transforms.heroBlur})`,
+                    opacity: transforms.heroOpacity,
+                    transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                  }}
+                >
+                  <HeroLeftScene />
+                </div>
+
+                <div
+                  className="absolute inset-x-0 top-[292px] will-change-transform will-change-opacity"
+                  style={{
+                    transform: `translate3d(${transforms.heroRightX}, 0, 0)`,
+                    filter: `blur(${transforms.heroBlur})`,
+                    opacity: transforms.heroOpacity,
+                    transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                  }}
+                >
+                  <HeroRightScene />
+                </div>
               </div>
             </Container>
           </div>
 
           <div
             className={cn(
-              'absolute inset-x-0 top-[36px] z-20',
+              'absolute inset-x-0 top-[36px] bottom-0 z-20',
               transforms.servicesOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
               opacity: transforms.servicesOpacity,
-              transform: `translateY(${transforms.servicesY})`,
-              filter: `blur(${transforms.servicesBlur})`,
-              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+              transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
             }}
           >
-            <ServicesSection headerProgress={1} cardsProgress={1} />
+            <div className="absolute inset-0 bg-[var(--bg)]" />
+            <div
+              className="relative will-change-transform will-change-opacity"
+              style={{
+                transform: `translate3d(${transforms.servicesX}, 0, 0)`,
+                filter: `blur(${transforms.servicesBlur})`,
+              }}
+            >
+              <ServicesSection headerProgress={1} cardsProgress={1} />
+            </div>
           </div>
 
           <div
             className={cn(
-              'absolute inset-x-0 top-[36px] z-30',
+              'absolute inset-x-0 top-[36px] bottom-0 z-30',
               transforms.aboutOpacity > 0.02 ? 'pointer-events-auto' : 'pointer-events-none',
             )}
             style={{
               opacity: transforms.aboutOpacity,
-              transform: `translateY(${transforms.aboutY})`,
-              filter: `blur(${transforms.aboutBlur})`,
-              transition: 'transform 90ms linear, filter 90ms linear, opacity 90ms linear',
+              transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
             }}
           >
-            <About revealProgress={1} />
+            <div className="absolute inset-0 bg-[var(--bg)]" />
+            <div
+              className="relative will-change-transform will-change-opacity"
+              style={{
+                transform: `translate3d(${transforms.aboutX}, 0, 0)`,
+                filter: `blur(${transforms.aboutBlur})`,
+              }}
+            >
+              <About revealProgress={1} />
+            </div>
           </div>
         </div>
       </div>
