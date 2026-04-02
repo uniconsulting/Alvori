@@ -1,6 +1,5 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import {
   Calculator,
   CheckCheck,
@@ -48,7 +47,7 @@ const PROCESS_STEPS: ProcessStep[] = [
     description:
       'Подтверждаем условия, детали маршрута, формат работы и запускаем перевозку в работу.',
     mobileDescription:
-      'Подтверждаем условия, детали маршрута,\nформат и запускаем\nперевозку в работу.',
+      'Подтверждаем условия,\nдетали маршрута, формат\nи запускаем перевозку в работу.',
     icon: CheckCheck,
   },
   {
@@ -106,11 +105,15 @@ function useTypewriter(text: string, isActive: boolean, duration = 3200) {
 }
 
 export function About({ revealProgress = 0 }: { revealProgress?: number }) {
-  const quoteText =
+  const desktopQuoteText =
+    '«Стабильный бизнес – это ответственность,\nпредсказуемость и уважение к клиенту»';
+
+  const mobileQuoteText =
     '«Стабильный бизнес — это\nответственность, предсказуемость\nи уважение к клиенту»';
 
   const typewriterActive = revealProgress > 0.34;
-  const typedQuote = useTypewriter(quoteText, typewriterActive, 3600);
+  const typedDesktopQuote = useTypewriter(desktopQuoteText, typewriterActive, 3600);
+  const typedMobileQuote = useTypewriter(mobileQuoteText, typewriterActive, 3600);
 
   const introReveal = Math.min(revealProgress / 0.28, 1);
   const quoteReveal = Math.min(Math.max((revealProgress - 0.22) / 0.28, 0), 1);
@@ -147,36 +150,60 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             </div>
 
             <div
-              className="mt-8 flex flex-col gap-6 transition-all duration-500 xl:mt-2 xl:gap-6"
+              className="mt-8 flex flex-col gap-8 transition-all duration-500 xl:mt-2 xl:gap-6"
               style={{
                 opacity: introReveal,
                 transform: `translateY(${20 - 20 * introReveal}px)`,
                 filter: `blur(${7 - 7 * introReveal}px)`,
               }}
             >
-              <p
-                className="max-w-[1120px] text-[18px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)] md:text-[20px] xl:text-[22px]"
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                «АЛВОРИ» – логистическая компания,
-                <br />
-                работающая в B2B-сегменте по РФ.
-              </p>
+              <div className="xl:hidden">
+                <p
+                  className="max-w-[1120px] text-[18px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)] md:text-[20px]"
+                  style={{ fontFamily: 'var(--font-body-text)' }}
+                >
+                  «АЛВОРИ» – логистическая компания,
+                  <br />
+                  работающая в B2B-сегменте по РФ.
+                </p>
+              </div>
 
-              <p
-                className="max-w-[980px] text-[16px] font-normal leading-[1.28] tracking-[-0.02em] text-[var(--text-muted)] md:text-[17px] xl:text-[20px] xl:leading-[1.26]"
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                Мы сочетаем собственный автопарк
-                <br />
-                и экспедиционное направление, чтобы
-                <br />
-                подбирать формат перевозки под задачу.
-              </p>
+              <div className="hidden xl:block">
+                <p
+                  className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
+                  style={{ fontFamily: 'var(--font-body-text)' }}
+                >
+                  «АЛВОРИ» – логистическая компания, работающая в B2B-сегменте по РФ.
+                </p>
+              </div>
+
+              <div className="xl:hidden">
+                <p
+                  className="max-w-[980px] text-[16px] font-normal leading-[1.28] tracking-[-0.02em] text-[var(--text-muted)] md:text-[17px]"
+                  style={{ fontFamily: 'var(--font-body-text)' }}
+                >
+                  Мы сочетаем собственный автопарк
+                  <br />
+                  и экспедиционное направление, чтобы
+                  <br />
+                  подбирать формат перевозки под задачу.
+                </p>
+              </div>
+
+              <div className="hidden xl:block">
+                <p
+                  className="max-w-[980px] text-[20px] font-normal leading-[1.26] tracking-[-0.02em] text-[var(--text-muted)]"
+                  style={{ fontFamily: 'var(--font-body-text)' }}
+                >
+                  Мы сочетаем собственный автопарк и экспедиционное направление,
+                  <br />
+                  чтобы подбирать оптимальный формат перевозки под задачу клиента.
+                </p>
+              </div>
             </div>
 
             <div
-              className="mt-6 h-[2px] rounded-full bg-[rgba(38,41,46,0.10)] transition-all duration-500"
+              className="mt-8 h-[2px] rounded-full bg-[color:color-mix(in_oklab,var(--text)_14%,transparent)] transition-all duration-500"
               style={{
                 opacity: introReveal,
                 transform: `scaleX(${0.72 + 0.28 * introReveal})`,
@@ -185,7 +212,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             />
 
             <div
-              className="mt-6 transition-all duration-[650ms] xl:mt-0"
+              className="mt-8 transition-all duration-[650ms] xl:mt-0"
               style={{
                 opacity: quoteReveal,
                 transform: `translateY(${24 - 24 * quoteReveal}px)`,
@@ -204,7 +231,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                     className="about-quote-text max-w-[720px] whitespace-pre-line text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
                     style={{ fontFamily: 'var(--font-body-text)' }}
                   >
-                    {typedQuote}
+                    {typedDesktopQuote}
                     {typewriterActive ? <span className="about-quote-caret" /> : null}
                   </p>
                 </div>
@@ -232,7 +259,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                       className="about-quote-text whitespace-pre-line text-[16px] font-semibold leading-[1.2] tracking-[-0.022em] text-[var(--text)] md:text-[17px]"
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
-                      {typedQuote}
+                      {typedMobileQuote}
                       {typewriterActive ? <span className="about-quote-caret" /> : null}
                     </p>
                   </div>
