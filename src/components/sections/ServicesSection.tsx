@@ -78,14 +78,14 @@ export function ServicesSection({
         <div className="px-[14px] md:px-[18px] xl:px-[22px]">
           <div className="flex flex-col gap-8 xl:gap-14">
             <div
-              className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between xl:gap-6"
+              className="flex items-start justify-between gap-4 xl:items-center xl:gap-6"
               style={headerRevealStyle(headerProgress)}
             >
               <h2 className="pl-[2px] font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] md:text-[42px] xl:pl-[10px] xl:text-[52px]">
                 Услуги
               </h2>
 
-              <div className="xl:pr-[10px]">
+              <div className="shrink-0 xl:pr-[10px]">
                 <ServicesBreadcrumb />
               </div>
             </div>
@@ -157,9 +157,7 @@ export function ServicesSection({
                     <>
                       перевозки под нестандартные
                       <br />
-                      задачи и согласованные
-                      <br />
-                      маршруты по рф
+                      задачи и согласованные маршруты
                     </>
                   }
                   ctaLabel="описать задачу"
@@ -175,9 +173,7 @@ export function ServicesSection({
                     <>
                       перевозки ADR-грузов с соблюдением
                       <br />
-                      требований и действующих
-                      <br />
-                      регламентов перевозки
+                      требований и регламентов
                     </>
                   }
                   ctaLabel="уточнить детали"
@@ -195,93 +191,271 @@ export function ServicesSection({
 }
 
 function ServicesMobileLayout({ progress }: { progress: number }) {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const frameRef = useRef<number | null>(null);
+  const railDragRef = useRef(false);
+
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const cardCount = 4;
+  const baseMainIndices = [4, 9, 14, 19];
+  const totalTicks = 24;
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const updateProgress = () => {
+      const targets = cardRefs.current
+        .map((node) => (node ? node.offsetLeft : 0))
+        .slice(0, cardCount);
+
+      if (targets.length < 2) {
+        setScrollProgress(0);
+        frameRef.current = null;
+        return;
+      }
+
+      const scrollLeft = scroller.scrollLeft;
+      let nextProgress = 0;
+
+      for (let i = 0; i < targets.length - 1; i += 1) {
+        const start = targets[i];
+        const end = targets[i + 1];
+
+        if (scrollLeft >= start && scrollLeft <= end) {
+          const span = end - start || 1;
+          const local = (scrollLeft - start) / span;
+          nextProgress = i + local;
+          setScrollProgress(nextProgress);
+          frameRef.current = null;
+          return;
+        }
+      }
+
+      if (scrollLeft <= targets[0]) {
+        nextProgress = 0;
+      } else {
+        nextProgress = targets.length - 1;
+      }
+
+      setScrollProgress(nextProgress);
+      frameRef.current = null;
+    };
+
+    const requestUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateProgress);
+    };
+
+    updateProgress();
+
+    scroller.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      scroller.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, []);
+
+  const scrollToProgress = (nextProgress: number, smooth = true) => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const targets = cardRefs.current
+      .map((node) => (node ? node.offsetLeft : 0))
+      .slice(0, cardCount);
+
+    if (targets.length < 2) return;
+
+    const clamped = clamp(nextProgress, 0, cardCount - 1);
+    const index = Math.floor(clamped);
+    const nextIndex = Math.min(index + 1, cardCount - 1);
+    const local = clamped - index;
+
+    const left = targets[index] + (targets[nextIndex] - targets[index]) * local;
+
+    scroller.scrollTo({
+      left,
+      behavior: smooth ? 'smooth' : 'auto',
+    });
+  };
+
+  const handleRailPointer = (clientX: number) => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const rect = rail.getBoundingClientRect();
+    const localX = clamp((clientX - rect.left) / rect.width, 0, 1);
+    const nextProgress = localX * (cardCount - 1);
+    scrollToProgress(nextProgress, false);
+  };
+
+  const accentMarkerIndex = (() => {
+    const currentIndex = Math.floor(scrollProgress);
+    const local = scrollProgress - currentIndex;
+
+    if (currentIndex >= baseMainIndices.length - 1) {
+      return baseMainIndices[baseMainIndices.length - 1];
+    }
+
+    const start = baseMainIndices[currentIndex];
+    const end = baseMainIndices[currentIndex + 1];
+
+    return start + (end - start) * local;
+  })();
+
+  const accentHeight = (() => {
+    const nearest = Math.round(scrollProgress);
+    const distance = Math.abs(scrollProgress - nearest);
+    return 42 - clamp(distance / 0.5, 0, 1) * 10;
+  })();
+
   return (
     <div className="flex flex-col gap-4">
       <AnimatedCard progress={progress} delay={0.0}>
-        <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex snap-x snap-mandatory gap-3">
-            <div className="min-w-full snap-start">
-              <ServiceCard
-                icon={Truck}
-                title="Междугородние перевозки"
-                description={
-                  <>
-                    междугородние перевозки
-                    <br />
-                    регулярные b2b-перевозки по
-                    <br />
-                    ключевым направлениям по рф
-                  </>
-                }
-                ctaLabel="изучить географию"
-                href={appRoutes.services.intercity}
-                mobile
-              />
-            </div>
+        <div
+          ref={scrollerRef}
+          className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <div
+            ref={(node) => {
+              cardRefs.current[0] = node;
+            }}
+            className="min-w-full snap-start"
+          >
+            <ServiceCard
+              icon={Truck}
+              title="Междугородние перевозки"
+              description={
+                <>
+                  междугородние перевозки
+                  <br />
+                  регулярные b2b-перевозки по
+                  <br />
+                  ключевым направлениям по рф
+                </>
+              }
+              ctaLabel="изучить географию"
+              href={appRoutes.services.intercity}
+              mobile
+              mobileProgress={Math.abs(scrollProgress - 0)}
+            />
+          </div>
 
-            <div className="min-w-full snap-start">
-              <ServiceCard
-                icon={Warehouse}
-                title="Межтерминальные перевозки"
-                description={
-                  <>
-                    работа между терминалами,
-                    <br />
-                    складами и распределительными
-                    <br />
-                    узлами с гарантией доставки тс
-                  </>
-                }
-                ctaLabel="обсудить условия"
-                href={appRoutes.services.interterminal}
-                mobile
-              />
-            </div>
+          <div
+            ref={(node) => {
+              cardRefs.current[1] = node;
+            }}
+            className="min-w-full snap-start"
+          >
+            <ServiceCard
+              icon={Warehouse}
+              title="Межтерминальные перевозки"
+              description={
+                <>
+                  работа между терминалами,
+                  <br />
+                  складами и распределительными
+                  <br />
+                  узлами с гарантией доставки тс
+                </>
+              }
+              ctaLabel="обсудить условия"
+              href={appRoutes.services.interterminal}
+              mobile
+              mobileProgress={Math.abs(scrollProgress - 1)}
+            />
+          </div>
 
-            <div className="min-w-full snap-start">
-              <ServiceCard
-                icon={Route}
-                title="Проектные перевозки"
-                description={
-                  <>
-                    перевозки под нестандартные
-                    <br />
-                    задачи и согласованные
-                    <br />
-                    маршруты по рф
-                  </>
-                }
-                ctaLabel="описать задачу"
-                href={appRoutes.services.project}
-                mobile
-              />
-            </div>
+          <div
+            ref={(node) => {
+              cardRefs.current[2] = node;
+            }}
+            className="min-w-full snap-start"
+          >
+            <ServiceCard
+              icon={Route}
+              title="Проектные перевозки"
+              description={
+                <>
+                  перевозки под нестандартные
+                  <br />
+                  задачи и согласованные
+                  <br />
+                  маршруты по рф
+                </>
+              }
+              ctaLabel="описать задачу"
+              href={appRoutes.services.project}
+              mobile
+              mobileProgress={Math.abs(scrollProgress - 2)}
+            />
+          </div>
 
-            <div className="min-w-full snap-start">
-              <ServiceCard
-                icon={ShieldAlert}
-                title="Опасные грузы"
-                description={
-                  <>
-                    перевозки ADR-грузов с соблюдением
-                    <br />
-                    требований и действующих
-                    <br />
-                    регламентов перевозки
-                  </>
-                }
-                ctaLabel="уточнить детали"
-                accentLabel="ADR"
-                isAdr
-                href={appRoutes.services.adr}
-                mobile
-              />
-            </div>
+          <div
+            ref={(node) => {
+              cardRefs.current[3] = node;
+            }}
+            className="min-w-full snap-start"
+          >
+            <ServiceCard
+              icon={ShieldAlert}
+              title="Опасные грузы"
+              description={
+                <>
+                  перевозки ADR-грузов с соблюдением
+                  <br />
+                  требований и действующих
+                  <br />
+                  регламентов перевозки
+                </>
+              }
+              ctaLabel="уточнить детали"
+              accentLabel="ADR"
+              isAdr
+              href={appRoutes.services.adr}
+              mobile
+              mobileProgress={Math.abs(scrollProgress - 3)}
+            />
           </div>
         </div>
       </AnimatedCard>
 
-      <AnimatedCard progress={progress} delay={0.18}>
+      <AnimatedCard progress={progress} delay={0.14}>
+        <ServicesMobileRail
+          railRef={railRef}
+          totalTicks={totalTicks}
+          accentMarkerIndex={accentMarkerIndex}
+          accentHeight={accentHeight}
+          baseMainIndices={baseMainIndices}
+          onTickClick={(index) => scrollToProgress(index, true)}
+          onPointerDown={(event) => {
+            railDragRef.current = true;
+            handleRailPointer(event.clientX);
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={(event) => {
+            if (!railDragRef.current) return;
+            handleRailPointer(event.clientX);
+          }}
+          onPointerUp={(event) => {
+            railDragRef.current = false;
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }}
+          onPointerCancel={() => {
+            railDragRef.current = false;
+          }}
+        />
+      </AnimatedCard>
+
+      <AnimatedCard progress={progress} delay={0.22}>
         <ServiceTallCard
           icon={Network}
           title="Экспедиционное направление"
@@ -299,6 +473,104 @@ function ServicesMobileLayout({ progress }: { progress: number }) {
           mobile
         />
       </AnimatedCard>
+    </div>
+  );
+}
+
+function ServicesMobileRail({
+  railRef,
+  totalTicks,
+  accentMarkerIndex,
+  accentHeight,
+  baseMainIndices,
+  onTickClick,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerCancel,
+}: {
+  railRef: React.RefObject<HTMLDivElement | null>;
+  totalTicks: number;
+  accentMarkerIndex: number;
+  accentHeight: number;
+  baseMainIndices: number[];
+  onTickClick: (index: number) => void;
+  onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerMove: (event: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerUp: (event: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerCancel: () => void;
+}) {
+  const mainToCardIndex = new Map<number, number>([
+    [baseMainIndices[0], 0],
+    [baseMainIndices[1], 1],
+    [baseMainIndices[2], 2],
+    [baseMainIndices[3], 3],
+  ]);
+
+  return (
+    <div className="flex justify-center">
+      <div
+        ref={railRef}
+        className="services-mobile-rail relative flex items-end gap-[10px] rounded-[20px] px-2 py-2 touch-pan-x"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}
+      >
+        {Array.from({ length: totalTicks }, (_, index) => {
+          const isMain = baseMainIndices.includes(index);
+          const cardIndex = mainToCardIndex.get(index);
+
+          let opacity = 1;
+
+          if (index <= 3) {
+            opacity = [0.1, 0.2, 0.4, 0.6][index] ?? 1;
+          } else if (index >= totalTicks - 4) {
+            opacity = [0.6, 0.4, 0.2, 0.1][index - (totalTicks - 4)] ?? 1;
+          } else if (isMain) {
+            opacity = 0.72;
+          } else {
+            opacity = 1;
+          }
+
+          const baseHeight = isMain ? 32 : 22;
+
+          return (
+            <button
+              key={index}
+              type="button"
+              aria-label={cardIndex !== undefined ? `перейти к карточке ${cardIndex + 1}` : undefined}
+              onClick={() => {
+                if (cardIndex !== undefined) onTickClick(cardIndex);
+              }}
+              className={cn(
+                'relative flex items-end justify-center',
+                cardIndex !== undefined ? 'cursor-pointer' : 'cursor-default',
+              )}
+            >
+              <span
+                className="block w-[8px] rounded-full bg-[var(--accent-2)]"
+                style={{
+                  height: `${baseHeight}px`,
+                  opacity,
+                }}
+              />
+            </button>
+          );
+        })}
+
+        <div
+          className="services-mobile-rail-accent pointer-events-none absolute bottom-2 left-2"
+          style={{
+            transform: `translateX(${accentMarkerIndex * 18}px)`,
+          }}
+        >
+          <span
+            className="block w-[8px] rounded-full bg-[var(--accent-1)]"
+            style={{ height: `${accentHeight}px` }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -355,6 +627,7 @@ function ServiceCard({
   accentLabel,
   isAdr = false,
   mobile = false,
+  mobileProgress = 0,
 }: {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   title: string;
@@ -364,8 +637,12 @@ function ServiceCard({
   accentLabel?: string;
   isAdr?: boolean;
   mobile?: boolean;
+  mobileProgress?: number;
 }) {
-  const inner = (
+  const mobileAmount = clamp(mobileProgress, 0, 1.15);
+  const mobileDepth = 1 - clamp(mobileAmount / 1.15, 0, 1);
+
+  const cardBody = (
     <div
       className={cn(
         'relative overflow-hidden bg-[var(--surface)]',
@@ -389,7 +666,7 @@ function ServiceCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-[10px]">
             <Icon
-              size={mobile ? 17 : 18}
+              size={mobile ? 19 : 18}
               strokeWidth={2.05}
               className="mt-[1px] shrink-0 text-[var(--text)]"
             />
@@ -397,7 +674,7 @@ function ServiceCard({
             <h3
               className={cn(
                 'min-w-0 truncate font-heading tracking-[-0.025em] text-[var(--text)]',
-                mobile ? 'text-[16px] leading-[1.04] whitespace-nowrap' : 'text-[19px] leading-[1.08]',
+                mobile ? 'text-[18px] leading-[1.04] whitespace-nowrap' : 'text-[19px] leading-[1.08]',
               )}
             >
               {title}
@@ -408,7 +685,7 @@ function ServiceCard({
             <div
               className={cn(
                 'shrink-0 pt-[1px] font-semibold leading-none tracking-[-0.02em] text-[var(--accent-1)]',
-                mobile ? 'text-[14px]' : 'text-[15px]',
+                mobile ? 'text-[16px]' : 'text-[15px]',
               )}
             >
               {accentLabel}
@@ -419,7 +696,7 @@ function ServiceCard({
         <div
           className={cn(
             'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
-            mobile ? 'mt-6 min-h-[64px] text-[15px] leading-[1.34]' : 'mt-[32px] text-[16px] leading-[1.34]',
+            mobile ? 'mt-6 min-h-[72px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
           )}
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
@@ -433,24 +710,38 @@ function ServiceCard({
     </div>
   );
 
-  return (
-    <TiltCardShell mobile={mobile}>
-      <Link href={href} className="block h-full">
-        {isAdr ? (
-          <div className={cn('relative p-[2px]', mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>
-            <div
-              className={cn(
-                'service-adr-border pointer-events-none absolute inset-0',
-                mobile ? 'rounded-[24px]' : 'rounded-[28px]',
-              )}
-            />
-            <div className={cn('relative bg-[var(--surface)]', mobile ? 'rounded-[22px]' : 'rounded-[26px]')}>
-              {inner}
-            </div>
-          </div>
-        ) : (
-          <div className={cn(mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>{inner}</div>
+  const wrapped = isAdr ? (
+    <div className={cn('relative p-[2px]', mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>
+      <div
+        className={cn(
+          'service-adr-border pointer-events-none absolute inset-0',
+          mobile ? 'rounded-[24px]' : 'rounded-[28px]',
         )}
+      />
+      <div className={cn('relative bg-[var(--surface)]', mobile ? 'rounded-[22px]' : 'rounded-[26px]')}>
+        {cardBody}
+      </div>
+    </div>
+  ) : (
+    <div className={cn(mobile ? 'rounded-[24px]' : 'rounded-[28px]')}>{cardBody}</div>
+  );
+
+  return (
+    <TiltCardShell mobile={mobile} mobileProgress={mobileAmount}>
+      <Link href={href} className="block h-full">
+        <div
+          style={
+            mobile
+              ? {
+                  transform: `perspective(1400px) rotateY(${(1 - mobileDepth) * -18}deg) translateX(${(1 - mobileDepth) * -14}px) scale(${0.94 + mobileDepth * 0.06})`,
+                  opacity: 0.72 + mobileDepth * 0.28,
+                  transformOrigin: 'center center',
+                }
+              : undefined
+          }
+        >
+          {wrapped}
+        </div>
       </Link>
     </TiltCardShell>
   );
@@ -477,7 +768,7 @@ function ServiceTallCard({
         <div
           className={cn(
             'relative overflow-hidden bg-[var(--accent-2)]',
-            mobile ? 'h-[248px] rounded-[24px]' : 'h-[548px] rounded-[28px]',
+            mobile ? 'h-[278px] rounded-[24px]' : 'h-[548px] rounded-[28px]',
           )}
         >
           <img
@@ -503,7 +794,7 @@ function ServiceTallCard({
             <div className="mt-auto">
               <div className="flex min-w-0 items-start gap-[10px]">
                 <Icon
-                  size={mobile ? 17 : 18}
+                  size={mobile ? 19 : 18}
                   strokeWidth={2.05}
                   className="mt-[1px] shrink-0 text-white"
                 />
@@ -511,7 +802,7 @@ function ServiceTallCard({
                 <h3
                   className={cn(
                     'min-w-0 truncate font-heading tracking-[-0.025em] text-white',
-                    mobile ? 'text-[16px] leading-[1.04] whitespace-nowrap' : 'text-[19px] leading-[1.08]',
+                    mobile ? 'text-[18px] leading-[1.04] whitespace-nowrap' : 'text-[19px] leading-[1.08]',
                   )}
                 >
                   {title}
@@ -521,7 +812,7 @@ function ServiceTallCard({
               <div
                 className={cn(
                   'font-normal tracking-[-0.012em] text-white/88',
-                  mobile ? 'mt-6 min-h-[64px] text-[15px] leading-[1.34]' : 'mt-[32px] text-[16px] leading-[1.34]',
+                  mobile ? 'mt-6 min-h-[72px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
                 )}
                 style={{ fontFamily: 'var(--font-body-text)' }}
               >
@@ -543,10 +834,12 @@ function TiltCardShell({
   children,
   className,
   mobile = false,
+  mobileProgress = 0,
 }: {
   children: React.ReactNode;
   className?: string;
   mobile?: boolean;
+  mobileProgress?: number;
 }) {
   const currentRef = useRef<TiltView>({
     rotateX: 0,
@@ -638,11 +931,21 @@ function TiltCardShell({
       className={cn('relative [perspective:1400px]', className)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      style={
+        mobile
+          ? {
+              transform: `perspective(1400px) translateZ(0)`,
+              willChange: 'transform',
+            }
+          : undefined
+      }
     >
       <div
         style={
           mobile
-            ? undefined
+            ? {
+                transition: 'transform 220ms cubic-bezier(0.22,1,0.36,1), opacity 220ms cubic-bezier(0.22,1,0.36,1)',
+              }
             : {
                 transform: `perspective(1400px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) translateY(${view.y}px) scale(${view.scale})`,
                 transition: 'transform 80ms linear',
@@ -668,14 +971,14 @@ function CardCTA({
     <div
       className={cn(
         'flex items-center',
-        mobile ? 'h-[52px] rounded-[12px] pl-4 pr-[7px]' : 'h-[56px] rounded-[14px] pl-5 pr-[8px]',
+        mobile ? 'h-[54px] rounded-[12px] pl-4 pr-[7px]' : 'h-[56px] rounded-[14px] pl-5 pr-[8px]',
         darkButton ? 'bg-[#31353b]' : 'bg-[var(--bg)]',
       )}
     >
       <span
         className={cn(
           'font-semibold lowercase leading-none tracking-[-0.02em]',
-          mobile ? 'text-[15px]' : 'text-[16px]',
+          mobile ? 'text-[17px]' : 'text-[16px]',
           darkButton ? 'text-white' : 'text-[var(--text)]',
         )}
         style={{ fontFamily: 'var(--font-body-text)' }}
@@ -686,11 +989,11 @@ function CardCTA({
       <div
         className={cn(
           'ml-auto inline-flex shrink-0 items-center justify-center',
-          mobile ? 'h-[38px] w-[54px] rounded-[10px]' : 'h-[40px] w-[58px] rounded-[10px]',
+          mobile ? 'h-[40px] w-[58px] rounded-[10px]' : 'h-[40px] w-[58px] rounded-[10px]',
           darkButton ? 'bg-[#26292e] text-white' : 'bg-[var(--surface)] text-[var(--text)]',
         )}
       >
-        <ArrowRight size={mobile ? 18 : 20} strokeWidth={2.1} />
+        <ArrowRight size={mobile ? 20 : 20} strokeWidth={2.1} />
       </div>
     </div>
   );
