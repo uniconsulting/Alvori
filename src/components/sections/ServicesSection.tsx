@@ -401,9 +401,9 @@ function ServicesMobileLayout({ progress }: { progress: number }) {
               title="Опасные грузы"
               description={
                 <>
-                  перевозки ADR-грузов с соблюдением
+                  перевозки ADR-грузов,
                   <br />
-                  требований и действующих
+                  с соблюдением действующих
                   <br />
                   регламентов перевозки
                 </>
@@ -542,7 +542,7 @@ function ServicesMobileRail({
               )}
             >
               <span
-                className="services-mobile-rail-tick block w-[2px] rounded-full"
+                className="services-mobile-rail-tick block w-[4px] rounded-full"
                 style={{
                   height: `${height}px`,
                   opacity,
