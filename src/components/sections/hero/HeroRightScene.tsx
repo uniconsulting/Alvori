@@ -594,7 +594,7 @@ function BentoCard({
                 <div
                   className={cn(
                     'font-semibold leading-[1.15] tracking-[-0.01em]',
-                    mobileSquare ? 'max-w-[176px] text-[15px]' : 'max-w-[152px] text-[12px]',
+                    mobileSquare ? 'max-w-[184px] text-[15px]' : 'max-w-[152px] text-[12px]',
                     textClass,
                   )}
                 >
