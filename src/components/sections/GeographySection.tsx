@@ -193,7 +193,7 @@ export function GeographySection() {
                 </div>
               </div>
 
-              <div className="relative z-30 flex flex-col gap-3">
+              <div className="relative z-40 flex flex-col gap-3">
                 <div className="inline-flex h-[72px] w-full flex-col justify-center rounded-[20px] bg-[#26292e] px-5">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/56">
                     активное направление
