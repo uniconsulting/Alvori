@@ -108,7 +108,7 @@ export function HeroServicesStage() {
   const transforms = useMemo(() => {
     const heroToServices = remap(progress, 0, 0.16);
     const servicesExit = remap(progress, 0.72, 0.84);
-    const aboutEnter = remap(progress, 0.88, 1);
+    const aboutEnter = remap(progress, 0.68, 0.88);
 
     const servicesHeaderProgress = remap(progress, 0.1, 0.22);
     const servicesCardsProgress = remap(progress, 0.2, 0.7);
