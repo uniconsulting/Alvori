@@ -542,7 +542,7 @@ function ServicesMobileRail({
               )}
             >
               <span
-                className="services-mobile-rail-tick block w-[4px] rounded-full"
+                className="services-mobile-rail-tick block w-[3px] rounded-full"
                 style={{
                   height: `${height}px`,
                   opacity,
@@ -639,13 +639,13 @@ function ServiceCard({
         )}
       />
 
-      <div
-        className={cn(
-          mobile
-            ? 'relative grid h-full grid-rows-[auto_auto_54px] px-5 py-5'
-            : 'relative flex h-full flex-col px-8 py-8',
-        )}
-      >
+<div
+  className={cn(
+    mobile
+      ? 'relative flex h-full flex-col px-5 py-5'
+      : 'relative flex h-full flex-col px-8 py-8',
+  )}
+>
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-[10px]">
             <Icon
@@ -676,19 +676,21 @@ function ServiceCard({
           ) : null}
         </div>
 
-        <div
-          className={cn(
-            'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
-            mobile ? 'mt-[18px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
-          )}
-          style={{ fontFamily: 'var(--font-body-text)' }}
-        >
-          {description}
-        </div>
+<div
+  className={cn(
+    'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
+    mobile
+      ? 'mt-[14px] max-w-[240px] text-[17px] leading-[1.28] sm:max-w-[252px]'
+      : 'mt-[32px] text-[16px] leading-[1.34]',
+  )}
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
+  {description}
+</div>
 
-        <div className={cn(mobile ? 'mt-[18px] self-end' : 'mt-auto pt-[32px]')}>
-          <CardCTA label={ctaLabel} darkButton={false} mobile={mobile} />
-        </div>
+<div className={cn(mobile ? 'mt-[14px] pt-0' : 'mt-auto pt-[32px]')}>
+  <CardCTA label={ctaLabel} darkButton={false} mobile={mobile} />
+</div>
       </div>
     </div>
   );
@@ -792,15 +794,17 @@ function ServiceTallCard({
                 </h3>
               </div>
 
-              <div
-                className={cn(
-                  'font-normal tracking-[-0.012em] text-white/88',
-                  mobile ? 'mt-7 min-h-[72px] text-[17px] leading-[1.28]' : 'mt-[32px] text-[16px] leading-[1.34]',
-                )}
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                {description}
-              </div>
+<div
+  className={cn(
+    'font-normal tracking-[-0.012em] text-[var(--text-muted)]',
+    mobile
+      ? 'mt-[14px] max-w-[240px] text-[17px] leading-[1.28] sm:max-w-[252px]'
+      : 'mt-[32px] text-[16px] leading-[1.34]',
+  )}
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
+  {description}
+</div>
 
               <div className={cn(mobile ? 'pt-6' : 'pt-[32px]')}>
                 <CardCTA label={ctaLabel} darkButton mobile={mobile} />
