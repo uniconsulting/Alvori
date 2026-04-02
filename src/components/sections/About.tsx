@@ -97,7 +97,7 @@ function useTypewriter(text: string, isActive: boolean, duration = 3200) {
 
 export function About({ revealProgress = 0 }: { revealProgress?: number }) {
   const quoteText =
-    '«Стабильный бизнес – это ответственность,\nпредсказуемость и уважение к клиенту»';
+    '«Стабильный бизнес — это\nответственность, предсказуемость\nи уважение к клиенту»';
 
   const typewriterActive = revealProgress > 0.34;
   const typedQuote = useTypewriter(quoteText, typewriterActive, 3600);
@@ -137,7 +137,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             </div>
 
             <div
-              className="mt-1 flex flex-col gap-5 transition-all duration-500 xl:mt-2 xl:gap-6"
+              className="mt-1 flex flex-col gap-6 transition-all duration-500 xl:mt-2 xl:gap-6"
               style={{
                 opacity: introReveal,
                 transform: `translateY(${20 - 20 * introReveal}px)`,
@@ -175,7 +175,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             />
 
             <div
-              className="transition-all duration-[650ms]"
+              className="pt-6 transition-all duration-[650ms] xl:pt-0"
               style={{
                 opacity: quoteReveal,
                 transform: `translateY(${24 - 24 * quoteReveal}px)`,
@@ -213,7 +213,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                 <div className="flex flex-col gap-4">
                   <div className="flex items-start gap-3">
                     <Quote
-                      size={28}
+                      size={32}
                       strokeWidth={2}
                       className="mt-[2px] shrink-0 text-[var(--accent-1)]"
                     />
@@ -408,14 +408,14 @@ function ProcessFlowNodesMobile() {
     const swapTimer = window.setTimeout(() => {
       setDisplayedIndex(activeIndex);
       requestAnimationFrame(() => setTextVisible(true));
-    }, 220);
+    }, 260);
 
     return () => window.clearTimeout(swapTimer);
   }, [activeIndex, displayedIndex]);
 
   return (
     <div className="rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
-      <div className="mb-5 flex justify-end">
+      <div className="mb-3 flex justify-end">
         <div className="flex items-center gap-2">
           {PROCESS_STEPS.map((step, index) => {
             const isActive = index === activeIndex;
@@ -440,34 +440,34 @@ function ProcessFlowNodesMobile() {
 
       <div
         className={cn(
-          'transition-all duration-300 ease-out',
+          'transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]',
           textVisible
             ? 'translate-y-0 opacity-100 blur-0'
-            : 'translate-y-[6px] opacity-0 blur-[4px]',
+            : 'translate-y-[10px] opacity-0 blur-[2px]',
         )}
       >
-        <div className="flex items-start gap-3">
-          <ActiveIcon
-            size={20}
-            strokeWidth={2.05}
-            className="mt-[2px] shrink-0 text-[var(--accent-1)]"
-          />
+        <div className="flex flex-col gap-3">
+          <div className="flex items-start gap-3">
+            <ActiveIcon
+              size={20}
+              strokeWidth={2.05}
+              className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+            />
 
-          <div className="min-w-0">
             <h3
               className="text-[18px] font-semibold lowercase leading-[1.08] tracking-[-0.022em] text-[var(--text)]"
               style={{ fontFamily: 'var(--font-body-text)' }}
             >
               {activeStep.title}
             </h3>
-
-            <p
-              className="mt-3 text-left text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
-              style={{ fontFamily: 'var(--font-body-text)' }}
-            >
-              {activeStep.description}
-            </p>
           </div>
+
+          <p
+            className="text-left text-[15px] font-normal leading-[1.34] tracking-[-0.016em] text-[var(--text-muted)] md:text-[16px]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            {activeStep.description}
+          </p>
         </div>
       </div>
     </div>
