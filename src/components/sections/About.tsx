@@ -122,7 +122,7 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
   return (
     <div id={homeAnchorIds.about} className="h-full scroll-mt-[120px]">
       <Container>
-        <div className="px-[14px] md:px-[18px] xl:px-[22px]">
+        <div className="px-[14px] pb-1 md:px-[18px] xl:px-[22px] xl:pb-0">
           <div className="flex flex-col gap-0 xl:gap-10">
             <div className="flex items-start justify-between gap-4 xl:items-center xl:gap-6">
               <h2
