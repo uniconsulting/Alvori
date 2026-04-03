@@ -121,13 +121,12 @@ export default function RequestPageClient() {
                 </div>
               </div>
 
-              <p
-                className="mt-10 max-w-[860px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
-                style={{ fontFamily: 'var(--font-body-text)' }}
-              >
-                Выберите нужный сценарий: запросить коммерческое предложение или
-                отправить свое КП.
-              </p>
+<p
+  className="mt-10 max-w-[1120px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
+  Выберите нужный сценарий: запросить коммерческое предложение или отправить свое КП.
+</p>
             </div>
 
             <div className="xl:hidden">
@@ -484,18 +483,18 @@ export default function RequestPageClient() {
                     </p>
                   </div>
 
-                  <div className="mt-4 flex flex-col gap-3 text-[14px] leading-[1.25] text-white/78">
-                    <Bullet text="Выберите сценарий: запросить или отправить КП" />
-                    <Bullet text="Заполните основные контактные данные и комментарий" />
-                    <Bullet text="Отправьте запрос для получения обратной связи" />
-                  </div>
+<div className="mt-4 flex flex-col gap-3 text-[14px] leading-[1.25] text-white/78">
+  <Bullet text={'Выберите сценарий: запросить\nили отправить КП.'} mobile />
+  <Bullet text={'Заполните основные контактные\nданные и комментарий'} mobile />
+  <Bullet text={'Отправьте запрос для\nполучения обратной связи'} mobile />
+</div>
 
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       className="inline-flex h-[50px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
                     >
-                      отправить запрос
+                      отправить
                     </button>
 
                     <Link
@@ -519,7 +518,7 @@ export default function RequestPageClient() {
                     </p>
                   </div>
 
-                  <label className="relative mt-4 flex min-h-[152px] cursor-pointer flex-col overflow-hidden rounded-[16px] bg-white/6 px-4 py-4 transition">
+                  <label className="relative mt-4 flex min-h-[152px] cursor-pointer flex-col justify-center overflow-hidden rounded-[16px] bg-white/6 px-4 py-4 transition">
                     <input
                       type="file"
                       multiple
@@ -529,7 +528,7 @@ export default function RequestPageClient() {
                     />
 
                     {files.length === 0 ? (
-                      <div className="flex h-full flex-col items-center justify-center text-center">
+                      <div className="flex h-full min-h-[120px] w-full flex-col items-center justify-center text-center">
                         <Upload
                           size={20}
                           strokeWidth={2}
@@ -543,7 +542,7 @@ export default function RequestPageClient() {
                         </span>
                       </div>
                     ) : (
-                      <div className="flex h-full flex-col">
+                      <div className="flex h-full w-full flex-col justify-center">
                         <div className="mb-3 flex items-center justify-between">
                           <span className="text-[12px] font-semibold text-white/72">
                             Загруженные файлы
@@ -652,11 +651,17 @@ function FieldDark({
   );
 }
 
-function Bullet({ text }: { text: string }) {
+function Bullet({
+  text,
+  mobile = false,
+}: {
+  text: string;
+  mobile?: boolean;
+}) {
   return (
     <div className="flex items-center gap-3">
       <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--accent-1)]" />
-      <span>{text}</span>
+      <span className={mobile ? 'whitespace-pre-line' : undefined}>{text}</span>
     </div>
   );
 }
