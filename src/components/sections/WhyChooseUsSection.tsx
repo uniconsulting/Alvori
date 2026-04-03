@@ -348,7 +348,7 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
     phase === 'hiding' ? 0.992 : phase === 'showing' ? 1 : 1;
 
   return (
-    <section ref={rootRef} className="relative h-[250vh]">
+    <section ref={rootRef} className="relative h-[185vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
         <div className="pt-4">
           <div
