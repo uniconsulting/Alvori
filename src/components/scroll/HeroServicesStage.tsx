@@ -368,9 +368,16 @@ function MobileHeroServicesStage() {
         </div>
       </div>
 
-      <div className="relative -mt-[26vh] pt-8">
-        {showMobileGeography ? <GeographySection /> : null}
-      </div>
+<div className="relative -mt-[26vh] pt-8">
+  <div
+    className={cn(
+      'transition-opacity duration-300',
+      showMobileGeography ? 'opacity-100' : 'opacity-0 pointer-events-none',
+    )}
+  >
+    <GeographySection />
+  </div>
+</div>
     </section>
   );
 }
