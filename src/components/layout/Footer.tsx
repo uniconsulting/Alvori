@@ -5,7 +5,6 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { contacts } from '@/content/contacts';
-import { legalLinks } from '@/content/legal';
 import { cn } from '@/lib/cn';
 import { sitePath } from '@/lib/site-path';
 
@@ -52,12 +51,8 @@ export function Footer() {
       };
 
   const assets = {
-    footerLogo: isLightTheme
-      ? `${sitePath}/brand/footer/light/logo.svg`
-      : `${sitePath}/brand/footer/dark/logo.svg`,
-    footerLogoFallback: isLightTheme
-      ? `${sitePath}/brand/footer/dark/logo.svg`
-      : `${sitePath}/brand/footer/light/logo.svg`,
+    footerLogo: `${sitePath}/brand/footer/logo.png`,
+    footerLogoFallback: `${sitePath}/brand/footer/logo.png`,
 
     developerLogo:
       theme === 'dark'
@@ -110,7 +105,7 @@ export function Footer() {
         <Container className="flex min-h-[500px] flex-col pt-10 pb-5 md:pt-10 md:pb-5">
           <Road trucks={assets.trucks} />
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:items-start">
+          <div className="mt-10 hidden gap-10 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-start">
             <div className="w-full max-w-[430px] justify-self-start space-y-8">
               <div className="h-[72px] w-[390px] max-w-full">
                 <AssetImage
@@ -130,23 +125,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="justify-self-center space-y-8 lg:-translate-x-10">
-              <h3 className="font-heading text-[20px] font-semibold leading-none tracking-[-0.01em] text-[var(--footer-text)]">
-                инфо-блок
-              </h3>
-
-              <div className="flex flex-col gap-5">
-                {legalLinks.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-[17px] leading-[1.15] tracking-[-0.01em] text-[var(--footer-text)] transition hover:opacity-75"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <div />
 
             <div className="w-full max-w-[460px] justify-self-end space-y-8">
               <div className="space-y-5">
@@ -182,7 +161,66 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-auto pt-6">
+          <div className="mt-10 lg:hidden">
+            <div className="flex flex-col gap-6">
+              <div className="h-[58px] w-[220px] max-w-full">
+                <AssetImage
+                  src={assets.footerLogo}
+                  fallbackSrc={assets.footerLogoFallback}
+                  alt="Алвори"
+                  className="h-full w-full object-contain object-left"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <ContactRow
+                  icon={<Phone size={18} strokeWidth={1.9} />}
+                  text={contacts.phoneDisplay}
+                  mobile
+                />
+                <ContactRow
+                  icon={<Mail size={18} strokeWidth={1.9} />}
+                  text={contacts.email}
+                  mobile
+                />
+                <ContactRow
+                  icon={<MapPin size={18} strokeWidth={1.9} />}
+                  text={contacts.address}
+                  mobile
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <MessengerButton
+                  href={contacts.maxHref}
+                  label="написать в max"
+                  logoSrc={assets.maxLogo}
+                  logoFallbackSrc={assets.maxLogoFallback}
+                  mobile
+                />
+
+                <MessengerButton
+                  href={contacts.telegramHref}
+                  label="написать в tg"
+                  logoSrc={assets.telegramLogo}
+                  logoFallbackSrc={assets.telegramLogoFallback}
+                  mobile
+                />
+              </div>
+
+              <div className="h-[1px] w-full bg-[var(--footer-line)] opacity-40" />
+
+              <div className="space-y-2 text-left text-[15px] leading-[1.24] tracking-[-0.01em] text-[var(--footer-text)]">
+                <div>
+                  ООО «АЛВОРИ» | ИНН: 7300045728
+                </div>
+                <div>все права защищены</div>
+                <div>© 2021 – 2026</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-auto pt-6 hidden lg:block">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
               <div className="h-[2px] flex-1 bg-[var(--footer-line)] opacity-40" />
 
@@ -211,8 +249,63 @@ export function Footer() {
               </div>
             </div>
           </div>
+
+          <div className="mt-8 overflow-hidden lg:hidden">
+            <div className="relative h-[26px]">
+              <div className="footer-marquee absolute left-0 top-0 flex min-w-max items-center gap-4 whitespace-nowrap text-[14px] leading-none tracking-[-0.01em] text-[var(--footer-muted)]">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-[18px] w-[24px] items-center justify-center">
+                    <AssetImage
+                      src={assets.developerLogo}
+                      alt="Юни"
+                      className="h-[14px] w-auto object-contain"
+                    />
+                  </div>
+                  <span>Сайт разработан командой ЮНИ.ai</span>
+                </div>
+
+                <span className="opacity-50">|</span>
+                <span>Telegram: @uni_smb</span>
+                <span className="opacity-50">|</span>
+                <span>MAX: +7(995)518-69-42</span>
+
+                <span className="opacity-50">|</span>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex h-[18px] w-[24px] items-center justify-center">
+                    <AssetImage
+                      src={assets.developerLogo}
+                      alt="Юни"
+                      className="h-[14px] w-auto object-contain"
+                    />
+                  </div>
+                  <span>Сайт разработан командой ЮНИ.ai</span>
+                </div>
+
+                <span className="opacity-50">|</span>
+                <span>Telegram: @uni_smb</span>
+                <span className="opacity-50">|</span>
+                <span>MAX: +7(995)518-69-42</span>
+              </div>
+            </div>
+          </div>
         </Container>
       </div>
+
+      <style jsx>{`
+        .footer-marquee {
+          animation: footerMarquee 20s linear infinite;
+        }
+
+        @keyframes footerMarquee {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+      `}</style>
     </footer>
   );
 }
@@ -275,13 +368,22 @@ function Truck({
 function ContactRow({
   icon,
   text,
+  mobile = false,
 }: {
   icon: React.ReactNode;
   text: string;
+  mobile?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-4 text-[17px] leading-none tracking-[-0.01em] text-[var(--footer-text)]">
-      <span className="inline-flex h-[24px] w-[24px] items-center justify-center text-[var(--footer-accent)]">
+    <div
+      className={cn(
+        'flex text-[var(--footer-text)]',
+        mobile
+          ? 'items-start gap-3 text-[16px] leading-[1.24] tracking-[-0.01em]'
+          : 'items-center gap-4 text-[17px] leading-none tracking-[-0.01em]',
+      )}
+    >
+      <span className="inline-flex h-[24px] w-[24px] shrink-0 items-center justify-center text-[var(--footer-accent)]">
         {icon}
       </span>
       <span>{text}</span>
@@ -294,16 +396,21 @@ function MessengerButton({
   label,
   logoSrc,
   logoFallbackSrc,
+  mobile = false,
 }: {
   href: string;
   label: string;
   logoSrc: string;
   logoFallbackSrc?: string;
+  mobile?: boolean;
 }) {
   return (
     <Link
       href={href}
-      className="header-utility-button inline-flex h-[56px] w-full items-center justify-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] px-5 text-[var(--footer-button-text)]"
+      className={cn(
+        'header-utility-button inline-flex w-full items-center justify-center gap-3 rounded-[22px] bg-[var(--footer-button-bg)] text-[var(--footer-button-text)]',
+        mobile ? 'h-[54px] px-5' : 'h-[56px] px-5',
+      )}
     >
       <div className="flex h-[28px] w-[28px] items-center justify-center">
         <AssetImage
@@ -314,7 +421,12 @@ function MessengerButton({
         />
       </div>
 
-      <span className="whitespace-nowrap text-[17px] leading-none tracking-[-0.01em] text-[var(--footer-button-text)]">
+      <span
+        className={cn(
+          'whitespace-nowrap tracking-[-0.01em] text-[var(--footer-button-text)]',
+          mobile ? 'text-[16px] leading-none' : 'text-[17px] leading-none',
+        )}
+      >
         {label}
       </span>
     </Link>
