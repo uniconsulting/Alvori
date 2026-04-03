@@ -207,7 +207,18 @@ export default function CalculatorPage() {
           : 'Без дополнительных точек',
       ],
     };
-  }, [bodyType, urgency, tempMode, insurance, loadingType, extraPoints, distanceKm, weightTons, volumeM3, pallets]);
+  }, [
+    bodyType,
+    urgency,
+    tempMode,
+    insurance,
+    loadingType,
+    extraPoints,
+    distanceKm,
+    weightTons,
+    volumeM3,
+    pallets,
+  ]);
 
   const requestQuery = useMemo(() => {
     const params = new URLSearchParams({
@@ -381,14 +392,14 @@ function PageHeader() {
 
       <div className="xl:hidden">
         <div className="flex items-center justify-between gap-3">
-<Link
-  href="/"
-  className="inline-flex h-[42px] items-center px-0 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
-  style={{ fontFamily: 'var(--font-body-text)' }}
->
-  <ArrowLeft size={15} className="mr-2" />
-  вернуться
-</Link>
+          <Link
+            href="/"
+            className="inline-flex h-[42px] items-center px-0 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            <ArrowLeft size={15} className="mr-2" />
+            вернуться
+          </Link>
 
           <div className="inline-flex h-[42px] items-center rounded-[14px] bg-[var(--surface)] px-[14px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
             <span
@@ -457,7 +468,7 @@ function ControlBar({
   routeDistance: number;
 }) {
   return (
-    <div className="rounded-[24px] bg-[var(--surface)] px-4 pb-4 pt-5 shadow-[var(--shadow-soft)] xl:rounded-[30px] xl:px-4 xl:pb-4 xl:pt-6">
+    <div className="rounded-[24px] bg-[var(--surface)] px-4 pb-4 pt-5 shadow-[var(--shadow-soft)] xl:rounded-[36px] xl:px-4 xl:pb-4 xl:pt-6">
       <div className="flex items-center gap-3 pl-[2px] xl:pl-[10px]">
         <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
         <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] xl:text-[28px]">
@@ -465,10 +476,10 @@ function ControlBar({
         </h2>
       </div>
 
-<div
-  className="mt-4 px-0 py-0 text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)] xl:mt-0 xl:ml-auto xl:mr-[8px] xl:text-right"
-  style={{ fontFamily: 'var(--font-body-text)' }}
->
+      <div
+        className="mt-4 px-0 py-0 text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)] xl:mt-0 xl:ml-auto xl:mr-[8px] xl:text-right"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
         маршрут:{' '}
         <span className="text-[var(--text)]">
           {routeFrom} → {routeTo}
@@ -512,7 +523,7 @@ function ControlBar({
         <button
           type="button"
           onClick={onOpenFilters}
-          className="inline-flex h-[84px] items-center justify-center gap-3 rounded-[18px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)] transition hover:opacity-95"
+          className="inline-flex h-[84px] items-center justify-center gap-3 rounded-[20px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--accent-1-text)] transition hover:opacity-95"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           <SlidersHorizontal size={17} strokeWidth={2} />
@@ -558,18 +569,18 @@ function ControlBar({
             mobile
           />
 
-<button
-  type="button"
-  onClick={onOpenFilters}
-  className="flex h-[76px] items-center justify-center rounded-[16px] bg-[var(--accent-1)]"
-  aria-label="все фильтры"
->
-  <SlidersHorizontal
-    size={22}
-    strokeWidth={2.15}
-    className="text-[var(--accent-1-text)]"
-  />
-</button>
+          <button
+            type="button"
+            onClick={onOpenFilters}
+            className="flex h-[76px] items-center justify-center rounded-[16px] bg-[var(--accent-1)]"
+            aria-label="все фильтры"
+          >
+            <SlidersHorizontal
+              size={22}
+              strokeWidth={2.15}
+              className="text-[var(--accent-1-text)]"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -619,13 +630,29 @@ function CitySegment({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={mobile ? 'flex h-[76px] w-full items-center justify-between rounded-[16px] bg-[var(--bg)] px-4 text-left transition hover:opacity-95' : 'flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95'}
+        className={
+          mobile
+            ? 'flex h-[76px] w-full items-center justify-between rounded-[16px] bg-[var(--bg)] px-4 text-left transition hover:opacity-95'
+            : 'flex h-[84px] w-full items-center justify-between rounded-[20px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95'
+        }
       >
         <div className="min-w-0">
-          <div className={mobile ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]' : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'}>
+          <div
+            className={
+              mobile
+                ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'
+                : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'
+            }
+          >
             {label}
           </div>
-          <div className={mobile ? 'mt-2 truncate text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]' : 'mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'}>
+          <div
+            className={
+              mobile
+                ? 'mt-2 truncate text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]'
+                : 'mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'
+            }
+          >
             {selected?.label ?? placeholder}
           </div>
         </div>
@@ -637,15 +664,15 @@ function CitySegment({
       </button>
 
       {open ? (
-        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[18px] bg-[var(--surface)] shadow-[0_20px_44px_rgba(38,41,46,0.12)]">
+        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[20px] bg-[var(--surface)] shadow-[0_20px_44px_rgba(38,41,46,0.12)]">
           <div className="p-3">
-<input
-  value={query}
-  onChange={(e) => setQuery(e.target.value)}
-  placeholder="Поиск города"
-  className="input-shell h-[46px] rounded-[14px] px-4 py-0 text-[14px] placeholder:text-[12px]"
-  style={{ fontFamily: 'var(--font-body-text)' }}
-/>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Поиск города"
+              className="input-shell h-[46px] rounded-[14px] px-4 py-0 text-[14px] placeholder:text-[12px]"
+              style={{ fontFamily: 'var(--font-body-text)' }}
+            />
           </div>
           <div className="max-h-[280px] overflow-y-auto pb-2">
             {filtered.length ? (
@@ -705,13 +732,29 @@ function SelectSegment({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={mobile ? 'flex h-[76px] w-full items-center justify-between rounded-[16px] bg-[var(--bg)] px-4 text-left transition hover:opacity-95' : 'flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95'}
+        className={
+          mobile
+            ? 'flex h-[76px] w-full items-center justify-between rounded-[16px] bg-[var(--bg)] px-4 text-left transition hover:opacity-95'
+            : 'flex h-[84px] w-full items-center justify-between rounded-[20px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95'
+        }
       >
         <div className="min-w-0">
-          <div className={mobile ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]' : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'}>
+          <div
+            className={
+              mobile
+                ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'
+                : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'
+            }
+          >
             {label}
           </div>
-          <div className={mobile ? 'mt-2 truncate text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]' : 'mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'}>
+          <div
+            className={
+              mobile
+                ? 'mt-2 truncate text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]'
+                : 'mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'
+            }
+          >
             {selected?.label}
           </div>
         </div>
@@ -723,7 +766,7 @@ function SelectSegment({
       </button>
 
       {open ? (
-        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[18px] bg-[var(--surface)] shadow-[0_20px_44px_rgba(38,41,46,0.12)]">
+        <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-[20px] bg-[var(--surface)] shadow-[0_20px_44px_rgba(38,41,46,0.12)]">
           <div className="py-2">
             {options.map((option) => (
               <button
@@ -759,28 +802,60 @@ function PointsSegment({
   mobile?: boolean;
 }) {
   return (
-    <div className={mobile ? 'relative h-[76px] rounded-[16px] bg-[var(--bg)] px-4 py-3' : 'relative h-[84px] rounded-[18px] bg-[var(--bg)] px-5 py-4'}>
+    <div
+      className={
+        mobile
+          ? 'relative h-[76px] rounded-[16px] bg-[var(--bg)] px-4 py-3'
+          : 'relative h-[84px] rounded-[20px] bg-[var(--bg)] px-5 py-4'
+      }
+    >
       <div className={mobile ? 'pr-[58px]' : 'pr-[84px]'}>
-        <div className={mobile ? 'whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]' : 'whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'}>
+        <div
+          className={
+            mobile
+              ? 'whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'
+              : 'whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'
+          }
+        >
           {label}
         </div>
-        <div className={mobile ? 'mt-2 text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]' : 'mt-2 text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'}>
+        <div
+          className={
+            mobile
+              ? 'mt-2 text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]'
+              : 'mt-2 text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'
+          }
+        >
           {value}
         </div>
       </div>
 
-      <div className={mobile ? 'absolute bottom-3 right-3 flex items-center gap-1.5' : 'absolute bottom-4 right-4 flex items-center gap-2'}>
+      <div
+        className={
+          mobile
+            ? 'absolute bottom-3 right-3 flex items-center gap-1.5'
+            : 'absolute bottom-4 right-4 flex items-center gap-2'
+        }
+      >
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className={mobile ? 'inline-flex h-[28px] w-[28px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]' : 'inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]'}
+          className={
+            mobile
+              ? 'inline-flex h-[28px] w-[28px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]'
+              : 'inline-flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-[var(--surface)] text-[var(--text)]'
+          }
         >
           −
         </button>
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className={mobile ? 'inline-flex h-[28px] w-[28px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]' : 'inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]'}
+          className={
+            mobile
+              ? 'inline-flex h-[28px] w-[28px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]'
+              : 'inline-flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-[var(--surface)] text-[var(--text)]'
+          }
         >
           +
         </button>
@@ -813,9 +888,9 @@ function ResultPanel({
   const empty = distance <= 0;
 
   return (
-    <div className="rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:rounded-[32px] xl:px-8 xl:py-8">
+    <div className="rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:rounded-[36px] xl:px-8 xl:py-8">
       {empty ? (
-        <div className="flex min-h-[240px] items-center justify-center rounded-[20px] bg-white/6 xl:min-h-[260px] xl:rounded-[24px]">
+        <div className="flex min-h-[240px] items-center justify-center rounded-[16px] bg-white/6 xl:min-h-[260px] xl:rounded-[24px]">
           <div className="text-center">
             <h2 className="font-heading text-[28px] tracking-[-0.03em] xl:text-[34px]">
               Выберите маршрут
@@ -828,14 +903,18 @@ function ResultPanel({
       ) : (
         <>
           <div className="flex items-center gap-3">
-            <Route size={18} strokeWidth={2} className="text-[var(--accent-1)] xl:size-[19px]" />
+            <Route
+              size={18}
+              strokeWidth={2}
+              className="text-[var(--accent-1)] xl:size-[19px]"
+            />
             <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] xl:text-[30px]">
               Результат
             </h2>
           </div>
 
           <div className="mt-5 xl:hidden">
-            <div className="rounded-[18px] bg-white/6 px-4 py-4">
+            <div className="rounded-[16px] bg-white/6 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-white/56">
                 ориентировочная стоимость
               </p>
@@ -844,7 +923,7 @@ function ResultPanel({
                 {formatCurrency(center)} ₽
               </p>
 
-              <div className="mt-4 rounded-[14px] bg-white/6 px-4 py-3">
+              <div className="mt-4 rounded-[12px] bg-white/6 px-4 py-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-white/50">
                   рабочая вилка
                 </p>
@@ -861,7 +940,7 @@ function ResultPanel({
               <MetricCard label="Ставка / км" value={pricePerKm} mobile />
             </div>
 
-            <div className="mt-3 rounded-[18px] bg-white/6 px-4 py-4">
+            <div className="mt-3 rounded-[16px] bg-white/6 px-4 py-4">
               <div className="flex items-center gap-2">
                 <CircleAlert size={15} strokeWidth={2} className="text-[var(--accent-1)]" />
                 <p className="text-[14px] font-semibold tracking-[-0.016em]">
@@ -871,7 +950,10 @@ function ResultPanel({
 
               <div className="mt-4 flex flex-col gap-3">
                 {factors.map((factor) => (
-                  <div key={factor} className="flex items-start gap-3 text-[14px] leading-[1.25] text-white/82">
+                  <div
+                    key={factor}
+                    className="flex items-start gap-3 text-[14px] leading-[1.25] text-white/82"
+                  >
                     <span className="mt-[5px] h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--accent-1)]" />
                     <span>{factor}</span>
                   </div>
@@ -987,11 +1069,29 @@ function MetricCard({
   mobile?: boolean;
 }) {
   return (
-    <div className={mobile ? 'h-full rounded-[16px] bg-white/6 px-4 py-4' : 'h-full rounded-[14px] bg-white/6 px-5 py-5'}>
-      <p className={mobile ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-white/50' : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50'}>
+    <div
+      className={
+        mobile
+          ? 'h-full rounded-[16px] bg-white/6 px-4 py-4'
+          : 'h-full rounded-[20px] bg-white/6 px-5 py-5'
+      }
+    >
+      <p
+        className={
+          mobile
+            ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-white/50'
+            : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50'
+        }
+      >
         {label}
       </p>
-      <p className={mobile ? 'mt-3 text-[15px] font-semibold leading-[1.2] tracking-[-0.018em] text-white' : 'mt-3 text-[16px] font-semibold leading-[1.2] tracking-[-0.018em] text-white'}>
+      <p
+        className={
+          mobile
+            ? 'mt-3 text-[15px] font-semibold leading-[1.2] tracking-[-0.018em] text-white'
+            : 'mt-3 text-[16px] font-semibold leading-[1.2] tracking-[-0.018em] text-white'
+        }
+      >
         {value}
       </p>
     </div>
@@ -1069,57 +1169,61 @@ function ExplainBlock() {
     };
   }, []);
 
-const cards = [
-  {
-    title: '1. Базовая ставка маршрута',
-    mobileText:
-      'Берём расстояние маршрута\nи применяем рыночную базу\n78–87 ₽/км для типовой\nфуры по РФ.',
-    desktopText:
-      'Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ.',
-  },
-  {
-    title: '2. Поправка на кузов',
-    mobileText:
-      'Учитываем тип кузова:\nтент, штора, изотерм, рефрижератор\nили спецперевозка.',
-    desktopText:
-      'Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка.',
-  },
-  {
-    title: '3. Поправка на условия',
-    mobileText:
-      'Срочность, температура, тип\nзагрузки, страхование и доп-\nточки корректирует итог.',
-    desktopText:
-      'Срочность, температура, тип загрузки, страхование и дополнительные точки корректируют итог.',
-  },
-  {
-    title: '4. Рабочая вилка',
-    mobileText:
-      'На выходе показываем\nориентир и вилку,\nчтобы расчёт был ближе\nк реальной ставке рынка.',
-    desktopText:
-      'На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка.',
-  },
-];
+  const cards = [
+    {
+      title: '1. Базовая ставка маршрута',
+      mobileText:
+        'Берём расстояние маршрута\nи применяем рыночную базу\n78–87 ₽/км для типовой\nфуры по РФ.',
+      desktopText:
+        'Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ.',
+    },
+    {
+      title: '2. Поправка на кузов',
+      mobileText:
+        'Учитываем тип кузова:\nтент, штора, изотерм, рефрижератор\nили спецперевозка.',
+      desktopText:
+        'Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка.',
+    },
+    {
+      title: '3. Поправка на условия',
+      mobileText:
+        'Срочность, температура, тип\nзагрузки, страхование и доп-\nточки корректирует итог.',
+      desktopText:
+        'Срочность, температура, тип загрузки, страхование и дополнительные точки корректируют итог.',
+    },
+    {
+      title: '4. Рабочая вилка',
+      mobileText:
+        'На выходе показываем\nориентир и вилку,\nчтобы расчёт был ближе\nк реальной ставке рынка.',
+      desktopText:
+        'На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка.',
+    },
+  ];
 
   return (
-    <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[30px] xl:px-8 xl:py-8">
+    <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[36px] xl:px-8 xl:py-8">
       <div className="flex items-center gap-3">
-        <MapPinned size={18} strokeWidth={2} className="text-[var(--accent-1)] xl:size-[19px]" />
+        <MapPinned
+          size={18}
+          strokeWidth={2}
+          className="text-[var(--accent-1)] xl:size-[19px]"
+        />
         <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] xl:text-[30px]">
           Как мы считаем
         </h2>
       </div>
 
-<div className="mt-5 overflow-hidden xl:hidden">
-  <div
-    ref={scrollerRef}
-    className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-    style={{
-      paddingLeft: '0px',
-      paddingRight: '0px',
-      scrollPaddingLeft: '0px',
-      WebkitOverflowScrolling: 'touch',
-    }}
-  >
+      <div className="mt-5 overflow-hidden xl:hidden">
+        <div
+          ref={scrollerRef}
+          className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          style={{
+            paddingLeft: '0px',
+            paddingRight: '0px',
+            scrollPaddingLeft: '0px',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
           <div className="h-px shrink-0" style={{ width: 0 }} aria-hidden="true" />
 
           {cards.map((card, index) => {
@@ -1140,7 +1244,7 @@ const cards = [
                 className="w-[272px] shrink-0 snap-start"
               >
                 <div
-                  className="min-h-[164px] rounded-[18px] bg-[var(--bg)] px-5 py-5"
+                  className="min-h-[164px] rounded-[16px] bg-[var(--bg)] px-5 py-5"
                   style={{
                     transform: `translateX(${transform.translateX}px) rotateY(${transform.rotateY}deg) scaleX(${transform.scaleX}) scaleY(${transform.scaleY})`,
                     transformOrigin: transform.rotateY > 0 ? 'left center' : 'right center',
@@ -1149,12 +1253,12 @@ const cards = [
                       'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
                   }}
                 >
-<h3 className="font-heading text-[14px] leading-[1] tracking-[-0.02em] text-[var(--text)]">
-  {card.title}
-</h3>
-<p className="mt-4 whitespace-pre-line text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
-  {card.mobileText}
-</p>
+                  <h3 className="font-heading text-[14px] leading-[1] tracking-[-0.02em] text-[var(--text)]">
+                    {card.title}
+                  </h3>
+                  <p className="mt-4 whitespace-pre-line text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
+                    {card.mobileText}
+                  </p>
                 </div>
               </div>
             );
@@ -1163,9 +1267,9 @@ const cards = [
       </div>
 
       <div className="mt-6 hidden grid-cols-2 gap-4 xl:grid">
-{cards.map((card) => (
-  <ExplainCard key={card.title} title={card.title} text={card.desktopText} />
-))}
+        {cards.map((card) => (
+          <ExplainCard key={card.title} title={card.title} text={card.desktopText} />
+        ))}
       </div>
     </div>
   );
@@ -1179,7 +1283,7 @@ function ExplainCard({
   text: string;
 }) {
   return (
-    <div className="rounded-[18px] bg-[var(--bg)] px-5 py-5">
+    <div className="rounded-[20px] bg-[var(--bg)] px-5 py-5">
       <h3 className="font-heading text-[22px] leading-[1] tracking-[-0.024em] text-[var(--text)]">
         {title}
       </h3>
@@ -1281,7 +1385,7 @@ function FiltersDrawer(props: {
         </div>
 
         <div className="mt-8 space-y-6">
-          <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
+          <div className="rounded-[20px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
               Груз
             </h3>
@@ -1292,7 +1396,7 @@ function FiltersDrawer(props: {
             </div>
           </div>
 
-          <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
+          <div className="rounded-[20px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
               Условия
             </h3>
@@ -1340,7 +1444,7 @@ function FiltersDrawer(props: {
             </div>
           </div>
 
-          <div className="rounded-[22px] bg-[var(--bg)] px-5 py-5">
+          <div className="rounded-[20px] bg-[var(--bg)] px-5 py-5">
             <h3 className="font-heading text-[22px] tracking-[-0.024em] text-[var(--text)]">
               Комментарий
             </h3>
@@ -1351,7 +1455,7 @@ function FiltersDrawer(props: {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Укажите особенности груза, сроки, пожелания"
-                className="input-shell min-h-[132px] resize-none rounded-[18px]"
+                className="input-shell min-h-[132px] resize-none rounded-[16px]"
               />
             </div>
           </div>
@@ -1370,7 +1474,7 @@ function FiltersDrawer(props: {
               setInsurance('basic');
               setComment('');
             }}
-            className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--bg)] px-6 text-[15px] font-semibold lowercase text-[var(--text)]"
+            className="inline-flex h-[54px] items-center justify-center rounded-[14px] bg-[var(--bg)] px-6 text-[15px] font-semibold lowercase text-[var(--text)]"
           >
             сбросить
           </button>
@@ -1378,7 +1482,7 @@ function FiltersDrawer(props: {
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-[54px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase text-[var(--accent-1-text)]"
+            className="inline-flex h-[54px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold lowercase text-[var(--accent-1-text)]"
           >
             применить
           </button>
@@ -1460,7 +1564,7 @@ function DrawerSelect({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[50px] w-full items-center justify-between rounded-[8px] bg-[var(--bg)] px-4 text-left text-[15px] tracking-[-0.014em] text-[var(--text)]"
+        className="flex h-[50px] w-full items-center justify-between rounded-[10px] bg-[var(--bg)] px-4 text-left text-[15px] tracking-[-0.014em] text-[var(--text)]"
       >
         <span>{selected?.label}</span>
         <ChevronDown
@@ -1471,7 +1575,7 @@ function DrawerSelect({
       </button>
 
       {open ? (
-        <div className="mt-2 overflow-hidden rounded-[8px] bg-[var(--bg)]">
+        <div className="mt-2 overflow-hidden rounded-[10px] bg-[var(--bg)]">
           {options.map((option) => (
             <button
               key={option.value}
