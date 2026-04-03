@@ -322,9 +322,10 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
     };
   }, []);
 
-  const floatIndex = progress * (cards.length - 1);
-  const targetIndex = Math.round(floatIndex);
-
+const effectiveProgress = Math.min(progress / 0.985, 1);
+const floatIndex = effectiveProgress * cards.length;
+const targetIndex = Math.min(Math.floor(floatIndex), cards.length - 1);
+  
   useEffect(() => {
     if (targetIndex === displayedIndex) return;
 
@@ -349,7 +350,7 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
 
   return (
     <section ref={rootRef} className="relative h-[185vh]">
-      <div className="sticky top-[92px] h-[calc(100vh-92px-120px)] overflow-hidden">
+      <div className="sticky top-[92px] h-[calc(100vh-92px-160px)] overflow-hidden">
         <div className="pt-4">
           <div
             className="relative h-[286px] w-full overflow-hidden rounded-[24px] will-change-transform"
