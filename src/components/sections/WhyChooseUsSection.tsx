@@ -189,9 +189,9 @@ export function WhyChooseUsSection() {
                     <>
                       позволяет держать качество
                       <br />
-                      исполнения под контролем и обеспечивать
+                      исполнения под контролем
                       <br />
-                      предсказуемость работы
+                      и обеспечивать предсказуемость работы
                     </>
                   }
                   imageSrc={`${sitePath}/why-choose-us/fleet-card-bg.webp`}
@@ -350,7 +350,7 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   return (
     <section ref={rootRef} className="relative h-[250vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="pt-6">
+        <div className="pt-4">
           <div
             className="relative h-[286px] w-full overflow-hidden rounded-[24px] will-change-transform"
             style={{
@@ -379,7 +379,7 @@ function WhyChooseUsMobileRail({
   floatIndex: number;
 }) {
   return (
-    <div className="pointer-events-none absolute right-[8px] top-1/2 z-30 -translate-y-1/2">
+    <div className="pointer-events-none absolute right-[6px] top-1/2 z-30 -translate-y-1/2">
       <div className="flex h-[150px] flex-col items-center justify-between">
         {cards.map((card, index) => {
           const distance = Math.abs(index - floatIndex);
@@ -461,7 +461,7 @@ function WhyMobileUnifiedCard({
       <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
 
       <div
-        className="relative flex h-full flex-col justify-end px-5 py-5 pr-[24px] will-change-transform will-change-opacity"
+        className="relative flex h-full flex-col justify-end px-5 py-5 pr-[20px] will-change-transform will-change-opacity"
         style={{
           ...contentStyle,
           transition:
