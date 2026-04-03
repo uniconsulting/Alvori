@@ -317,14 +317,13 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   return (
     <section ref={rootRef} className="relative h-[250vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="flex h-full items-center">
+        <div className="pt-6">
           <div className="relative h-[286px] w-full overflow-hidden rounded-[24px]">
             <div
-              className="absolute inset-0 will-change-transform will-change-opacity"
+              className="absolute inset-0 will-change-opacity"
               style={{
-                opacity: 1 - localProgress,
-                transform: `scale(${1 - 0.018 * localProgress})`,
-                transition: 'opacity 120ms linear, transform 120ms linear',
+                opacity: nextIndex === currentIndex ? 1 : 1 - localProgress,
+                transition: 'opacity 120ms linear',
               }}
             >
               <WhyMobileUnifiedCard card={currentCard} />
@@ -332,11 +331,10 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
 
             {nextIndex !== currentIndex ? (
               <div
-                className="absolute inset-0 will-change-transform will-change-opacity"
+                className="absolute inset-0 will-change-opacity"
                 style={{
                   opacity: localProgress,
-                  transform: `scale(${0.982 + 0.018 * localProgress})`,
-                  transition: 'opacity 120ms linear, transform 120ms linear',
+                  transition: 'opacity 120ms linear',
                 }}
               >
                 <WhyMobileUnifiedCard card={nextCard} />
@@ -360,7 +358,7 @@ function WhyChooseUsMobileRail({
 }) {
   return (
     <div className="pointer-events-none absolute right-[10px] top-1/2 z-30 -translate-y-1/2">
-      <div className="flex h-[144px] flex-col items-center justify-between">
+      <div className="flex h-[150px] flex-col items-center justify-between">
         {cards.map((card, index) => {
           const distance = Math.abs(index - floatIndex);
           const isActive = distance < 0.5;
@@ -371,9 +369,9 @@ function WhyChooseUsMobileRail({
               className="block rounded-full transition-all duration-200"
               style={{
                 width: '2px',
-                height: isActive ? '26px' : '14px',
-                background: isActive ? 'var(--accent-1)' : 'rgba(255,255,255,0.34)',
-                opacity: 1,
+                height: isActive ? '26px' : '18px',
+                background: isActive ? 'var(--accent-1)' : '#ffffff',
+                opacity: isActive ? 1 : 0.92,
               }}
             />
           );
@@ -394,7 +392,7 @@ function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
       <CardImageMask />
       <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
 
-      <div className="relative flex h-full flex-col justify-end px-5 py-5 pr-[24px]">
+      <div className="relative flex h-full flex-col justify-end px-5 py-5 pr-[28px]">
         <div className="flex items-start gap-[10px]">
           <card.icon
             size={17}
