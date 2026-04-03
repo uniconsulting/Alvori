@@ -315,16 +315,16 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   const nextCard = cards[nextIndex];
 
   return (
-    <section ref={rootRef} className="relative h-[260vh]">
+    <section ref={rootRef} className="relative h-[250vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
-        <div className="flex h-full items-start pt-2">
+        <div className="flex h-full items-center">
           <div className="relative h-[286px] w-full overflow-hidden rounded-[24px]">
             <div
               className="absolute inset-0 will-change-transform will-change-opacity"
               style={{
-                transform: `translate3d(0, ${-28 * localProgress}px, 0) scale(${1 - 0.04 * localProgress})`,
                 opacity: 1 - localProgress,
-                transition: 'transform 100ms linear, opacity 100ms linear',
+                transform: `scale(${1 - 0.018 * localProgress})`,
+                transition: 'opacity 120ms linear, transform 120ms linear',
               }}
             >
               <WhyMobileUnifiedCard card={currentCard} />
@@ -334,9 +334,9 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
               <div
                 className="absolute inset-0 will-change-transform will-change-opacity"
                 style={{
-                  transform: `translate3d(0, ${48 * (1 - localProgress)}px, 0) scale(${0.96 + 0.04 * localProgress})`,
                   opacity: localProgress,
-                  transition: 'transform 100ms linear, opacity 100ms linear',
+                  transform: `scale(${0.982 + 0.018 * localProgress})`,
+                  transition: 'opacity 120ms linear, transform 120ms linear',
                 }}
               >
                 <WhyMobileUnifiedCard card={nextCard} />
@@ -359,23 +359,21 @@ function WhyChooseUsMobileRail({
   floatIndex: number;
 }) {
   return (
-    <div className="pointer-events-none absolute right-[14px] top-1/2 z-30 -translate-y-1/2">
-      <div className="flex h-[148px] flex-col items-center justify-between">
+    <div className="pointer-events-none absolute right-[10px] top-1/2 z-30 -translate-y-1/2">
+      <div className="flex h-[144px] flex-col items-center justify-between">
         {cards.map((card, index) => {
           const distance = Math.abs(index - floatIndex);
           const isActive = distance < 0.5;
 
-          const height = isActive ? 28 : 14;
-          const opacity = isActive ? 1 : 0.92;
-
           return (
             <span
               key={card.id}
-              className="block w-[3px] rounded-full transition-all duration-200"
+              className="block rounded-full transition-all duration-200"
               style={{
-                height: `${height}px`,
-                opacity,
-                background: isActive ? 'var(--accent-1)' : 'var(--accent-2)',
+                width: '2px',
+                height: isActive ? '26px' : '14px',
+                background: isActive ? 'var(--accent-1)' : 'rgba(255,255,255,0.34)',
+                opacity: 1,
               }}
             />
           );
@@ -396,7 +394,7 @@ function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
       <CardImageMask />
       <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
 
-      <div className="relative flex h-full flex-col justify-end px-5 py-5 pr-[34px]">
+      <div className="relative flex h-full flex-col justify-end px-5 py-5 pr-[24px]">
         <div className="flex items-start gap-[10px]">
           <card.icon
             size={17}
@@ -409,7 +407,7 @@ function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
         </div>
 
         <div
-          className="mt-5 text-[15px] font-normal leading-[1.28] tracking-[-0.014em] text-white/88"
+          className="mt-5 w-full text-[15px] font-normal leading-[1.28] tracking-[-0.014em] text-white/88"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {card.description}
