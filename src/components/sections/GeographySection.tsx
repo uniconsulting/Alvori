@@ -17,7 +17,11 @@ const DISTRICTS = [
   'Уральский федеральный округ',
 ];
 
-export function GeographySection() {
+export function GeographySection({
+  activateHeavy = true,
+}: {
+  activateHeavy?: boolean;
+}) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const [activeRouteIndex, setActiveRouteIndex] = useState(0);
@@ -27,6 +31,12 @@ export function GeographySection() {
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
+
+    if (!activateHeavy) {
+      setShouldMountGlobe(false);
+      setIsGlobeActive(false);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -42,9 +52,10 @@ export function GeographySection() {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [activateHeavy]);
 
   useEffect(() => {
+    if (!activateHeavy) return;
     if (!isGlobeActive) return;
 
     const interval = window.setInterval(() => {
@@ -52,7 +63,7 @@ export function GeographySection() {
     }, 4200);
 
     return () => window.clearInterval(interval);
-  }, [isGlobeActive]);
+  }, [activateHeavy, isGlobeActive]);
 
   const activeRoute = GEO_ROUTES[activeRouteIndex];
 
@@ -175,7 +186,7 @@ export function GeographySection() {
               >
                 Работаем по ключевым направлениям
                 <br />
-                внутри РФ, выстраивая устойчивую 
+                внутри РФ, выстраивая устойчивую
                 <br />
                 логистику под задачу клиента.
               </p>
@@ -236,9 +247,9 @@ export function GeographySection() {
                     mobile
                   />
                 ) : (
-<div className="absolute inset-0 flex items-center justify-end overflow-hidden">
-  <div className="aspect-square w-[98vw] max-w-none translate-x-[44%] rounded-full bg-[var(--surface)]/60" />
-</div>
+                  <div className="absolute inset-0 flex items-center justify-end overflow-hidden">
+                    <div className="aspect-square w-[98vw] max-w-none translate-x-[44%] rounded-full bg-[var(--surface)]/60" />
+                  </div>
                 )}
               </div>
             </div>
