@@ -1,7 +1,8 @@
 'use client';
 
 import createGlobe from 'cobe';
-import { useEffect, useMemo, useRef } from 'react';
+import { Minus, Plus } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { GEO_CITIES, GEO_ROUTES } from '@/components/sections/geography-data';
 
 function rgb(hex: string): [number, number, number] {
@@ -19,6 +20,9 @@ function rgb(hex: string): [number, number, number] {
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
+
+const ZOOM_STEPS = [0.78, 0.84, 0.9, 0.96, 1.02, 1.08, 1.14, 1.2, 1.26, 1.32];
+const SCALE_MARKS = Array.from({ length: 16 }, (_, index) => index);
 
 type PointerPoint = {
   x: number;
@@ -53,6 +57,14 @@ export function GeographyGlobe({
     distance: number;
     scale: number;
   } | null>(null);
+
+  const [zoomIndex, setZoomIndex] = useState(6);
+
+  useEffect(() => {
+    if (!mobile) {
+      scaleRef.current = ZOOM_STEPS[zoomIndex];
+    }
+  }, [zoomIndex, mobile]);
 
   const activeRoute = GEO_ROUTES[activeRouteIndex];
 
@@ -204,6 +216,10 @@ export function GeographyGlobe({
     }
   };
 
+  const changeZoom = (nextIndex: number) => {
+    setZoomIndex(clamp(nextIndex, 0, ZOOM_STEPS.length - 1));
+  };
+
   const handlePointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -297,6 +313,9 @@ export function GeographyGlobe({
     </div>
   ));
 
+  const isMajorMark = (index: number) => index % 5 === 0;
+  const activeMarkIndex = 15 - Math.round((zoomIndex / (ZOOM_STEPS.length - 1)) * 15);
+
   return (
     <div
       className={
@@ -308,11 +327,11 @@ export function GeographyGlobe({
     >
       {mobile ? (
         <div className="relative h-full w-full overflow-visible" style={{ touchAction: 'none' }}>
-<div className="absolute top-[40%] right-[-34%] w-[76vw] -translate-y-1/2">
-  <canvas
-    ref={canvasRef}
-    className="aspect-square w-full h-auto cursor-grab"
-    style={{ touchAction: 'none' }}
+          <div className="absolute top-[40%] right-[-34%] w-[76vw] -translate-y-1/2">
+            <canvas
+              ref={canvasRef}
+              className="aspect-square h-auto w-full cursor-grab"
+              style={{ touchAction: 'none' }}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
@@ -334,6 +353,59 @@ export function GeographyGlobe({
               onPointerCancel={handlePointerUp}
             />
             {labels}
+          </div>
+
+          <div className="absolute right-0 top-[35%] z-20 flex -translate-y-1/2 flex-col items-center gap-3">
+            <button
+              type="button"
+              onClick={() => changeZoom(zoomIndex + 1)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+              aria-label="увеличить"
+            >
+              <Plus size={14} />
+            </button>
+
+            <div className="flex h-[360px] flex-col items-center justify-between py-1">
+              {SCALE_MARKS.map((markIndex) => {
+                const major = isMajorMark(markIndex);
+                const isActive = markIndex === activeMarkIndex;
+
+                return (
+                  <button
+                    key={markIndex}
+                    type="button"
+                    onClick={() => {
+                      const normalized = 1 - markIndex / 15;
+                      const snapped = Math.round(normalized * (ZOOM_STEPS.length - 1));
+                      changeZoom(snapped);
+                    }}
+                    className="flex h-[20px] items-center justify-center"
+                    aria-label={`шаг масштаба ${markIndex + 1}`}
+                  >
+                    <span
+                      className={cn(
+                        'block rounded-full transition-all duration-300',
+                        major ? 'h-[3px] w-[34px]' : 'h-[2px] w-[18px]',
+                        isActive
+                          ? 'bg-[var(--accent-1)]'
+                          : major
+                            ? 'bg-[rgba(38,41,46,0.72)]'
+                            : 'bg-[rgba(38,41,46,0.16)]',
+                      )}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => changeZoom(zoomIndex - 1)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.06)]"
+              aria-label="уменьшить"
+            >
+              <Minus size={14} />
+            </button>
           </div>
         </div>
       )}
