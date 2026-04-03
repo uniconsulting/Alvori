@@ -274,7 +274,7 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState(0);
   const [displayedIndex, setDisplayedIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [phase, setPhase] = useState<'visible' | 'hiding' | 'showing'>('visible');
 
   useEffect(() => {
     const preloaders = cards.map((card) => {
@@ -328,37 +328,40 @@ function WhyChooseUsMobileStack({ cards }: { cards: WhyCardItem[] }) {
   useEffect(() => {
     if (targetIndex === displayedIndex) return;
 
-    setIsVisible(false);
+    setPhase('hiding');
 
-    const swapTimer = window.setTimeout(() => {
+    const hideTimer = window.setTimeout(() => {
       setDisplayedIndex(targetIndex);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsVisible(true);
-        });
-      });
-    }, 110);
+      setPhase('showing');
 
-    return () => window.clearTimeout(swapTimer);
+      const showTimer = window.setTimeout(() => {
+        setPhase('visible');
+      }, 220);
+
+      return () => window.clearTimeout(showTimer);
+    }, 170);
+
+    return () => window.clearTimeout(hideTimer);
   }, [targetIndex, displayedIndex]);
+
+  const cardScale =
+    phase === 'hiding' ? 0.992 : phase === 'showing' ? 1 : 1;
 
   return (
     <section ref={rootRef} className="relative h-[250vh]">
       <div className="sticky top-[92px] h-[calc(100vh-92px)] overflow-hidden">
         <div className="pt-6">
-          <div className="relative h-[286px] w-full overflow-hidden rounded-[24px]">
-            <div
-              className="absolute inset-0 will-change-transform will-change-opacity"
-              style={{
-                opacity: isVisible ? 1 : 0,
-                transform: `translateZ(0) scale(${isVisible ? 1 : 0.988})`,
-                transition:
-                  'opacity 220ms cubic-bezier(0.22,1,0.36,1), transform 220ms cubic-bezier(0.22,1,0.36,1)',
-                backfaceVisibility: 'hidden',
-              }}
-            >
-              <WhyMobileUnifiedCard card={cards[displayedIndex]} />
-            </div>
+          <div
+            className="relative h-[286px] w-full overflow-hidden rounded-[24px] will-change-transform"
+            style={{
+              transform: `translateZ(0) scale(${cardScale})`,
+              transition: 'transform 220ms cubic-bezier(0.22,1,0.36,1)',
+            }}
+          >
+            <WhyMobileUnifiedCard
+              card={cards[displayedIndex]}
+              phase={phase}
+            />
 
             <WhyChooseUsMobileRail cards={cards} floatIndex={floatIndex} />
           </div>
@@ -376,7 +379,7 @@ function WhyChooseUsMobileRail({
   floatIndex: number;
 }) {
   return (
-    <div className="pointer-events-none absolute right-[10px] top-1/2 z-30 -translate-y-1/2">
+    <div className="pointer-events-none absolute right-[8px] top-1/2 z-30 -translate-y-1/2">
       <div className="flex h-[150px] flex-col items-center justify-between">
         {cards.map((card, index) => {
           const distance = Math.abs(index - floatIndex);
@@ -400,7 +403,32 @@ function WhyChooseUsMobileRail({
   );
 }
 
-function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
+function WhyMobileUnifiedCard({
+  card,
+  phase = 'visible',
+}: {
+  card: WhyCardItem;
+  phase?: 'visible' | 'hiding' | 'showing';
+}) {
+  const contentStyle =
+    phase === 'hiding'
+      ? {
+          opacity: 0,
+          transform: 'translate3d(0, 8px, 0) scale(0.985)',
+        }
+      : phase === 'showing'
+        ? {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0) scale(1)',
+          }
+        : {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0) scale(1)',
+          };
+
+  const overlayOpacity =
+    phase === 'hiding' ? 0.16 : phase === 'showing' ? 0.06 : 0;
+
   return (
     <div
       className="relative h-full overflow-hidden rounded-[24px] bg-[#26292e]"
@@ -422,9 +450,24 @@ function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
       />
 
       <CardImageMask />
+      <div
+        className="pointer-events-none absolute inset-0 rounded-[24px] bg-white"
+        style={{
+          opacity: overlayOpacity,
+          transition: 'opacity 220ms cubic-bezier(0.22,1,0.36,1)',
+          mixBlendMode: 'soft-light',
+        }}
+      />
       <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/12" />
 
-      <div className="relative flex h-full flex-col justify-end px-5 py-5 pr-[28px]">
+      <div
+        className="relative flex h-full flex-col justify-end px-5 py-5 pr-[24px] will-change-transform will-change-opacity"
+        style={{
+          ...contentStyle,
+          transition:
+            'opacity 220ms cubic-bezier(0.22,1,0.36,1), transform 220ms cubic-bezier(0.22,1,0.36,1)',
+        }}
+      >
         <div className="flex items-start gap-[10px]">
           <card.icon
             size={17}
@@ -437,7 +480,7 @@ function WhyMobileUnifiedCard({ card }: { card: WhyCardItem }) {
         </div>
 
         <div
-          className="mt-5 w-full text-[15px] font-normal leading-[1.28] tracking-[-0.014em] text-white/88"
+          className="mt-5 w-full max-w-none text-[15px] font-normal leading-[1.28] tracking-[-0.014em] text-white/88"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           {card.description}
