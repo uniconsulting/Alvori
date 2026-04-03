@@ -217,7 +217,7 @@ export function AutoParkGallery({ mobile = false }: { mobile?: boolean }) {
                     opacity: transform.opacity,
                     boxShadow: 'none',
                     transition:
-                      'transform 240ms cubic-bezier(0.22,1,0.36,1), opacity 240ms cubic-bezier(0.22,1,0.36,1)',
+                      'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
                   }}
                 >
                   <img
