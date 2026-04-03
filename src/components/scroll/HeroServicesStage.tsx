@@ -373,7 +373,7 @@ function MobileHeroServicesStage() {
       </div>
 
       <div
-        className="relative -mt-[28vh] pt-8 will-change-transform will-change-opacity"
+        className="relative -mt-[24vh] pt-8 will-change-transform will-change-opacity"
         style={{
           transform: `translate3d(0, ${32 * (1 - geographyReveal)}px, 0)`,
           opacity: geographyReveal,
