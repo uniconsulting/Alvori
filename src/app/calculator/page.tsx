@@ -44,10 +44,11 @@ const TEMP_CONFIG: Record<TempMode, { label: string; min: number; max: number }>
   temp: { label: 'Температурный режим', min: 1.1, max: 1.18 },
 };
 
-const INSURANCE_CONFIG: Record<InsuranceType, { label: string; minAdd: number; maxAdd: number }> = {
-  basic: { label: 'Стандартное', minAdd: 0, maxAdd: 0 },
-  extended: { label: 'Расширенное', minAdd: 3000, maxAdd: 7000 },
-};
+const INSURANCE_CONFIG: Record<InsuranceType, { label: string; minAdd: number; maxAdd: number }> =
+  {
+    basic: { label: 'Стандартное', minAdd: 0, maxAdd: 0 },
+    extended: { label: 'Расширенное', minAdd: 3000, maxAdd: 7000 },
+  };
 
 const LOADING_CONFIG: Record<LoadingType, { label: string; minAdd: number; maxAdd: number }> = {
   rear: { label: 'Задняя', minAdd: 0, maxAdd: 0 },
@@ -255,22 +256,22 @@ export default function CalculatorPage() {
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
               <PageHeader />
 
-<div className="mt-8">
-  <ControlBar
-    onOpenFilters={() => setFiltersOpen(true)}
-    fromCity={fromCity}
-    toCity={toCity}
-    onChangeFrom={setFromCity}
-    onChangeTo={setToCity}
-    bodyType={bodyType}
-    onChangeBody={(value) => setBodyType(value as BodyType)}
-    extraPoints={extraPoints}
-    onChangePoints={setExtraPoints}
-    routeFrom={fromCityObj?.label ?? '—'}
-    routeTo={toCityObj?.label ?? '—'}
-    routeDistance={distanceKm}
-  />
-</div>
+              <div className="mt-8">
+                <ControlBar
+                  onOpenFilters={() => setFiltersOpen(true)}
+                  fromCity={fromCity}
+                  toCity={toCity}
+                  onChangeFrom={setFromCity}
+                  onChangeTo={setToCity}
+                  bodyType={bodyType}
+                  onChangeBody={(value) => setBodyType(value as BodyType)}
+                  extraPoints={extraPoints}
+                  onChangePoints={setExtraPoints}
+                  routeFrom={fromCityObj?.label ?? '—'}
+                  routeTo={toCityObj?.label ?? '—'}
+                  routeDistance={distanceKm}
+                />
+              </div>
             </div>
           </Container>
         </section>
@@ -301,28 +302,28 @@ export default function CalculatorPage() {
           </Container>
         </section>
 
-<FiltersDrawer
-  open={filtersOpen}
-  onClose={() => setFiltersOpen(false)}
-  mode={mode}
-  setMode={setMode}
-  weightTons={weightTons}
-  setWeightTons={setWeightTons}
-  volumeM3={volumeM3}
-  setVolumeM3={setVolumeM3}
-  pallets={pallets}
-  setPallets={setPallets}
-  urgency={urgency}
-  setUrgency={setUrgency}
-  tempMode={tempMode}
-  setTempMode={setTempMode}
-  loadingType={loadingType}
-  setLoadingType={setLoadingType}
-  insurance={insurance}
-  setInsurance={setInsurance}
-  comment={comment}
-  setComment={setComment}
-/>
+        <FiltersDrawer
+          open={filtersOpen}
+          onClose={() => setFiltersOpen(false)}
+          mode={mode}
+          setMode={setMode}
+          weightTons={weightTons}
+          setWeightTons={setWeightTons}
+          volumeM3={volumeM3}
+          setVolumeM3={setVolumeM3}
+          pallets={pallets}
+          setPallets={setPallets}
+          urgency={urgency}
+          setUrgency={setUrgency}
+          tempMode={tempMode}
+          setTempMode={setTempMode}
+          loadingType={loadingType}
+          setLoadingType={setLoadingType}
+          insurance={insurance}
+          setInsurance={setInsurance}
+          comment={comment}
+          setComment={setComment}
+        />
       </main>
 
       <Footer />
@@ -333,47 +334,96 @@ export default function CalculatorPage() {
 function PageHeader() {
   return (
     <>
-      <Link
-        href="/"
-        className="inline-flex items-center text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]/70 transition hover:text-[var(--text)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        <ArrowLeft size={15} className="mr-2" />
-        вернуться
-      </Link>
+      <div className="hidden xl:block">
+        <Link
+          href="/"
+          className="inline-flex items-center text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]/70 transition hover:text-[var(--text)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          <ArrowLeft size={15} className="mr-2" />
+          вернуться
+        </Link>
 
-      <div className="mt-5 flex items-center justify-between gap-6">
-        <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
-          Расчёт грузоперевозки
-        </h1>
+        <div className="mt-5 flex items-center justify-between gap-6">
+          <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
+            Расчёт грузоперевозки
+          </h1>
 
-        <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[18px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+          <div className="inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[18px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+            <span
+              className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+              style={{ fontFamily: 'var(--font-body-text)' }}
+            >
+              главная
+              <span className="px-[8px] text-[var(--accent-1)]">·</span>
+              калькулятор
+            </span>
+          </div>
+        </div>
+
+        <p
+          className="mt-10 max-w-[760px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          Получите ориентировочную стоимость перевозки по РФ на основе маршрута,
+          параметров груза и текущей рыночной ставки.
+        </p>
+
+        <div className="mt-8 inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3 shadow-[var(--shadow-soft)]">
           <span
-            className="text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+            className="text-[15px] font-semibold tracking-[-0.016em] text-[var(--text)]"
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
-            главная
-            <span className="px-[8px] text-[var(--accent-1)]">·</span>
-            калькулятор
+            рыночная база: 78–87 ₽/км
           </span>
         </div>
       </div>
 
-      <p
-        className="mt-10 max-w-[760px] text-[19px] font-normal leading-[1.32] tracking-[-0.018em] text-[var(--muted)]"
-        style={{ fontFamily: 'var(--font-body-text)' }}
-      >
-        Получите ориентировочную стоимость перевозки по РФ на основе маршрута,
-        параметров груза и текущей рыночной ставки.
-      </p>
+      <div className="xl:hidden">
+        <div className="flex items-center justify-between gap-3">
+          <Link
+            href="/"
+            className="inline-flex h-[42px] items-center rounded-[14px] bg-[var(--surface)] px-4 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            <ArrowLeft size={15} className="mr-2" />
+            вернуться
+          </Link>
 
-      <div className="mt-8 inline-flex items-center rounded-[18px] bg-[var(--surface)] px-5 py-3 shadow-[var(--shadow-soft)]">
-        <span
-          className="text-[15px] font-semibold tracking-[-0.016em] text-[var(--text)]"
+          <div className="inline-flex h-[42px] items-center rounded-[14px] bg-[var(--surface)] px-[14px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+            <span
+              className="text-[13px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+              style={{ fontFamily: 'var(--font-body-text)' }}
+            >
+              главная
+              <span className="px-[6px] text-[var(--accent-1)]">·</span>
+              калькулятор
+            </span>
+          </div>
+        </div>
+
+        <h1 className="mt-7 font-heading text-[34px] leading-[0.96] tracking-[-0.045em] text-[var(--text)] md:text-[40px]">
+          Расчёт
+          <br />
+          грузоперевозки
+        </h1>
+
+        <p
+          className="mt-5 max-w-[640px] text-[16px] font-normal leading-[1.3] tracking-[-0.018em] text-[var(--muted)] md:text-[17px]"
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
-          рыночная база: 78–87 ₽/км
-        </span>
+          Получите ориентировочную стоимость перевозки по РФ на основе маршрута,
+          параметров груза и текущей рыночной ставки.
+        </p>
+
+        <div className="mt-6 inline-flex items-center rounded-[16px] bg-[var(--surface)] px-4 py-3 shadow-[var(--shadow-soft)]">
+          <span
+            className="text-[14px] font-semibold tracking-[-0.016em] text-[var(--text)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            рыночная база: 78–87 ₽/км
+          </span>
+        </div>
       </div>
     </>
   );
@@ -407,28 +457,28 @@ function ControlBar({
   routeDistance: number;
 }) {
   return (
-    <div className="rounded-[30px] bg-[var(--surface)] px-4 pb-4 pt-6 shadow-[var(--shadow-soft)]">
-      <div className="flex items-center gap-3 pl-[10px]">
+    <div className="rounded-[24px] bg-[var(--surface)] px-4 pb-4 pt-5 shadow-[var(--shadow-soft)] xl:rounded-[30px] xl:px-4 xl:pb-4 xl:pt-6">
+      <div className="flex items-center gap-3 pl-[2px] xl:pl-[10px]">
         <Calculator size={20} strokeWidth={2} className="text-[var(--accent-1)]" />
-        <h2 className="font-heading text-[28px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
+        <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] xl:text-[28px]">
           Параметры перевозки
         </h2>
-
-        <div
-          className="ml-auto mr-[8px] text-right text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)]"
-          style={{ fontFamily: 'var(--font-body-text)' }}
-        >
-          Маршрут:{' '}
-          <span className="text-[var(--text)]">
-            {routeFrom} → {routeTo}
-          </span>{' '}
-          <span className="text-[var(--text)]">
-            ~ {routeDistance ? formatDistance(routeDistance) : '—'} км
-          </span>
-        </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-[1.25fr_1.25fr_0.85fr_0.78fr_auto] gap-3">
+      <div
+        className="mt-4 rounded-[16px] bg-[var(--bg)] px-4 py-3 text-[14px] font-medium tracking-[-0.014em] text-[var(--muted)] xl:mt-0 xl:ml-auto xl:mr-[8px] xl:rounded-none xl:bg-transparent xl:px-0 xl:py-0 xl:text-right"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        маршрут:{' '}
+        <span className="text-[var(--text)]">
+          {routeFrom} → {routeTo}
+        </span>{' '}
+        <span className="text-[var(--text)]">
+          ~ {routeDistance ? formatDistance(routeDistance) : '—'} км
+        </span>
+      </div>
+
+      <div className="mt-4 hidden xl:grid xl:grid-cols-[1.25fr_1.25fr_0.85fr_0.78fr_auto] xl:gap-3">
         <CitySegment
           label="откуда"
           value={fromCity}
@@ -469,6 +519,58 @@ function ControlBar({
           все фильтры
         </button>
       </div>
+
+      <div className="mt-4 xl:hidden">
+        <div className="grid grid-cols-2 gap-3">
+          <CitySegment
+            label="откуда"
+            value={fromCity}
+            onChange={onChangeFrom}
+            placeholder="Выберите город"
+            mobile
+          />
+
+          <CitySegment
+            label="куда"
+            value={toCity}
+            onChange={onChangeTo}
+            placeholder="Выберите город"
+            mobile
+          />
+        </div>
+
+        <div className="mt-3 grid grid-cols-3 gap-3">
+          <SelectSegment
+            label="тип кузова"
+            value={bodyType}
+            onChange={onChangeBody}
+            options={Object.entries(BODY_CONFIG).map(([value, cfg]) => ({
+              value,
+              label: cfg.label,
+            }))}
+            mobile
+          />
+
+          <PointsSegment
+            label="доп. точки"
+            value={extraPoints}
+            onChange={onChangePoints}
+            mobile
+          />
+
+          <button
+            type="button"
+            onClick={onOpenFilters}
+            className="flex h-[76px] flex-col items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-3 text-center text-[13px] font-semibold lowercase leading-[1.12] tracking-[-0.016em] text-[var(--accent-1-text)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            <SlidersHorizontal size={16} strokeWidth={2} className="mb-2" />
+            все
+            <br />
+            фильтры
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -478,11 +580,13 @@ function CitySegment({
   value,
   onChange,
   placeholder,
+  mobile = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
+  mobile?: boolean;
 }) {
   const selected = RUSSIA_CITIES.find((city) => city.value === value);
   const [open, setOpen] = useState(false);
@@ -492,7 +596,10 @@ function CitySegment({
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!normalized) return RUSSIA_CITIES.slice(0, 12);
-    return RUSSIA_CITIES.filter((city) => city.label.toLowerCase().includes(normalized)).slice(0, 12);
+    return RUSSIA_CITIES.filter((city) => city.label.toLowerCase().includes(normalized)).slice(
+      0,
+      12,
+    );
   }, [query]);
 
   useEffect(() => {
@@ -511,17 +618,21 @@ function CitySegment({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95"
+        className={mobile ? 'flex h-[76px] w-full items-center justify-between rounded-[16px] bg-[var(--bg)] px-4 text-left transition hover:opacity-95' : 'flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95'}
       >
         <div className="min-w-0">
-          <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+          <div className={mobile ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]' : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'}>
             {label}
           </div>
-          <div className="mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]">
+          <div className={mobile ? 'mt-2 truncate text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]' : 'mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'}>
             {selected?.label ?? placeholder}
           </div>
         </div>
-        <ChevronDown size={18} strokeWidth={2} className={`ml-4 shrink-0 text-[var(--muted)] transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          size={mobile ? 16 : 18}
+          strokeWidth={2}
+          className={`ml-4 shrink-0 text-[var(--muted)] transition-transform ${open ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {open ? (
@@ -568,11 +679,13 @@ function SelectSegment({
   value,
   onChange,
   options,
+  mobile = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   options: Array<{ value: string; label: string }>;
+  mobile?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -591,17 +704,21 @@ function SelectSegment({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95"
+        className={mobile ? 'flex h-[76px] w-full items-center justify-between rounded-[16px] bg-[var(--bg)] px-4 text-left transition hover:opacity-95' : 'flex h-[84px] w-full items-center justify-between rounded-[18px] bg-[var(--bg)] px-5 text-left transition hover:opacity-95'}
       >
         <div className="min-w-0">
-          <div className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+          <div className={mobile ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]' : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'}>
             {label}
           </div>
-          <div className="mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]">
+          <div className={mobile ? 'mt-2 truncate text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]' : 'mt-2 truncate text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'}>
             {selected?.label}
           </div>
         </div>
-        <ChevronDown size={18} strokeWidth={2} className={`ml-4 shrink-0 text-[var(--muted)] transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          size={mobile ? 16 : 18}
+          strokeWidth={2}
+          className={`ml-4 shrink-0 text-[var(--muted)] transition-transform ${open ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {open ? (
@@ -633,34 +750,36 @@ function PointsSegment({
   label,
   value,
   onChange,
+  mobile = false,
 }: {
   label: string;
   value: number;
   onChange: (value: number) => void;
+  mobile?: boolean;
 }) {
   return (
-    <div className="relative h-[84px] rounded-[18px] bg-[var(--bg)] px-5 py-4">
-      <div className="pr-[84px]">
-        <div className="whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+    <div className={mobile ? 'relative h-[76px] rounded-[16px] bg-[var(--bg)] px-4 py-3' : 'relative h-[84px] rounded-[18px] bg-[var(--bg)] px-5 py-4'}>
+      <div className={mobile ? 'pr-[58px]' : 'pr-[84px]'}>
+        <div className={mobile ? 'whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]' : 'whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--muted)]'}>
           {label}
         </div>
-        <div className="mt-2 text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]">
+        <div className={mobile ? 'mt-2 text-[15px] font-semibold tracking-[-0.018em] text-[var(--text)]' : 'mt-2 text-[17px] font-semibold tracking-[-0.018em] text-[var(--text)]'}>
           {value}
         </div>
       </div>
 
-      <div className="absolute bottom-4 right-4 flex items-center gap-2">
+      <div className={mobile ? 'absolute bottom-3 right-3 flex items-center gap-1.5' : 'absolute bottom-4 right-4 flex items-center gap-2'}>
         <button
           type="button"
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]"
+          className={mobile ? 'inline-flex h-[28px] w-[28px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]' : 'inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]'}
         >
           −
         </button>
         <button
           type="button"
           onClick={() => onChange(value + 1)}
-          className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]"
+          className={mobile ? 'inline-flex h-[28px] w-[28px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]' : 'inline-flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--surface)] text-[var(--text)]'}
         >
           +
         </button>
@@ -693,14 +812,14 @@ function ResultPanel({
   const empty = distance <= 0;
 
   return (
-    <div className="rounded-[32px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
+    <div className="rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:rounded-[32px] xl:px-8 xl:py-8">
       {empty ? (
-        <div className="flex min-h-[260px] items-center justify-center rounded-[24px] bg-white/6">
+        <div className="flex min-h-[240px] items-center justify-center rounded-[20px] bg-white/6 xl:min-h-[260px] xl:rounded-[24px]">
           <div className="text-center">
-            <h2 className="font-heading text-[34px] tracking-[-0.03em]">
+            <h2 className="font-heading text-[28px] tracking-[-0.03em] xl:text-[34px]">
               Выберите маршрут
             </h2>
-            <p className="mt-3 text-[16px] text-white/68">
+            <p className="mt-3 text-[15px] text-white/68 xl:text-[16px]">
               Укажите города отправления и назначения, чтобы получить расчёт.
             </p>
           </div>
@@ -708,79 +827,149 @@ function ResultPanel({
       ) : (
         <>
           <div className="flex items-center gap-3">
-            <Route size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-            <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em]">
+            <Route size={18} strokeWidth={2} className="text-[var(--accent-1)] xl:size-[19px]" />
+            <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] xl:text-[30px]">
               Результат
             </h2>
           </div>
 
-          <div className="mt-7 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4 items-stretch">
-            <div className="rounded-[24px] bg-white/6 px-6 py-6">
-              <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+          <div className="mt-5 xl:hidden">
+            <div className="rounded-[18px] bg-white/6 px-4 py-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-white/56">
                 ориентировочная стоимость
               </p>
 
-              <p className="mt-3 font-heading text-[58px] leading-[0.94] tracking-[-0.05em]">
+              <p className="mt-3 font-heading text-[40px] leading-[0.94] tracking-[-0.05em]">
                 {formatCurrency(center)} ₽
               </p>
 
-              <div className="mt-5 rounded-[14px] bg-white/6 px-5 py-4">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
+              <div className="mt-4 rounded-[14px] bg-white/6 px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-white/50">
                   рабочая вилка
                 </p>
-                <p className="mt-2 text-[24px] font-semibold tracking-[-0.03em]">
+                <p className="mt-2 text-[18px] font-semibold tracking-[-0.03em]">
                   {formatCurrency(min)} – {formatCurrency(max)} ₽
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 grid-rows-2 gap-4">
-              <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} />
-              <MetricCard label="Срок" value={days} />
-              <MetricCard label="Кузов" value={body} />
-              <MetricCard label="Ставка / км" value={pricePerKm} />
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} mobile />
+              <MetricCard label="Срок" value={days} mobile />
+              <MetricCard label="Кузов" value={body} mobile />
+              <MetricCard label="Ставка / км" value={pricePerKm} mobile />
             </div>
 
-            <div className="rounded-[24px] bg-white/6 px-5 py-5 h-full">
+            <div className="mt-3 rounded-[18px] bg-white/6 px-4 py-4">
               <div className="flex items-center gap-2">
-                <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
-                <p className="text-[15px] font-semibold tracking-[-0.016em]">
+                <CircleAlert size={15} strokeWidth={2} className="text-[var(--accent-1)]" />
+                <p className="text-[14px] font-semibold tracking-[-0.016em]">
                   Что повлияло на цену
                 </p>
               </div>
 
               <div className="mt-4 flex flex-col gap-3">
                 {factors.map((factor) => (
-                  <div key={factor} className="flex items-center gap-3 text-[15px] text-white/82">
-                    <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
+                  <div key={factor} className="flex items-start gap-3 text-[14px] leading-[1.25] text-white/82">
+                    <span className="mt-[5px] h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--accent-1)]" />
                     <span>{factor}</span>
                   </div>
                 ))}
               </div>
             </div>
+
+            <div className="mt-4 flex flex-col gap-3">
+              <Link
+                href={requestHref}
+                className="inline-flex h-[52px] w-full items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] !text-[var(--accent-1-text)]"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                отправить этот расчёт
+              </Link>
+
+              <Link
+                href={requestHref}
+                className="inline-flex h-[52px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[14px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+                style={{ fontFamily: 'var(--font-body-text)' }}
+              >
+                запросить коммерческое предложение
+              </Link>
+            </div>
+
+            <p className="mt-4 text-[12px] leading-[1.35] tracking-[-0.012em] text-white/54">
+              Итоговый тариф подтверждается после уточнения параметров груза, маршрута и условий подачи транспорта.
+            </p>
           </div>
 
-          <div className="mt-5 grid grid-cols-[0.92fr_1.08fr_0.86fr] gap-4 items-center">
-            <Link
-              href={requestHref}
-              className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] !text-[var(--accent-1-text)]"
-            >
-              отправить этот расчёт
-            </Link>
+          <div className="mt-7 hidden xl:block">
+            <div className="grid grid-cols-[0.92fr_1.08fr_0.86fr] items-stretch gap-4">
+              <div className="rounded-[24px] bg-white/6 px-6 py-6">
+                <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/56">
+                  ориентировочная стоимость
+                </p>
 
-            <Link
-              href={requestHref}
-              className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
-            >
-              запросить коммерческое предложение
-            </Link>
+                <p className="mt-3 font-heading text-[58px] leading-[0.94] tracking-[-0.05em]">
+                  {formatCurrency(center)} ₽
+                </p>
 
-            <div />
+                <div className="mt-5 rounded-[14px] bg-white/6 px-5 py-4">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
+                    рабочая вилка
+                  </p>
+                  <p className="mt-2 text-[24px] font-semibold tracking-[-0.03em]">
+                    {formatCurrency(min)} – {formatCurrency(max)} ₽
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                <MetricCard label="Расстояние" value={`${formatDistance(distance)} км`} />
+                <MetricCard label="Срок" value={days} />
+                <MetricCard label="Кузов" value={body} />
+                <MetricCard label="Ставка / км" value={pricePerKm} />
+              </div>
+
+              <div className="h-full rounded-[24px] bg-white/6 px-5 py-5">
+                <div className="flex items-center gap-2">
+                  <CircleAlert size={16} strokeWidth={2} className="text-[var(--accent-1)]" />
+                  <p className="text-[15px] font-semibold tracking-[-0.016em]">
+                    Что повлияло на цену
+                  </p>
+                </div>
+
+                <div className="mt-4 flex flex-col gap-3">
+                  {factors.map((factor) => (
+                    <div key={factor} className="flex items-center gap-3 text-[15px] text-white/82">
+                      <span className="h-[6px] w-[6px] rounded-full bg-[var(--accent-1)]" />
+                      <span>{factor}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-[0.92fr_1.08fr_0.86fr] items-center gap-4">
+              <Link
+                href={requestHref}
+                className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-6 text-[16px] font-semibold tracking-[-0.02em] !text-[var(--accent-1-text)]"
+              >
+                отправить этот расчёт
+              </Link>
+
+              <Link
+                href={requestHref}
+                className="inline-flex h-[54px] w-full items-center justify-center rounded-[14px] bg-white/10 px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-white transition hover:bg-white/14"
+              >
+                запросить коммерческое предложение
+              </Link>
+
+              <div />
+            </div>
+
+            <p className="mt-5 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
+              Итоговый тариф подтверждается после уточнения параметров груза, маршрута и условий подачи транспорта.
+            </p>
           </div>
-
-          <p className="mt-5 text-[13px] leading-[1.35] tracking-[-0.012em] text-white/54">
-            Итоговый тариф подтверждается после уточнения параметров груза, маршрута и условий подачи транспорта.
-          </p>
         </>
       )}
     </div>
@@ -790,16 +979,18 @@ function ResultPanel({
 function MetricCard({
   label,
   value,
+  mobile = false,
 }: {
   label: string;
   value: string;
+  mobile?: boolean;
 }) {
   return (
-    <div className="h-full rounded-[14px] bg-white/6 px-5 py-5">
-      <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50">
+    <div className={mobile ? 'h-full rounded-[16px] bg-white/6 px-4 py-4' : 'h-full rounded-[14px] bg-white/6 px-5 py-5'}>
+      <p className={mobile ? 'text-[11px] font-semibold uppercase tracking-[0.08em] text-white/50' : 'text-[12px] font-semibold uppercase tracking-[0.08em] text-white/50'}>
         {label}
       </p>
-      <p className="mt-3 text-[16px] font-semibold leading-[1.2] tracking-[-0.018em] text-white">
+      <p className={mobile ? 'mt-3 text-[15px] font-semibold leading-[1.2] tracking-[-0.018em] text-white' : 'mt-3 text-[16px] font-semibold leading-[1.2] tracking-[-0.018em] text-white'}>
         {value}
       </p>
     </div>
@@ -807,20 +998,161 @@ function MetricCard({
 }
 
 function ExplainBlock() {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const frameRef = useRef<number | null>(null);
+
+  const [mobileTransforms, setMobileTransforms] = useState<
+    Array<{
+      rotateY: number;
+      translateX: number;
+      scaleX: number;
+      scaleY: number;
+      opacity: number;
+    }>
+  >([
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1 },
+    { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1 },
+  ]);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+
+    const updateTransforms = () => {
+      const containerRect = scroller.getBoundingClientRect();
+
+      const next = itemRefs.current.map((node) => {
+        if (!node) {
+          return { rotateY: 0, translateX: 0, scaleX: 1, scaleY: 1, opacity: 1 };
+        }
+
+        const cardRect = node.getBoundingClientRect();
+        const containerCenter = containerRect.left + containerRect.width / 2;
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = cardCenter - containerCenter;
+        const normalized = clamp(distance / (containerRect.width * 0.52), -1, 1);
+        const absN = Math.abs(normalized);
+
+        return {
+          rotateY: -normalized * 16,
+          translateX: -normalized * 8,
+          scaleX: 1 - absN * 0.08,
+          scaleY: 1 - absN * 0.03,
+          opacity: 1 - absN * 0.16,
+        };
+      });
+
+      setMobileTransforms(next);
+      frameRef.current = null;
+    };
+
+    const requestUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateTransforms);
+    };
+
+    updateTransforms();
+
+    scroller.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      scroller.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
+
+  const cards = [
+    {
+      title: '1. Базовая ставка маршрута',
+      text: 'Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ.',
+    },
+    {
+      title: '2. Поправка на кузов',
+      text: 'Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка.',
+    },
+    {
+      title: '3. Поправка на условия',
+      text: 'Срочность, температура, тип загрузки, страхование и дополнительные точки корректируют итог.',
+    },
+    {
+      title: '4. Рабочая вилка',
+      text: 'На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка.',
+    },
+  ];
+
   return (
-    <div className="rounded-[30px] bg-[var(--surface)] px-8 py-8 shadow-[var(--shadow-soft)]">
+    <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[30px] xl:px-8 xl:py-8">
       <div className="flex items-center gap-3">
-        <MapPinned size={19} strokeWidth={2} className="text-[var(--accent-1)]" />
-        <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
+        <MapPinned size={18} strokeWidth={2} className="text-[var(--accent-1)] xl:size-[19px]" />
+        <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] xl:text-[30px]">
           Как мы считаем
         </h2>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <ExplainCard title="1. Базовая ставка маршрута" text="Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ." />
-        <ExplainCard title="2. Поправка на кузов" text="Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка." />
-        <ExplainCard title="3. Поправка на условия" text="Срочность, температура, тип загрузки, страхование и дополнительные точки корректируют итог." />
-        <ExplainCard title="4. Рабочая вилка" text="На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка." />
+      <div className="mt-5 xl:hidden">
+        <div
+          ref={scrollerRef}
+          className="relative left-1/2 flex w-screen -translate-x-1/2 snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          style={{
+            paddingLeft: '10px',
+            paddingRight: 0,
+            scrollPaddingLeft: '10px',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          <div className="h-px shrink-0" style={{ width: 0 }} aria-hidden="true" />
+
+          {cards.map((card, index) => {
+            const transform = mobileTransforms[index] ?? {
+              rotateY: 0,
+              translateX: 0,
+              scaleX: 1,
+              scaleY: 1,
+              opacity: 1,
+            };
+
+            return (
+              <div
+                key={card.title}
+                ref={(node) => {
+                  itemRefs.current[index] = node;
+                }}
+                className="w-[284px] shrink-0 snap-start"
+              >
+                <div
+                  className="rounded-[18px] bg-[var(--bg)] px-5 py-5"
+                  style={{
+                    transform: `translateX(${transform.translateX}px) rotateY(${transform.rotateY}deg) scaleX(${transform.scaleX}) scaleY(${transform.scaleY})`,
+                    transformOrigin: transform.rotateY > 0 ? 'left center' : 'right center',
+                    opacity: transform.opacity,
+                    transition:
+                      'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
+                  }}
+                >
+                  <h3 className="font-heading text-[20px] leading-[1] tracking-[-0.024em] text-[var(--text)]">
+                    {card.title}
+                  </h3>
+                  <p className="mt-4 text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
+                    {card.text}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-6 hidden grid-cols-2 gap-4 xl:grid">
+        {cards.map((card) => (
+          <ExplainCard key={card.title} title={card.title} text={card.text} />
+        ))}
       </div>
     </div>
   );
@@ -900,12 +1232,12 @@ function FiltersDrawer(props: {
       />
 
       <aside
-        className={`drawer-scroll fixed right-0 top-0 z-50 h-screen w-[480px] overflow-y-auto bg-[var(--surface)] px-6 py-6 shadow-[-24px_0_48px_rgba(38,41,46,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`drawer-scroll fixed right-0 top-0 z-50 h-screen w-full overflow-y-auto bg-[var(--surface)] px-5 py-5 shadow-[-24px_0_48px_rgba(38,41,46,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:w-[480px] md:px-6 md:py-6 ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
+          <h2 className="font-heading text-[26px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] md:text-[30px]">
             Все фильтры
           </h2>
 
