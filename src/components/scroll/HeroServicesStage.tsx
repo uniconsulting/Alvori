@@ -165,19 +165,28 @@ function MobileHeroServicesStage() {
   const [progress, setProgress] = useState(0);
 
   const showMobileGeography = progress > 0.995;
+  const geographyReveal = remap(progress, 0.992, 1);
 
   useEffect(() => {
+    let raf = 0;
+
     const handleScroll = () => {
-      const root = sceneRef.current;
-      if (!root) return;
+      if (raf) return;
 
-      const rect = root.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const total = rect.height - viewportHeight;
-      const passed = clamp(-rect.top, 0, total);
-      const nextProgress = total <= 0 ? 0 : passed / total;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
 
-      setProgress(clamp(nextProgress, 0, 1));
+        const root = sceneRef.current;
+        if (!root) return;
+
+        const rect = root.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const total = rect.height - viewportHeight;
+        const passed = clamp(-rect.top, 0, total);
+        const nextProgress = total <= 0 ? 0 : passed / total;
+
+        setProgress(clamp(nextProgress, 0, 1));
+      });
     };
 
     handleScroll();
@@ -187,6 +196,7 @@ function MobileHeroServicesStage() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      if (raf) window.cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -265,16 +275,13 @@ function MobileHeroServicesStage() {
     return {
       heroLeftX: `${heroLeftX}vw`,
       heroRightX: `${heroRightX}vw`,
-      heroBlur: `${heroExit * 6}px`,
       heroOpacity: 1 - heroExit * 0.92,
 
       servicesX: `${servicesX}vw`,
       servicesOpacity: clamp(servicesEnter * 1.08, 0, 1) * (1 - servicesExit * 0.96),
-      servicesBlur: `${(1 - servicesEnter) * 4 + servicesExit * 6}px`,
 
       aboutX: `${aboutX}vw`,
       aboutOpacity: aboutEnter,
-      aboutBlur: `${(1 - aboutEnter) * 5}px`,
     };
   }, [progress]);
 
@@ -298,9 +305,8 @@ function MobileHeroServicesStage() {
                     className="absolute inset-x-0 top-0 will-change-transform will-change-opacity"
                     style={{
                       transform: `translate3d(${transforms.heroLeftX}, 0, 0)`,
-                      filter: `blur(${transforms.heroBlur})`,
                       opacity: transforms.heroOpacity,
-                      transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                      transition: 'transform 60ms linear, opacity 60ms linear',
                     }}
                   >
                     <HeroLeftScene />
@@ -310,9 +316,8 @@ function MobileHeroServicesStage() {
                     className="absolute inset-x-0 top-[292px] will-change-transform will-change-opacity"
                     style={{
                       transform: `translate3d(${transforms.heroRightX}, 0, 0)`,
-                      filter: `blur(${transforms.heroBlur})`,
                       opacity: transforms.heroOpacity,
-                      transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                      transition: 'transform 60ms linear, opacity 60ms linear',
                     }}
                   >
                     <HeroRightScene />
@@ -328,7 +333,8 @@ function MobileHeroServicesStage() {
               )}
               style={{
                 opacity: transforms.servicesOpacity,
-                transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                visibility: transforms.servicesOpacity > 0.01 ? 'visible' : 'hidden',
+                transition: 'transform 60ms linear, opacity 60ms linear',
               }}
             >
               <div className="absolute inset-0 bg-[var(--bg)]" />
@@ -336,7 +342,6 @@ function MobileHeroServicesStage() {
                 className="relative will-change-transform will-change-opacity"
                 style={{
                   transform: `translate3d(${transforms.servicesX}, 0, 0)`,
-                  filter: `blur(${transforms.servicesBlur})`,
                 }}
               >
                 <ServicesSection headerProgress={1} cardsProgress={1} />
@@ -350,7 +355,7 @@ function MobileHeroServicesStage() {
               )}
               style={{
                 opacity: transforms.aboutOpacity,
-                transition: 'transform 60ms linear, filter 60ms linear, opacity 60ms linear',
+                transition: 'transform 60ms linear, opacity 60ms linear',
               }}
             >
               <div className="absolute inset-0 bg-[var(--bg)]" />
@@ -358,7 +363,6 @@ function MobileHeroServicesStage() {
                 className="relative will-change-transform will-change-opacity"
                 style={{
                   transform: `translate3d(${transforms.aboutX}, 0, 0)`,
-                  filter: `blur(${transforms.aboutBlur})`,
                 }}
               >
                 <About revealProgress={1} />
@@ -368,16 +372,16 @@ function MobileHeroServicesStage() {
         </div>
       </div>
 
-<div className="relative -mt-[26vh] pt-8">
-  <div
-    className={cn(
-      'transition-opacity duration-300',
-      showMobileGeography ? 'opacity-100' : 'opacity-0 pointer-events-none',
-    )}
-  >
-    <GeographySection />
-  </div>
-</div>
+      <div
+        className="relative -mt-[26vh] pt-8 will-change-transform will-change-opacity"
+        style={{
+          transform: `translate3d(0, ${32 * (1 - geographyReveal)}px, 0)`,
+          opacity: geographyReveal,
+          transition: 'transform 140ms linear, opacity 140ms linear',
+        }}
+      >
+        <GeographySection activateHeavy={showMobileGeography} />
+      </div>
     </section>
   );
 }
