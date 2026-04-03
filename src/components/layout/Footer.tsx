@@ -59,16 +59,26 @@ export function Footer() {
       ? `${sitePath}/brand/footer/dark/logo.svg`
       : `${sitePath}/brand/footer/light/logo.svg`,
 
-    footerLogoMobile: `${sitePath}/brand/footer/logo.png`,
-    footerLogoMobileFallback: `${sitePath}/brand/footer/logo.png`,
+    footerLogoMobile: isLightTheme
+      ? `${sitePath}/brand/footer/light/logo.png`
+      : `${sitePath}/brand/footer/dark/logo.png`,
+    footerLogoMobileFallback: isLightTheme
+      ? `${sitePath}/brand/footer/dark/logo.png`
+      : `${sitePath}/brand/footer/light/logo.png`,
 
-    developerLogoDesktop:
-      theme === 'dark'
-        ? `${sitePath}/brand/developer/dark/logo.svg`
-        : `${sitePath}/brand/developer/light/logo.svg`,
+    developerLogoDesktop: isLightTheme
+      ? `${sitePath}/brand/developer/light/logo.svg`
+      : `${sitePath}/brand/developer/dark/logo.svg`,
+    developerLogoDesktopFallback: isLightTheme
+      ? `${sitePath}/brand/developer/dark/logo.svg`
+      : `${sitePath}/brand/developer/light/logo.svg`,
 
-    developerLogoMobile: `${sitePath}/brand/developer/logo.png`,
-    developerLogoMobileFallback: `${sitePath}/brand/developer/logo.png`,
+    developerLogoMobile: isLightTheme
+      ? `${sitePath}/brand/developer/light/logo.png`
+      : `${sitePath}/brand/developer/dark/logo.png`,
+    developerLogoMobileFallback: isLightTheme
+      ? `${sitePath}/brand/developer/dark/logo.png`
+      : `${sitePath}/brand/developer/light/logo.png`,
 
     maxLogoDesktop: isLightTheme
       ? `${sitePath}/brand/messengers/max/light.svg`
@@ -77,8 +87,12 @@ export function Footer() {
       ? `${sitePath}/brand/messengers/max/dark.svg`
       : `${sitePath}/brand/messengers/max/light.svg`,
 
-    maxLogoMobile: `${sitePath}/brand/messengers/max/logo.png`,
-    maxLogoMobileFallback: `${sitePath}/brand/messengers/max/logo.png`,
+    maxLogoMobile: isLightTheme
+      ? `${sitePath}/brand/messengers/max/light.png`
+      : `${sitePath}/brand/messengers/max/dark.png`,
+    maxLogoMobileFallback: isLightTheme
+      ? `${sitePath}/brand/messengers/max/dark.png`
+      : `${sitePath}/brand/messengers/max/light.png`,
 
     telegramLogoDesktop: isLightTheme
       ? `${sitePath}/brand/messengers/telegram/light.svg`
@@ -87,8 +101,12 @@ export function Footer() {
       ? `${sitePath}/brand/messengers/telegram/dark.svg`
       : `${sitePath}/brand/messengers/telegram/light.svg`,
 
-    telegramLogoMobile: `${sitePath}/brand/messengers/telegram/logo.png`,
-    telegramLogoMobileFallback: `${sitePath}/brand/messengers/telegram/logo.png`,
+    telegramLogoMobile: isLightTheme
+      ? `${sitePath}/brand/messengers/telegram/light.png`
+      : `${sitePath}/brand/messengers/telegram/dark.png`,
+    telegramLogoMobileFallback: isLightTheme
+      ? `${sitePath}/brand/messengers/telegram/dark.png`
+      : `${sitePath}/brand/messengers/telegram/light.png`,
 
     trucksDesktop: [
       isLightTheme
@@ -103,9 +121,15 @@ export function Footer() {
     ],
 
     trucksMobile: [
-      `${sitePath}/brand/trucks/footer/track-1.png`,
-      `${sitePath}/brand/trucks/footer/track-2.png`,
-      `${sitePath}/brand/trucks/footer/track-3.png`,
+      isLightTheme
+        ? `${sitePath}/brand/trucks/footer/light/truck-1.png`
+        : `${sitePath}/brand/trucks/footer/dark/truck-1.png`,
+      isLightTheme
+        ? `${sitePath}/brand/trucks/footer/light/truck-2.png`
+        : `${sitePath}/brand/trucks/footer/dark/truck-2.png`,
+      isLightTheme
+        ? `${sitePath}/brand/trucks/footer/light/truck-3.png`
+        : `${sitePath}/brand/trucks/footer/dark/truck-3.png`,
     ],
   };
 
@@ -125,7 +149,7 @@ export function Footer() {
       }
     >
       <div className="bg-[var(--footer-bg)] text-[var(--footer-text)]">
-        <Container className="flex min-h-[500px] flex-col pt-10 pb-8 md:pt-10 md:pb-5">
+        <Container className="flex min-h-[500px] flex-col pt-10 pb-5 md:pt-10 md:pb-5">
           <div className="hidden lg:block">
             <Road trucks={assets.trucksDesktop} />
           </div>
@@ -214,7 +238,6 @@ export function Footer() {
                   fallbackSrc={assets.footerLogoMobileFallback}
                   alt="Алвори"
                   className="h-full w-full object-contain object-left"
-                  preferContainBox
                 />
               </div>
 
@@ -243,7 +266,6 @@ export function Footer() {
                   logoSrc={assets.maxLogoMobile}
                   logoFallbackSrc={assets.maxLogoMobileFallback}
                   mobile
-                  imageIsPng
                 />
 
                 <MessengerButton
@@ -252,7 +274,6 @@ export function Footer() {
                   logoSrc={assets.telegramLogoMobile}
                   logoFallbackSrc={assets.telegramLogoMobileFallback}
                   mobile
-                  imageIsPng
                 />
               </div>
 
@@ -275,6 +296,7 @@ export function Footer() {
                   <div className="flex h-[28px] w-[36px] items-center justify-center">
                     <AssetImage
                       src={assets.developerLogoDesktop}
+                      fallbackSrc={assets.developerLogoDesktopFallback}
                       alt="Юни"
                       className="h-[20px] w-auto object-contain"
                     />
@@ -296,47 +318,49 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-8 overflow-hidden pb-[max(env(safe-area-inset-bottom),8px)] lg:hidden">
-            <div className="relative h-[26px]">
-              <div className="footer-marquee absolute left-0 top-0 flex min-w-max items-center gap-4 whitespace-nowrap text-[14px] leading-none tracking-[-0.01em] text-[var(--footer-muted)]">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-[18px] w-[24px] items-center justify-center">
-                    <AssetImage
-                      src={assets.developerLogoMobile}
-                      fallbackSrc={assets.developerLogoMobileFallback}
-                      alt="Юни"
-                      className="h-[14px] w-auto object-contain"
-                      imageIsPng
-                    />
+          <div className="mt-8 lg:hidden">
+            <div className="relative overflow-hidden pb-[calc(env(safe-area-inset-bottom)+22px)]">
+              <div className="relative h-[26px]">
+                <div className="footer-marquee absolute left-0 top-0 flex min-w-max items-center gap-4 whitespace-nowrap text-[14px] leading-none tracking-[-0.01em] text-[var(--footer-muted)]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-[18px] w-[24px] items-center justify-center">
+                      <AssetImage
+                        src={assets.developerLogoMobile}
+                        fallbackSrc={assets.developerLogoMobileFallback}
+                        alt="Юни"
+                        className="h-[14px] w-auto object-contain"
+                      />
+                    </div>
+                    <span>Сайт разработан командой ЮНИ.ai</span>
                   </div>
-                  <span>Сайт разработан командой ЮНИ.ai</span>
-                </div>
 
-                <span className="opacity-50">|</span>
-                <span>Telegram: @uni_smb</span>
-                <span className="opacity-50">|</span>
-                <span>MAX: +7(995)518-69-42</span>
+                  <span className="opacity-50">|</span>
+                  <span>Telegram: @uni_smb</span>
+                  <span className="opacity-50">|</span>
+                  <span>MAX: +7(995)518-69-42</span>
 
-                <span className="opacity-50">|</span>
+                  <span className="opacity-50">|</span>
 
-                <div className="flex items-center gap-3">
-                  <div className="flex h-[18px] w-[24px] items-center justify-center">
-                    <AssetImage
-                      src={assets.developerLogoMobile}
-                      fallbackSrc={assets.developerLogoMobileFallback}
-                      alt="Юни"
-                      className="h-[14px] w-auto object-contain"
-                      imageIsPng
-                    />
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-[18px] w-[24px] items-center justify-center">
+                      <AssetImage
+                        src={assets.developerLogoMobile}
+                        fallbackSrc={assets.developerLogoMobileFallback}
+                        alt="Юни"
+                        className="h-[14px] w-auto object-contain"
+                      />
+                    </div>
+                    <span>Сайт разработан командой ЮНИ.ai</span>
                   </div>
-                  <span>Сайт разработан командой ЮНИ.ai</span>
-                </div>
 
-                <span className="opacity-50">|</span>
-                <span>Telegram: @uni_smb</span>
-                <span className="opacity-50">|</span>
-                <span>MAX: +7(995)518-69-42</span>
+                  <span className="opacity-50">|</span>
+                  <span>Telegram: @uni_smb</span>
+                  <span className="opacity-50">|</span>
+                  <span>MAX: +7(995)518-69-42</span>
+                </div>
               </div>
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22px] bg-[var(--footer-bg)]" />
             </div>
           </div>
         </Container>
@@ -365,21 +389,9 @@ function Road({ trucks }: { trucks: string[] }) {
     <div className="footer-road relative h-[72px]">
       <div className="footer-road-line absolute left-0 right-0 top-[78%] h-[2px] -translate-y-1/2 bg-[var(--footer-line)]" />
 
-      <Truck
-        src={trucks[0]}
-        alt="Фура 1"
-        className="footer-truck footer-truck-1"
-      />
-      <Truck
-        src={trucks[1]}
-        alt="Фура 2"
-        className="footer-truck footer-truck-2"
-      />
-      <Truck
-        src={trucks[2]}
-        alt="Фура 3"
-        className="footer-truck footer-truck-3"
-      />
+      <Truck src={trucks[0]} alt="Фура 1" className="footer-truck footer-truck-1" />
+      <Truck src={trucks[1]} alt="Фура 2" className="footer-truck footer-truck-2" />
+      <Truck src={trucks[2]} alt="Фура 3" className="footer-truck footer-truck-3" />
     </div>
   );
 }
@@ -407,6 +419,7 @@ function Truck({
           alt={alt}
           className="h-full w-full object-contain"
           onError={() => setBroken(true)}
+          draggable={false}
         />
       ) : (
         <div className="h-full w-full rounded-[8px] bg-[var(--footer-accent)]/60" />
@@ -447,14 +460,12 @@ function MessengerButton({
   logoSrc,
   logoFallbackSrc,
   mobile = false,
-  imageIsPng = false,
 }: {
   href: string;
   label: string;
   logoSrc: string;
   logoFallbackSrc?: string;
   mobile?: boolean;
-  imageIsPng?: boolean;
 }) {
   return (
     <Link
@@ -470,8 +481,6 @@ function MessengerButton({
           fallbackSrc={logoFallbackSrc}
           alt=""
           className="h-[22px] w-auto object-contain"
-          imageIsPng={imageIsPng}
-          preferContainBox={imageIsPng}
         />
       </div>
 
@@ -492,15 +501,11 @@ function AssetImage({
   fallbackSrc,
   alt,
   className,
-  imageIsPng = false,
-  preferContainBox = false,
 }: {
   src: string;
   fallbackSrc?: string;
   alt: string;
   className?: string;
-  imageIsPng?: boolean;
-  preferContainBox?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(src);
@@ -535,12 +540,7 @@ function AssetImage({
 
         setBroken(true);
       }}
-      className={cn(
-        broken ? 'hidden' : '',
-        imageIsPng ? 'block' : '',
-        preferContainBox ? 'max-w-full max-h-full' : '',
-        className,
-      )}
+      className={cn(broken ? 'hidden' : '', className)}
       draggable={false}
     />
   );
