@@ -47,7 +47,7 @@ export function ContactsSection() {
                   : 'translate-y-[18px] opacity-0 blur-[10px]',
               )}
             >
-              <div className="flex items-center justify-between gap-6">
+              <div className="hidden items-center justify-between gap-6 xl:flex">
                 <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                   Связаться с нами
                 </h2>
@@ -60,9 +60,27 @@ export function ContactsSection() {
                   запросить или отправить коммерческое предложение
                 </Link>
               </div>
+
+              <div className="xl:hidden">
+                <h2 className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] md:text-[42px]">
+                  Связаться с нами
+                </h2>
+
+                <div className="mt-8">
+                  <Link
+                    href={appRoutes.request}
+                    className="header-utility-button inline-flex min-h-[58px] w-full items-center justify-center rounded-[16px] bg-[var(--surface)] px-5 py-4 text-center text-[15px] font-semibold lowercase leading-[1.18] tracking-[-0.02em] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    запросить или отправить
+                    <br />
+                    коммерческое предложение
+                  </Link>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-[0.94fr_1.06fr] items-stretch gap-6 xl:gap-8">
+            <div className="hidden grid-cols-[0.94fr_1.06fr] items-stretch gap-6 xl:grid xl:gap-8">
               <div
                 className={cn(
                   'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
@@ -87,6 +105,32 @@ export function ContactsSection() {
                 <MapCard />
               </div>
             </div>
+
+            <div className="flex flex-col gap-4 xl:hidden">
+              <div
+                className={cn(
+                  'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                  isActive
+                    ? 'translate-y-0 opacity-100 blur-0'
+                    : 'translate-y-[22px] opacity-0 blur-[10px]',
+                )}
+                style={{ transitionDelay: '140ms' }}
+              >
+                <ContactFormCard mobile />
+              </div>
+
+              <div
+                className={cn(
+                  'transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                  isActive
+                    ? 'translate-y-0 opacity-100 blur-0'
+                    : 'translate-y-[22px] opacity-0 blur-[10px]',
+                )}
+                style={{ transitionDelay: '220ms' }}
+              >
+                <MapCard mobile />
+              </div>
+            </div>
           </div>
         </div>
       </Container>
@@ -94,16 +138,31 @@ export function ContactsSection() {
   );
 }
 
-function ContactFormCard() {
+function ContactFormCard({ mobile = false }: { mobile?: boolean }) {
   return (
-    <div className="flex h-full flex-col rounded-[30px] bg-[var(--surface)] px-8 py-8">
+    <div
+      className={cn(
+        'flex h-full flex-col bg-[var(--surface)]',
+        mobile ? 'rounded-[24px] px-5 py-5' : 'rounded-[30px] px-8 py-8',
+      )}
+    >
       <div>
-        <h3 className="font-heading text-[30px] leading-[0.98] tracking-[-0.03em] text-[var(--text)]">
+        <h3
+          className={cn(
+            'font-heading tracking-[-0.03em] text-[var(--text)]',
+            mobile ? 'text-[24px] leading-[0.98]' : 'text-[30px] leading-[0.98]',
+          )}
+        >
           Короткий запрос
         </h3>
 
         <p
-          className="mt-3 max-w-[520px] text-[16px] font-normal leading-[1.3] tracking-[-0.014em] text-[var(--text-muted)]"
+          className={cn(
+            'font-normal tracking-[-0.014em] text-[var(--text-muted)]',
+            mobile
+              ? 'mt-3 max-w-none text-[15px] leading-[1.3]'
+              : 'mt-3 max-w-[520px] text-[16px] leading-[1.3]',
+          )}
           style={{ fontFamily: 'var(--font-body-text)' }}
         >
           Оставьте краткую информацию по задаче, и мы свяжемся с вами для
@@ -111,38 +170,56 @@ function ContactFormCard() {
         </p>
       </div>
 
-      <form className="mt-7 flex flex-1 flex-col gap-4">
-        <Field label="Ваше имя">
+      <form className={cn('flex flex-1 flex-col', mobile ? 'mt-6 gap-3.5' : 'mt-7 gap-4')}>
+        <Field label="Ваше имя" mobile={mobile}>
           <input
             type="text"
             placeholder="Введите имя"
-            className="h-[56px] w-full rounded-[12px] border border-transparent bg-[var(--bg)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]"
+            className={cn(
+              'w-full rounded-[12px] border border-transparent bg-[var(--bg)] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]',
+              mobile
+                ? 'h-[54px] px-4 text-[15px] placeholder:text-[13px]'
+                : 'h-[56px] px-5 text-[15px] placeholder:text-[13px]',
+            )}
             style={{ fontFamily: 'var(--font-body-text)' }}
           />
         </Field>
 
-        <Field label="Телефон или Telegram">
+        <Field label="Телефон или Telegram" mobile={mobile}>
           <input
             type="text"
             placeholder="+7 (...) ... или @telegram"
-            className="h-[56px] w-full rounded-[12px] border border-transparent bg-[var(--bg)] px-5 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]"
+            className={cn(
+              'w-full rounded-[12px] border border-transparent bg-[var(--bg)] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]',
+              mobile
+                ? 'h-[54px] px-4 text-[15px] placeholder:text-[13px]'
+                : 'h-[56px] px-5 text-[15px] placeholder:text-[13px]',
+            )}
             style={{ fontFamily: 'var(--font-body-text)' }}
           />
         </Field>
 
-        <Field label="Краткое описание задачи">
+        <Field label="Краткое описание задачи" mobile={mobile}>
           <textarea
             rows={4}
             placeholder="Опишите маршрут, задачу или пожелания"
-            className="w-full min-h-[132px] resize-none rounded-[12px] border border-transparent bg-[var(--bg)] px-5 py-4 text-[15px] font-normal tracking-[-0.014em] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:text-[13px] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]"
+            className={cn(
+              'w-full resize-none rounded-[12px] border border-transparent bg-[var(--bg)] text-[var(--text)] outline-none transition-[border-color,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] placeholder:font-normal placeholder:tracking-[-0.012em] placeholder:text-[var(--text-muted)] hover:border-[rgba(38,41,46,0.08)] focus:border-[rgba(250,176,33,0.34)] focus:bg-white focus:shadow-[0_0_0_4px_rgba(250,176,33,0.08)]',
+              mobile
+                ? 'min-h-[124px] px-4 py-4 text-[15px] placeholder:text-[13px]'
+                : 'min-h-[132px] px-5 py-4 text-[15px] placeholder:text-[13px]',
+            )}
             style={{ fontFamily: 'var(--font-body-text)' }}
           />
         </Field>
 
-        <div className="mt-2 flex flex-col gap-3">
+        <div className={cn('flex flex-col gap-3', mobile ? 'mt-1' : 'mt-2')}>
           <button
             type="submit"
-            className="header-utility-button inline-flex h-[58px] items-center justify-center rounded-[14px] bg-[var(--accent-1)] px-7 text-[17px] font-semibold tracking-[-0.02em] text-white"
+            className={cn(
+              'header-utility-button inline-flex items-center justify-center rounded-[14px] bg-[var(--accent-1)] font-semibold tracking-[-0.02em] text-white',
+              mobile ? 'h-[56px] px-6 text-[16px]' : 'h-[58px] px-7 text-[17px]',
+            )}
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             отправить запрос
@@ -150,7 +227,10 @@ function ContactFormCard() {
 
           <Link
             href={appRoutes.request}
-            className="inline-flex h-[52px] items-center justify-center rounded-[12px] bg-[var(--bg)] px-6 text-[15px] font-semibold lowercase tracking-[-0.016em] text-[var(--text)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:bg-white hover:shadow-[0_10px_24px_rgba(38,41,46,0.05)]"
+            className={cn(
+              'inline-flex items-center justify-center rounded-[12px] bg-[var(--bg)] font-semibold lowercase tracking-[-0.016em] text-[var(--text)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:bg-white hover:shadow-[0_10px_24px_rgba(38,41,46,0.05)]',
+              mobile ? 'min-h-[50px] px-5 py-3 text-[15px]' : 'h-[52px] px-6 text-[15px]',
+            )}
             style={{ fontFamily: 'var(--font-body-text)' }}
           >
             перейти к расширенной форме
@@ -164,14 +244,21 @@ function ContactFormCard() {
 function Field({
   label,
   children,
+  mobile = false,
 }: {
   label: string;
   children: React.ReactNode;
+  mobile?: boolean;
 }) {
   return (
-    <label className="flex flex-col gap-2">
+    <label className={cn('flex flex-col', mobile ? 'gap-2' : 'gap-2')}>
       <span
-        className="pl-[5px] text-[13px] font-semibold uppercase tracking-[0.07em] text-[var(--text-muted)]"
+        className={cn(
+          'uppercase text-[var(--text-muted)]',
+          mobile
+            ? 'pl-[4px] text-[12px] font-semibold tracking-[0.07em]'
+            : 'pl-[5px] text-[13px] font-semibold tracking-[0.07em]',
+        )}
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {label}
@@ -181,10 +268,20 @@ function Field({
   );
 }
 
-function MapCard() {
+function MapCard({ mobile = false }: { mobile?: boolean }) {
   return (
-    <div className="flex h-full flex-col rounded-[30px] bg-[var(--surface)] p-5">
-      <div className="relative min-h-[100%] flex-1 overflow-hidden rounded-[10px] bg-[#e9edf2]">
+    <div
+      className={cn(
+        'flex h-full flex-col bg-[var(--surface)]',
+        mobile ? 'rounded-[24px] p-4' : 'rounded-[30px] p-5',
+      )}
+    >
+      <div
+        className={cn(
+          'relative flex-1 overflow-hidden bg-[#e9edf2]',
+          mobile ? 'min-h-[320px] rounded-[14px]' : 'min-h-[100%] rounded-[10px]',
+        )}
+      >
         <iframe
           src="https://yandex.ru/map-widget/v1/?um=constructor%3A27a66f075dac296d1f0870f4a2a9f711d36545eef60e5931464e72c1f6040eb4&amp;source=constructor"
           width="760"
@@ -193,8 +290,18 @@ function MapCard() {
           className="absolute inset-0 h-full w-full border-0"
           title="Карта офиса АЛВОРИ"
         />
-        <div className="pointer-events-none absolute inset-0 rounded-[10px] border border-white/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]" />
-        <div className="pointer-events-none absolute inset-0 rounded-[10px] bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.00)_18%,rgba(38,41,46,0.03)_100%)]" />
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-0 border border-white/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]',
+            mobile ? 'rounded-[14px]' : 'rounded-[10px]',
+          )}
+        />
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.00)_18%,rgba(38,41,46,0.03)_100%)]',
+            mobile ? 'rounded-[14px]' : 'rounded-[10px]',
+          )}
+        />
       </div>
     </div>
   );
