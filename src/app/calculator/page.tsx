@@ -335,14 +335,14 @@ function PageHeader() {
   return (
     <>
       <div className="hidden xl:block">
-<Link
-  href="/"
-  className="inline-flex h-[42px] items-center px-0 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
-  style={{ fontFamily: 'var(--font-body-text)' }}
->
-  <ArrowLeft size={15} className="mr-2" />
-  вернуться
-</Link>
+        <Link
+          href="/"
+          className="inline-flex items-center text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]/70 transition hover:text-[var(--text)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          <ArrowLeft size={15} className="mr-2" />
+          вернуться
+        </Link>
 
         <div className="mt-5 flex items-center justify-between gap-6">
           <h1 className="font-heading text-[42px] leading-[0.98] tracking-[-0.04em] text-[var(--text)] xl:text-[46px]">
@@ -381,14 +381,14 @@ function PageHeader() {
 
       <div className="xl:hidden">
         <div className="flex items-center justify-between gap-3">
-          <Link
-            href="/"
-            className="inline-flex h-[42px] items-center rounded-[14px] bg-[var(--surface)] px-4 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]"
-            style={{ fontFamily: 'var(--font-body-text)' }}
-          >
-            <ArrowLeft size={15} className="mr-2" />
-            вернуться
-          </Link>
+<Link
+  href="/"
+  className="inline-flex h-[42px] items-center px-0 text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)]"
+  style={{ fontFamily: 'var(--font-body-text)' }}
+>
+  <ArrowLeft size={15} className="mr-2" />
+  вернуться
+</Link>
 
           <div className="inline-flex h-[42px] items-center rounded-[14px] bg-[var(--surface)] px-[14px] shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
             <span
