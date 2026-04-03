@@ -178,50 +178,50 @@ export default function ContactsPage() {
                 </div>
               </div>
 
-              <div className="rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:hidden">
-                <div className="grid grid-cols-2 gap-3">
-                  <ContactMiniCard
-                    icon={<Phone size={16} strokeWidth={2} />}
-                    label="телефон"
-                    value={CONTACTS.phoneDisplay}
-                    href={CONTACTS.phoneHref}
-                    mobile
-                  />
-                  <ContactMiniCard
-                    icon={<Mail size={16} strokeWidth={2} />}
-                    label="почта"
-                    value={CONTACTS.email}
-                    href={CONTACTS.emailHref}
-                    mobile
-                  />
-                </div>
+<div className="rounded-[24px] bg-[#26292e] px-5 py-5 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:hidden">
+  <div className="flex flex-col gap-3">
+    <ContactMiniCard
+      icon={<Phone size={16} strokeWidth={2} />}
+      label="телефон"
+      value={CONTACTS.phoneDisplay}
+      href={CONTACTS.phoneHref}
+      mobile
+    />
 
-                <div className="mt-3 grid grid-cols-[1fr_0.92fr] gap-3">
-                  <ContactMiniCard
-                    icon={<LinkIcon size={16} strokeWidth={2} />}
-                    label="код ati.su"
-                    value={CONTACTS.atiCode}
-                    href={CONTACTS.atiHref}
-                    mobile
-                  />
+    <ContactMiniCard
+      icon={<Mail size={16} strokeWidth={2} />}
+      label="почта"
+      value={CONTACTS.email}
+      href={CONTACTS.emailHref}
+      mobile
+    />
 
-                  <div className="flex flex-col gap-3">
-                    <Link
-                      href={CONTACTS.telegramHref}
-                      className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
-                    >
-                      написать в TG
-                    </Link>
+    <ContactMiniCard
+      icon={<Building2 size={16} strokeWidth={2} />}
+      label="код ati.su"
+      value={CONTACTS.atiCode}
+      href={CONTACTS.atiHref}
+      mobile
+      atiLinked
+    />
 
-                    <Link
-                      href={CONTACTS.maxHref}
-                      className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-white/10 px-4 text-[14px] font-semibold tracking-[-0.016em] text-white"
-                    >
-                      написать в MAX
-                    </Link>
-                  </div>
-                </div>
-              </div>
+    <div className="grid grid-cols-2 gap-3">
+      <Link
+        href={CONTACTS.telegramHref}
+        className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-[var(--accent-1)] px-4 text-[14px] font-semibold tracking-[-0.02em] text-[var(--accent-1-text)]"
+      >
+        написать в TG
+      </Link>
+
+      <Link
+        href={CONTACTS.maxHref}
+        className="inline-flex h-[52px] items-center justify-center rounded-[16px] bg-white/10 px-4 text-[14px] font-semibold tracking-[-0.016em] text-white"
+      >
+        написать в MAX
+      </Link>
+    </div>
+  </div>
+</div>
             </div>
           </Container>
         </section>
@@ -387,6 +387,7 @@ function ContactMiniCard({
   href,
   stretch = false,
   mobile = false,
+  atiLinked = false,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -394,7 +395,31 @@ function ContactMiniCard({
   href?: string;
   stretch?: boolean;
   mobile?: boolean;
+  atiLinked?: boolean;
 }) {
+  const valueNode = atiLinked ? (
+    <div
+      className={`mt-3 flex items-center gap-2 font-semibold tracking-[-0.03em] text-white ${
+        mobile ? 'text-[18px] leading-[1.18]' : 'text-[26px]'
+      }`}
+    >
+      <LinkIcon
+        size={mobile ? 15 : 17}
+        strokeWidth={2}
+        className="shrink-0 text-white"
+      />
+      <span>{value}</span>
+    </div>
+  ) : (
+    <div
+      className={`mt-3 font-semibold tracking-[-0.03em] text-white ${
+        mobile ? 'text-[18px] leading-[1.18]' : 'text-[26px]'
+      }`}
+    >
+      {value}
+    </div>
+  );
+
   const content = (
     <div
       className={`bg-white/6 ${stretch ? 'h-full' : ''} ${
@@ -412,13 +437,7 @@ function ContactMiniCard({
         </span>
       </div>
 
-      <div
-        className={`mt-3 font-semibold tracking-[-0.03em] text-white ${
-          mobile ? 'text-[18px] leading-[1.18]' : 'text-[26px]'
-        }`}
-      >
-        {value}
-      </div>
+      {valueNode}
     </div>
   );
 
