@@ -70,6 +70,24 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const media = window.matchMedia('(min-width: 1280px)');
+    const update = () => setIsDesktop(media.matches);
+
+    update();
+    media.addEventListener('change', update);
+
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  return isDesktop;
+}
+
 function useTypewriter(text: string, isActive: boolean, duration = 3200) {
   const [displayed, setDisplayed] = useState('');
 
@@ -105,19 +123,54 @@ function useTypewriter(text: string, isActive: boolean, duration = 3200) {
 }
 
 export function About({ revealProgress = 0 }: { revealProgress?: number }) {
+  const isDesktop = useIsDesktop();
+
   const desktopQuoteText =
     '«Стабильный бизнес – это ответственность,\nпредсказуемость и уважение к клиенту»';
 
   const mobileQuoteText =
     '«Стабильный бизнес — это\nответственность, предсказуемость\nи уважение к клиенту»';
 
-  const typewriterActive = revealProgress > 0.34;
+  const typewriterActive = isDesktop && revealProgress > 0.34;
+
   const typedDesktopQuote = useTypewriter(desktopQuoteText, typewriterActive, 3600);
-  const typedMobileQuote = useTypewriter(mobileQuoteText, typewriterActive, 3600);
 
   const introReveal = Math.min(revealProgress / 0.28, 1);
   const quoteReveal = Math.min(Math.max((revealProgress - 0.22) / 0.28, 0), 1);
   const processReveal = Math.min(Math.max((revealProgress - 0.46) / 0.28, 0), 1);
+
+  const mobileIntroStyle = {
+    opacity: introReveal,
+    transform: `translateY(${20 - 20 * introReveal}px)`,
+  };
+
+  const desktopIntroStyle = {
+    opacity: introReveal,
+    transform: `translateY(${20 - 20 * introReveal}px)`,
+    filter: `blur(${7 - 7 * introReveal}px)`,
+  };
+
+  const mobileQuoteStyle = {
+    opacity: quoteReveal,
+    transform: `translateY(${24 - 24 * quoteReveal}px)`,
+  };
+
+  const desktopQuoteStyle = {
+    opacity: quoteReveal,
+    transform: `translateY(${24 - 24 * quoteReveal}px)`,
+    filter: `blur(${8 - 8 * quoteReveal}px)`,
+  };
+
+  const mobileProcessStyle = {
+    opacity: processReveal,
+    transform: `translateY(${26 - 26 * processReveal}px)`,
+  };
+
+  const desktopProcessStyle = {
+    opacity: processReveal,
+    transform: `translateY(${26 - 26 * processReveal}px)`,
+    filter: `blur(${8 - 8 * processReveal}px)`,
+  };
 
   return (
     <div id={homeAnchorIds.about} className="h-full scroll-mt-[120px]">
@@ -127,79 +180,81 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
             <div className="flex items-start justify-between gap-4 xl:items-center xl:gap-6">
               <h2
                 className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] transition-all duration-500 md:text-[42px] xl:text-[52px]"
-                style={{
-                  opacity: introReveal,
-                  transform: `translateY(${18 - 18 * introReveal}px)`,
-                  filter: `blur(${6 - 6 * introReveal}px)`,
-                }}
+                style={
+                  isDesktop
+                    ? {
+                        opacity: introReveal,
+                        transform: `translateY(${18 - 18 * introReveal}px)`,
+                        filter: `blur(${6 - 6 * introReveal}px)`,
+                      }
+                    : {
+                        opacity: introReveal,
+                        transform: `translateY(${18 - 18 * introReveal}px)`,
+                      }
+                }
               >
                 О компании
               </h2>
 
-              <div
-                className="hidden xl:block"
-                style={{
-                  opacity: introReveal,
-                  transform: `translateY(${16 - 16 * introReveal}px)`,
-                  filter: `blur(${6 - 6 * introReveal}px)`,
-                  transition: 'all 500ms cubic-bezier(0.22,1,0.36,1)',
-                }}
-              >
-                <AboutBreadcrumb />
-              </div>
+              {isDesktop ? (
+                <div
+                  style={{
+                    opacity: introReveal,
+                    transform: `translateY(${16 - 16 * introReveal}px)`,
+                    filter: `blur(${6 - 6 * introReveal}px)`,
+                    transition: 'all 500ms cubic-bezier(0.22,1,0.36,1)',
+                  }}
+                >
+                  <AboutBreadcrumb />
+                </div>
+              ) : null}
             </div>
 
             <div
               className="mt-8 flex flex-col gap-8 transition-all duration-500 xl:mt-2 xl:gap-6"
-              style={{
-                opacity: introReveal,
-                transform: `translateY(${20 - 20 * introReveal}px)`,
-                filter: `blur(${7 - 7 * introReveal}px)`,
-              }}
+              style={isDesktop ? desktopIntroStyle : mobileIntroStyle}
             >
-              <div className="xl:hidden">
-                <p
-                  className="max-w-[1120px] text-[18px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)] md:text-[20px]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  «АЛВОРИ» – логистическая компания,
-                  <br />
-                  работающая в B2B-сегменте по РФ.
-                </p>
-              </div>
+              {isDesktop ? (
+                <>
+                  <p
+                    className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    «АЛВОРИ» – логистическая компания, работающая в B2B-сегменте по РФ.
+                  </p>
 
-              <div className="hidden xl:block">
-                <p
-                  className="max-w-[1120px] text-[22px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  «АЛВОРИ» – логистическая компания, работающая в B2B-сегменте по РФ.
-                </p>
-              </div>
+                  <p
+                    className="max-w-[980px] text-[20px] font-normal leading-[1.26] tracking-[-0.02em] text-[var(--text-muted)]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    Мы сочетаем собственный автопарк и экспедиционное направление,
+                    <br />
+                    чтобы подбирать оптимальный формат перевозки под задачу клиента.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p
+                    className="max-w-[1120px] text-[18px] font-semibold leading-[1.24] tracking-[-0.022em] text-[var(--text)] md:text-[20px]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    «АЛВОРИ» – логистическая компания,
+                    <br />
+                    работающая в B2B-сегменте по РФ.
+                  </p>
 
-              <div className="xl:hidden">
-                <p
-                  className="max-w-[980px] text-[16px] font-normal leading-[1.28] tracking-[-0.02em] text-[var(--text-muted)] md:text-[17px]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  Мы сочетаем собственный автопарк
-                  <br />
-                  и экспедиционное направление, чтобы
-                  <br />
-                  подбирать формат перевозки под задачу.
-                </p>
-              </div>
-
-              <div className="hidden xl:block">
-                <p
-                  className="max-w-[980px] text-[20px] font-normal leading-[1.26] tracking-[-0.02em] text-[var(--text-muted)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  Мы сочетаем собственный автопарк и экспедиционное направление,
-                  <br />
-                  чтобы подбирать оптимальный формат перевозки под задачу клиента.
-                </p>
-              </div>
+                  <p
+                    className="max-w-[980px] text-[16px] font-normal leading-[1.28] tracking-[-0.02em] text-[var(--text-muted)] md:text-[17px]"
+                    style={{ fontFamily: 'var(--font-body-text)' }}
+                  >
+                    Мы сочетаем собственный автопарк
+                    <br />
+                    и экспедиционное направление, чтобы
+                    <br />
+                    подбирать формат перевозки под задачу.
+                  </p>
+                </>
+              )}
             </div>
 
             <div
@@ -213,40 +268,36 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
 
             <div
               className="mt-8 transition-all duration-[650ms] xl:mt-0"
-              style={{
-                opacity: quoteReveal,
-                transform: `translateY(${24 - 24 * quoteReveal}px)`,
-                filter: `blur(${8 - 8 * quoteReveal}px)`,
-              }}
+              style={isDesktop ? desktopQuoteStyle : mobileQuoteStyle}
             >
-              <div className="hidden grid-cols-[1.1fr_0.9fr] gap-10 xl:grid xl:gap-12">
-                <div className="flex items-start gap-5">
-                  <Quote
-                    size={48}
-                    strokeWidth={2.15}
-                    className="mt-[2px] shrink-0 text-[var(--accent-1)]"
-                  />
+              {isDesktop ? (
+                <div className="grid grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-12">
+                  <div className="flex items-start gap-5">
+                    <Quote
+                      size={48}
+                      strokeWidth={2.15}
+                      className="mt-[2px] shrink-0 text-[var(--accent-1)]"
+                    />
 
-                  <p
-                    className="about-quote-text max-w-[720px] whitespace-pre-line text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
-                    style={{ fontFamily: 'var(--font-body-text)' }}
-                  >
-                    {typedDesktopQuote}
-                    {typewriterActive ? <span className="about-quote-caret" /> : null}
-                  </p>
+                    <p
+                      className="about-quote-text max-w-[720px] whitespace-pre-line text-[22px] font-semibold leading-[1.22] tracking-[-0.022em] text-[var(--text)]"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      {typedDesktopQuote}
+                      {typewriterActive ? <span className="about-quote-caret" /> : null}
+                    </p>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <p
+                      className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
+                      style={{ fontFamily: 'var(--font-body-text)' }}
+                    >
+                      — Алик, руководитель АЛВОРИ
+                    </p>
+                  </div>
                 </div>
-
-                <div className="flex justify-end">
-                  <p
-                    className="pt-[4px] text-right text-[20px] font-normal leading-[1.18] tracking-[-0.02em] text-[var(--text)]"
-                    style={{ fontFamily: 'var(--font-body-text)' }}
-                  >
-                    — Алик, руководитель АЛВОРИ
-                  </p>
-                </div>
-              </div>
-
-              <div className="xl:hidden">
+              ) : (
                 <div className="flex flex-col gap-4">
                   <div className="flex items-start gap-3">
                     <Quote
@@ -256,11 +307,10 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                     />
 
                     <p
-                      className="about-quote-text whitespace-pre-line text-[17px] font-semibold leading-[1.2] tracking-[-0.022em] text-[var(--text)] md:text-[17px]"
+                      className="whitespace-pre-line text-[17px] font-semibold leading-[1.2] tracking-[-0.022em] text-[var(--text)] md:text-[17px]"
                       style={{ fontFamily: 'var(--font-body-text)' }}
                     >
-                      {typedMobileQuote}
-                      {typewriterActive ? <span className="about-quote-caret" /> : null}
+                      {mobileQuoteText}
                     </p>
                   </div>
 
@@ -271,24 +321,14 @@ export function About({ revealProgress = 0 }: { revealProgress?: number }) {
                     — Алик, руководитель АЛВОРИ
                   </p>
                 </div>
-              </div>
+              )}
             </div>
 
             <div
               className="pt-8 transition-all duration-[700ms] xl:pt-14"
-              style={{
-                opacity: processReveal,
-                transform: `translateY(${26 - 26 * processReveal}px)`,
-                filter: `blur(${8 - 8 * processReveal}px)`,
-              }}
+              style={isDesktop ? desktopProcessStyle : mobileProcessStyle}
             >
-              <div className="hidden xl:block">
-                <ProcessFlowNodesDesktop />
-              </div>
-
-              <div className="xl:hidden">
-                <ProcessFlowNodesMobile />
-              </div>
+              {isDesktop ? <ProcessFlowNodesDesktop /> : <ProcessFlowNodesMobile />}
             </div>
           </div>
         </div>
