@@ -27,7 +27,7 @@ export const heroSlides: HeroSlide[] = [
     title: 'знаем своё дело',
     value: 'на 100%',
     ctaLabel: 'познакомиться',
-    href: homeAnchorHrefs.services,
+    href: homeAnchorHrefs.about,
   },
 ];
 
