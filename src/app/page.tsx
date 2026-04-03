@@ -14,7 +14,7 @@ export default function Home() {
       <main>
         <HeroServicesStage />
 
-        <section className="pb-20 pt-8 md:pb-24 md:pt-10 xl:pb-28 xl:pt-12">
+        <section className="hidden xl:block xl:pb-28 xl:pt-12">
           <GeographySection />
         </section>
 
