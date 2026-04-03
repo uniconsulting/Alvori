@@ -1069,24 +1069,36 @@ function ExplainBlock() {
     };
   }, []);
 
-  const cards = [
-    {
-      title: '1. Базовая ставка маршрута',
-      text: 'Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ.',
-    },
-    {
-      title: '2. Поправка на кузов',
-      text: 'Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка.',
-    },
-{
-  title: '3. Поправка на условия',
-  text: 'Срочность, температура,\nтип загрузки, страхование и доп-\nточки корректирует итог.',
-},
-    {
-      title: '4. Рабочая вилка',
-      text: 'На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка.',
-    },
-  ];
+const cards = [
+  {
+    title: '1. Базовая ставка маршрута',
+    mobileText:
+      'Берём расстояние маршрута\nи применяем рыночную базу\n78–87 ₽/км для типовой\nфуры по РФ.',
+    desktopText:
+      'Берём расстояние маршрута и применяем рыночную базу 78–87 ₽/км для типовой фуры по РФ.',
+  },
+  {
+    title: '2. Поправка на кузов',
+    mobileText:
+      'Учитываем тип кузова:\nтент, штора, изотерм, рефрижератор\nили спецперевозка.',
+    desktopText:
+      'Учитываем тип кузова: тент, штора, изотерм, рефрижератор или спецперевозка.',
+  },
+  {
+    title: '3. Поправка на условия',
+    mobileText:
+      'Срочность, температура, тип\nзагрузки, страхование и доп-\nточки корректирует итог.',
+    desktopText:
+      'Срочность, температура, тип загрузки, страхование и дополнительные точки корректируют итог.',
+  },
+  {
+    title: '4. Рабочая вилка',
+    mobileText:
+      'На выходе показываем\nориентир и вилку,\nчтобы расчёт был ближе\nк реальной ставке рынка.',
+    desktopText:
+      'На выходе показываем ориентир и вилку, чтобы расчёт был ближе к реальной ставке рынка.',
+  },
+];
 
   return (
     <div className="rounded-[24px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[30px] xl:px-8 xl:py-8">
@@ -1137,10 +1149,10 @@ function ExplainBlock() {
                       'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1)',
                   }}
                 >
-                  <h3 className="font-heading text-[17px] leading-[1] tracking-[-0.022em] text-[var(--text)]">
-                    {card.title}
-                  </h3>
-    <p className="mt-4 whitespace-pre-line text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
+<h3 className="font-heading text-[17px] leading-[1] tracking-[-0.022em] text-[var(--text)]">
+  {card.title}
+</h3>
+<p className="mt-4 whitespace-pre-line text-[14px] leading-[1.35] tracking-[-0.014em] text-[var(--muted)]">
   {card.text}
 </p>
                 </div>
@@ -1151,9 +1163,9 @@ function ExplainBlock() {
       </div>
 
       <div className="mt-6 hidden grid-cols-2 gap-4 xl:grid">
-        {cards.map((card) => (
-          <ExplainCard key={card.title} title={card.title} text={card.text} />
-        ))}
+{cards.map((card) => (
+  <ExplainCard key={card.title} title={card.title} text={card.desktopText} />
+))}
       </div>
     </div>
   );
