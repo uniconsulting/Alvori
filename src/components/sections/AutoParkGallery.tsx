@@ -215,9 +215,9 @@ export function AutoParkGallery({ mobile = false }: { mobile?: boolean }) {
                     transformOrigin:
                       transform.rotateY > 0 ? 'left center' : 'right center',
                     opacity: transform.opacity,
-                    boxShadow: `0 12px 28px rgba(38,41,46,${transform.shadowOpacity})`,
+                    boxShadow: 'none',
                     transition:
-                      'transform 180ms cubic-bezier(0.22,1,0.36,1), opacity 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1)',
+                      'transform 240ms cubic-bezier(0.22,1,0.36,1), opacity 240ms cubic-bezier(0.22,1,0.36,1)',
                   }}
                 >
                   <img
