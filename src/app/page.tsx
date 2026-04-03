@@ -18,7 +18,7 @@ export default function Home() {
           <GeographySection />
         </section>
 
-        <section className="pb-20 pt-16 md:pb-24 md:pt-10 xl:pb-24 xl:pt-10">
+        <section className="pb-20 pt-18 md:pb-24 md:pt-10 xl:pb-24 xl:pt-10">
           <WhyChooseUsSection />
         </section>
 
