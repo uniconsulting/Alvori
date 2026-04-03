@@ -1,6 +1,7 @@
 'use client';
 
 import { Dot } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { AutoParkGallery } from '@/components/sections/AutoParkGallery';
 import { homeAnchorIds } from '@/config/anchors';
@@ -26,7 +27,24 @@ function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
 
+type FleetMode = 'trucks' | 'trailers';
+
 export function AutoParkSection() {
+  const [mobileMode, setMobileMode] = useState<FleetMode>('trucks');
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setMobileMode((prev) => (prev === 'trucks' ? 'trailers' : 'trucks'));
+    }, 4200);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const mobileTitle = mobileMode === 'trucks' ? 'тягачей' : 'и полуприцепов';
+  const mobileBrands = mobileMode === 'trucks' ? TRUCK_BRANDS : TRAILER_BRANDS;
+  const mobilePoints = mobileMode === 'trucks' ? TRUCK_POINTS : TRAILER_POINTS;
+  const mobileTitleDark = mobileMode === 'trailers';
+
   return (
     <div id={homeAnchorIds.fleet} className="h-full overflow-visible scroll-mt-[120px]">
       <Container>
@@ -42,7 +60,7 @@ export function AutoParkSection() {
             } as React.CSSProperties
           }
         >
-          <div className="flex flex-col gap-8 overflow-visible xl:gap-10">
+          <div className="hidden flex-col gap-8 overflow-visible xl:flex xl:gap-10">
             <div className="flex items-center justify-between gap-6">
               <h2 className="font-heading text-[52px] leading-[0.94] tracking-[-0.045em] text-[var(--text)]">
                 Наш автопарк
@@ -79,6 +97,36 @@ export function AutoParkSection() {
               <div className="relative z-30 overflow-visible">
                 <AutoParkGallery />
               </div>
+            </div>
+          </div>
+
+          <div className="xl:hidden">
+            <div className="flex flex-col gap-8">
+              <div className="flex items-start justify-between gap-4">
+                <h2 className="font-heading text-[34px] leading-[0.94] tracking-[-0.045em] text-[var(--text)] md:text-[42px]">
+                  Наш автопарк
+                </h2>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <MobileCountCard value={17} />
+
+                <div className="min-w-0 flex-1">
+                  <MobileTitleSwitcher
+                    label={mobileTitle}
+                    dark={mobileTitleDark}
+                    mode={mobileMode}
+                  />
+                </div>
+              </div>
+
+              <MobileInfoSwitcher
+                brands={mobileBrands}
+                points={mobilePoints}
+                mode={mobileMode}
+              />
+
+              <AutoParkGallery mobile />
             </div>
           </div>
         </div>
@@ -119,6 +167,16 @@ function CountCard({ value }: { value: number }) {
   );
 }
 
+function MobileCountCard({ value }: { value: number }) {
+  return (
+    <div className="autopark-frame-hover flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-[20px] bg-[var(--accent-1)]">
+      <span className="relative left-[-1px] top-[1px] font-heading text-[40px] leading-none tracking-[-0.05em] text-white tabular-nums">
+        {value}
+      </span>
+    </div>
+  );
+}
+
 function TitleCard({
   label,
   dark = false,
@@ -143,6 +201,44 @@ function TitleCard({
       >
         {label}
       </span>
+    </div>
+  );
+}
+
+function MobileTitleSwitcher({
+  label,
+  dark,
+  mode,
+}: {
+  label: string;
+  dark: boolean;
+  mode: FleetMode;
+}) {
+  return (
+    <div
+      className={cn(
+        'relative h-[72px] overflow-hidden rounded-[20px]',
+        dark
+          ? 'bg-[#26292e]'
+          : 'border-[3px] border-[rgba(38,41,46,0.92)] bg-transparent',
+      )}
+    >
+      <div
+        key={mode}
+        className="flex h-full items-center justify-center px-5"
+        style={{
+          animation: 'autoparkMobileFadeIn 320ms cubic-bezier(0.22,1,0.36,1)',
+        }}
+      >
+        <span
+          className={cn(
+            'font-heading text-[24px] leading-none tracking-[-0.03em]',
+            dark ? 'text-white' : 'text-[var(--text)]',
+          )}
+        >
+          {label}
+        </span>
+      </div>
     </div>
   );
 }
@@ -177,11 +273,76 @@ function InfoCard({
   );
 }
 
+function MobileInfoSwitcher({
+  brands,
+  points,
+  mode,
+}: {
+  brands: string[];
+  points: string[];
+  mode: FleetMode;
+}) {
+  return (
+    <div className="relative min-h-[244px] overflow-hidden rounded-[22px] bg-[var(--surface)] px-5 py-5 shadow-[0_8px_20px_rgba(38,41,46,0.04)]">
+      <div
+        key={mode}
+        style={{
+          animation: 'autoparkMobileFadeIn 340ms cubic-bezier(0.22,1,0.36,1)',
+        }}
+      >
+        <div className="flex flex-wrap gap-2.5">
+          {brands.map((brand) => (
+            <MobileBrandPill key={brand} label={brand} />
+          ))}
+        </div>
+
+        <div
+          className="mt-6 flex flex-col gap-3.5 text-[15px] font-normal leading-[1.26] tracking-[-0.015em] text-[var(--text)]"
+          style={{ fontFamily: 'var(--font-body-text)' }}
+        >
+          {points.map((point) => (
+            <div key={point} className="flex items-center gap-3">
+              <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--text)]" />
+              <span>{point}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes autoparkMobileFadeIn {
+          0% {
+            opacity: 0;
+            transform: translateY(8px) scale(0.992);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 function BrandPill({ label }: { label: string }) {
   return (
     <div className="autopark-pill-hover inline-flex h-[40px] items-center rounded-[12px] bg-[var(--bg)] px-4">
       <span
         className="text-[15px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
+        style={{ fontFamily: 'var(--font-body-text)' }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function MobileBrandPill({ label }: { label: string }) {
+  return (
+    <div className="autopark-pill-hover inline-flex h-[38px] items-center rounded-[12px] bg-[var(--bg)] px-3.5">
+      <span
+        className="text-[14px] font-semibold leading-none tracking-[-0.02em] text-[var(--text)]"
         style={{ fontFamily: 'var(--font-body-text)' }}
       >
         {label}
