@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { FileText } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { appRoutes } from '@/config/routes';
@@ -52,13 +53,7 @@ export function ContactsSection() {
                   Связаться с нами
                 </h2>
 
-                <Link
-                  href={appRoutes.request}
-                  className="header-utility-button inline-flex h-[42px] items-center rounded-[16px] bg-[var(--surface)] px-[16px] text-[14px] font-semibold lowercase tracking-[-0.02em] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]"
-                  style={{ fontFamily: 'var(--font-body-text)' }}
-                >
-                  запросить или отправить коммерческое предложение
-                </Link>
+                <RequestProposalButton />
               </div>
 
               <div className="xl:hidden">
@@ -67,15 +62,7 @@ export function ContactsSection() {
                 </h2>
 
                 <div className="mt-8">
-                  <Link
-                    href={appRoutes.request}
-                    className="header-utility-button inline-flex min-h-[58px] w-full items-center justify-center rounded-[16px] bg-[var(--surface)] px-5 py-4 text-center text-[15px] font-semibold lowercase leading-[1.18] tracking-[-0.02em] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]"
-                    style={{ fontFamily: 'var(--font-body-text)' }}
-                  >
-                    запросить или отправить
-                    <br />
-                    коммерческое предложение
-                  </Link>
+                  <RequestProposalButton mobile />
                 </div>
               </div>
             </div>
@@ -138,6 +125,41 @@ export function ContactsSection() {
   );
 }
 
+function RequestProposalButton({ mobile = false }: { mobile?: boolean }) {
+  return (
+    <Link
+      href={appRoutes.request}
+      className={cn(
+        'header-utility-button inline-flex items-center rounded-[16px] bg-[var(--surface)] text-[var(--text)] shadow-[0_8px_20px_rgba(38,41,46,0.04)]',
+        mobile
+          ? 'min-h-[58px] w-full gap-3 px-4 py-3'
+          : 'h-[42px] gap-3 px-[12px] pr-[16px]',
+      )}
+      style={{ fontFamily: 'var(--font-body-text)' }}
+    >
+      <span
+        className={cn(
+          'inline-flex shrink-0 items-center justify-center bg-[#26292e] text-white',
+          mobile ? 'h-[34px] w-[34px] rounded-[10px]' : 'h-[28px] w-[28px] rounded-[8px]',
+        )}
+      >
+        <FileText size={mobile ? 16 : 14} strokeWidth={2.05} />
+      </span>
+
+      <span
+        className={cn(
+          'text-left font-semibold lowercase tracking-[-0.02em]',
+          mobile ? 'text-[15px] leading-[1.18]' : 'text-[14px] leading-none',
+        )}
+      >
+        запросить или отправить
+        {mobile ? <br /> : ' '}
+        коммерческое предложение
+      </span>
+    </Link>
+  );
+}
+
 function ContactFormCard({ mobile = false }: { mobile?: boolean }) {
   return (
     <div
@@ -156,18 +178,28 @@ function ContactFormCard({ mobile = false }: { mobile?: boolean }) {
           Короткий запрос
         </h3>
 
-        <p
-          className={cn(
-            'font-normal tracking-[-0.014em] text-[var(--text-muted)]',
-            mobile
-              ? 'mt-3 max-w-none text-[15px] leading-[1.3]'
-              : 'mt-3 max-w-[520px] text-[16px] leading-[1.3]',
-          )}
-          style={{ fontFamily: 'var(--font-body-text)' }}
-        >
-          Оставьте краткую информацию по задаче, и мы свяжемся с вами для
-          обсуждения маршрута, условий и сроков.
-        </p>
+        <div className="xl:hidden">
+          <p
+            className="mt-3 max-w-none text-[15px] font-normal leading-[1.3] tracking-[-0.014em] text-[var(--text-muted)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            Оставьте краткую информацию по задаче,
+            <br />
+            и мы свяжемся с вами для обсуждения
+            <br />
+            маршрута, условий и сроков.
+          </p>
+        </div>
+
+        <div className="hidden xl:block">
+          <p
+            className="mt-3 max-w-[520px] text-[16px] font-normal leading-[1.3] tracking-[-0.014em] text-[var(--text-muted)]"
+            style={{ fontFamily: 'var(--font-body-text)' }}
+          >
+            Оставьте краткую информацию по задаче, и мы свяжемся с вами для
+            обсуждения маршрута, условий и сроков.
+          </p>
+        </div>
       </div>
 
       <form className={cn('flex flex-1 flex-col', mobile ? 'mt-6 gap-3.5' : 'mt-7 gap-4')}>
@@ -251,7 +283,7 @@ function Field({
   mobile?: boolean;
 }) {
   return (
-    <label className={cn('flex flex-col', mobile ? 'gap-2' : 'gap-2')}>
+    <label className="flex flex-col gap-2">
       <span
         className={cn(
           'uppercase text-[var(--text-muted)]',
