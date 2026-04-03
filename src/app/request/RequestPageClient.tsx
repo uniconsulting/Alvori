@@ -193,7 +193,7 @@ export default function RequestPageClient() {
               </button>
             </div>
 
-            <div className="hidden rounded-[40px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:block">
+            <div className="hidden rounded-[34px] bg-[#26292e] px-8 py-8 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)] xl:block">
               <div className="grid grid-cols-[0.98fr_0.72fr] gap-6">
                 <div className="flex h-full flex-col">
                   <div className="flex items-center gap-3">
@@ -262,7 +262,7 @@ export default function RequestPageClient() {
                   </div>
                 </div>
 
-                <div className="flex h-full flex-col rounded-[40px] bg-white/6 px-5 py-5">
+                <div className="flex h-full flex-col rounded-[34px] bg-white/6 px-5 py-5">
                   {mode === 'request' ? (
                     <div className="flex h-full flex-col">
                       <div className="flex items-center gap-2">
@@ -604,7 +604,7 @@ export default function RequestPageClient() {
       <section className="pb-12 pt-0 md:pb-14 xl:pb-16">
         <Container>
           <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-            <div className="rounded-[40px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[40px] xl:px-8 xl:py-8">
+            <div className="rounded-[36px] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-soft)] xl:rounded-[40px] xl:px-8 xl:py-8">
               <div className="flex items-center gap-3">
                 <Calculator size={18} strokeWidth={2} className="text-[var(--accent-1)] xl:size-[19px]" />
                 <h2 className="font-heading text-[24px] leading-[0.98] tracking-[-0.03em] text-[var(--text)] xl:text-[30px]">
