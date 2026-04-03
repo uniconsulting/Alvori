@@ -13,8 +13,8 @@ import { Footer } from '@/components/layout/Footer';
 import { Container } from '@/components/layout/Container';
 
 const CONTACTS = {
-  phoneDisplay: '+7 (987) 630–68–63',
-  phoneHref: 'tel:+79876306863',
+  phoneDisplay: '+7 (902) 123–44–88',
+  phoneHref: 'tel:+79021234488',
   email: 'alvori@mail.ru',
   emailHref: 'mailto:alvori@mail.ru',
   atiCode: '1005',
@@ -91,7 +91,7 @@ export default function ContactsPage() {
         <section className="pb-8 pt-0 md:pb-10 xl:pb-10">
           <Container>
             <div className="px-[10px] md:px-[14px] xl:px-[16px]">
-              <div className="rounded-[32px] bg-[#26292e] px-6 py-6 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
+              <div className="rounded-[36px] bg-[#26292e] px-6 py-6 text-white shadow-[0_24px_48px_rgba(0,0,0,0.12)]">
                 <div className="grid grid-cols-[1fr_auto] items-stretch gap-4">
                   <div className="grid grid-cols-3 gap-3 items-stretch">
                     <ContactMiniCard
