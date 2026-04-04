@@ -16,19 +16,19 @@ type WelcomeLoaderProps = {
 };
 
 const SEGMENTS = [
-  { kind: 'major', width: 46 },
+  { kind: 'major', width: 38 },
   { kind: 'minor', width: 12 },
   { kind: 'minor', width: 12 },
   { kind: 'minor', width: 12 },
-  { kind: 'major', width: 46 },
+  { kind: 'major', width: 38 },
   { kind: 'minor', width: 12 },
   { kind: 'minor', width: 12 },
   { kind: 'minor', width: 12 },
-  { kind: 'major', width: 46 },
+  { kind: 'major', width: 38 },
   { kind: 'minor', width: 12 },
   { kind: 'minor', width: 12 },
   { kind: 'minor', width: 12 },
-  { kind: 'major', width: 46 },
+  { kind: 'major', width: 38 },
 ] as const;
 
 function clamp(value: number, min = 0, max = 100) {
@@ -53,7 +53,7 @@ function useAnimatedProgress(target: number, enabled: boolean) {
       const safeTarget = clamp(target, 0, 100);
       const diff = safeTarget - current;
 
-      if (Math.abs(diff) < 0.12) {
+      if (Math.abs(diff) < 0.08) {
         animatedRef.current = safeTarget;
         setAnimated(safeTarget);
 
@@ -63,7 +63,7 @@ function useAnimatedProgress(target: number, enabled: boolean) {
         return;
       }
 
-      const next = current + diff * 0.082;
+      const next = current + diff * 0.038;
       animatedRef.current = next;
       setAnimated(next);
       raf = window.requestAnimationFrame(tick);
@@ -87,27 +87,40 @@ function ProgressRail({
   visible: boolean;
 }) {
   const animatedProgress = useAnimatedProgress(progress, visible);
-  const activeCount = Math.round((animatedProgress / 100) * SEGMENTS.length);
+  const totalSegments = SEGMENTS.length;
+  const scaled = (animatedProgress / 100) * totalSegments;
+  const fullSegments = Math.floor(scaled);
+  const partialFill = scaled - fullSegments;
 
   return (
     <div className="w-full max-w-[332px]">
       <div className="flex w-full items-center justify-between gap-[6px]">
         {SEGMENTS.map((segment, index) => {
-          const isActive = index < activeCount;
+          let fill = 0;
+
+          if (index < fullSegments) fill = 1;
+          else if (index === fullSegments) fill = partialFill;
 
           return (
             <span
               key={index}
-              className="block shrink-0 rounded-full transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="relative block shrink-0 overflow-hidden rounded-full bg-[var(--accent-2)]"
               style={{
                 width: `${segment.width}px`,
                 height: segment.kind === 'major' ? '4px' : '3px',
-                backgroundColor: isActive ? 'var(--accent-1)' : 'var(--accent-2)',
-                boxShadow: isActive
-                  ? '0 0 10px rgba(250,176,33,0.18)'
-                  : 'none',
               }}
-            />
+            >
+              <span
+                className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent-1)] transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                style={{
+                  width: `${fill * 100}%`,
+                  boxShadow:
+                    fill > 0
+                      ? '0 0 10px rgba(250,176,33,0.18)'
+                      : 'none',
+                }}
+              />
+            </span>
           );
         })}
       </div>
@@ -166,9 +179,9 @@ function CookieConsentCard({
       >
         <div className="flex items-start gap-4">
           <Cookie
-            size={24}
+            size={30}
             strokeWidth={2}
-            className="mt-[2px] shrink-0 text-[var(--accent-2-text)]"
+            className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
           />
 
           <p className="text-[14px] leading-[1.36] tracking-[-0.016em] text-[var(--accent-2-text)]">
