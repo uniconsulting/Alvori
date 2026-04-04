@@ -114,10 +114,7 @@ function ProgressRail({
                 className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent-1)] transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={{
                   width: `${fill * 100}%`,
-                  boxShadow:
-                    fill > 0
-                      ? '0 0 10px rgba(250,176,33,0.18)'
-                      : 'none',
+                  boxShadow: fill > 0 ? '0 0 10px rgba(250,176,33,0.18)' : 'none',
                 }}
               />
             </span>
@@ -147,57 +144,53 @@ function CookieConsentCard({
   canAccept: boolean;
   onAccept: () => void;
 }) {
-  const outerRadius = 24;
-  const borderSize = 1;
-  const innerRadius = outerRadius - borderSize;
-  const innerPadding = 18;
-  const buttonRadius = innerRadius - innerPadding;
-
   return (
-<div
-  className="relative mt-8 w-full max-w-[332px]"
-  style={{
-    opacity: visible ? 1 : 0,
-    transform: visible ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.985)',
-    filter: visible ? 'blur(0px)' : 'blur(12px)',
-    transition:
-      'opacity 850ms cubic-bezier(0.22,1,0.36,1), transform 950ms cubic-bezier(0.22,1,0.36,1), filter 950ms cubic-bezier(0.22,1,0.36,1)',
-    pointerEvents: visible ? 'auto' : 'none',
-  }}
->
-  <div className="intro-cookie-border-shell rounded-[24px] p-[1px]">
     <div
-      className="relative bg-[var(--accent-2)] text-[var(--accent-2-text)] rounded-[23px]"
+      className="relative mt-8 w-full max-w-[332px]"
       style={{
-        padding: '18px',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.985)',
+        filter: visible ? 'blur(0px)' : 'blur(12px)',
+        transition:
+          'opacity 850ms cubic-bezier(0.22,1,0.36,1), transform 950ms cubic-bezier(0.22,1,0.36,1), filter 950ms cubic-bezier(0.22,1,0.36,1)',
+        pointerEvents: visible ? 'auto' : 'none',
       }}
     >
-      <div className="flex items-start gap-4">
-        <Cookie
-          size={36}
-          strokeWidth={2}
-          className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
-        />
+      <div className="intro-cookie-border-shell rounded-[24px] p-[1px]">
+        <div
+          className="relative rounded-[23px] bg-[var(--accent-2)] text-[var(--accent-2-text)]"
+          style={{
+            padding: '18px',
+          }}
+        >
+          <div className="flex items-start gap-4">
+            <Cookie
+              size={36}
+              strokeWidth={2}
+              className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
+            />
 
-        <p className="text-[14px] leading-[1.36] tracking-[-0.016em] text-[var(--accent-2-text)]">
-          Продолжая, вы подтверждаете
-          <br />
-          использование файлов cookie.
-        </p>
+            <p className="text-[14px] leading-[1.36] tracking-[-0.016em] text-[var(--accent-2-text)]">
+              Продолжая, вы подтверждаете
+              <br />
+              использование файлов cookie.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onAccept}
+            disabled={!canAccept}
+            className="mt-5 inline-flex h-[52px] w-full items-center justify-center bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(38,41,46,0.16)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+            style={{ borderRadius: '5px' }}
+          >
+            Понятно
+          </button>
+        </div>
       </div>
-
-      <button
-        type="button"
-        onClick={onAccept}
-        disabled={!canAccept}
-        className="mt-5 inline-flex h-[52px] w-full items-center justify-center rounded-[5px] bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(38,41,46,0.16)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:hover:shadow-none"
-        style={{ borderRadius: '5px' }}
-      >
-        Понятно
-      </button>
     </div>
-  </div>
-</div>
+  );
+}
 
 export function WelcomeLoader({
   progress,
@@ -219,11 +212,7 @@ export function WelcomeLoader({
       }}
     >
       <div className="relative z-10 flex w-full max-w-[520px] flex-col items-center px-6">
-        <LoaderLogo
-          src={logoSrc}
-          isExiting={isExiting}
-          isVisible={showLogo}
-        />
+        <LoaderLogo src={logoSrc} isExiting={isExiting} isVisible={showLogo} />
 
         <div
           className="mt-10 w-full"
