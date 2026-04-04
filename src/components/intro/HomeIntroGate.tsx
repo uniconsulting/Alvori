@@ -7,12 +7,12 @@ import { preloadHomeAssets } from '@/lib/preload-home-assets';
 import { setIntroAccepted } from '@/lib/intro-storage';
 import { sitePath } from '@/lib/site-path';
 
-const MIN_LOADER_TIME_MS = 2200;
+const MIN_LOADER_TIME_MS = 2600;
 const EXIT_ANIMATION_MS = 620;
 
 const LOGO_APPEAR_DELAY_MS = 120;
 const PROGRESS_APPEAR_DELAY_MS = 760;
-const COOKIE_APPEAR_DELAY_MS = 1480;
+const COOKIE_APPEAR_DELAY_MS = 1620;
 
 export function HomeIntroGate() {
   const [progress, setProgress] = useState(0);
