@@ -1,7 +1,7 @@
 'use client';
 
 import { Cookie } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LoaderLogo } from '@/components/intro/LoaderLogo';
 
 type WelcomeLoaderProps = {
@@ -16,34 +16,23 @@ type WelcomeLoaderProps = {
 };
 
 const SEGMENTS = [
-  { type: 'major', width: 44 },
-  { type: 'minor', width: 12 },
-  { type: 'minor', width: 12 },
-  { type: 'minor', width: 12 },
-  { type: 'major', width: 44 },
-  { type: 'minor', width: 12 },
-  { type: 'minor', width: 12 },
-  { type: 'minor', width: 12 },
-  { type: 'major', width: 44 },
-  { type: 'minor', width: 12 },
-  { type: 'minor', width: 12 },
-  { type: 'minor', width: 12 },
-  { type: 'major', width: 44 },
+  { kind: 'major', width: 46 },
+  { kind: 'minor', width: 12 },
+  { kind: 'minor', width: 12 },
+  { kind: 'minor', width: 12 },
+  { kind: 'major', width: 46 },
+  { kind: 'minor', width: 12 },
+  { kind: 'minor', width: 12 },
+  { kind: 'minor', width: 12 },
+  { kind: 'major', width: 46 },
+  { kind: 'minor', width: 12 },
+  { kind: 'minor', width: 12 },
+  { kind: 'minor', width: 12 },
+  { kind: 'major', width: 46 },
 ] as const;
 
-function clamp(value: number, min = 0, max = 1) {
+function clamp(value: number, min = 0, max = 100) {
   return Math.min(max, Math.max(min, value));
-}
-
-function getSegmentFill(index: number, progress: number) {
-  const total = SEGMENTS.length;
-  const start = (index / total) * 100;
-  const end = ((index + 1) / total) * 100;
-
-  if (progress <= start) return 0;
-  if (progress >= end) return 1;
-
-  return clamp((progress - start) / (end - start));
 }
 
 function useAnimatedProgress(target: number, enabled: boolean) {
@@ -61,18 +50,20 @@ function useAnimatedProgress(target: number, enabled: boolean) {
 
     const tick = () => {
       const current = animatedRef.current;
-      const diff = target - current;
+      const safeTarget = clamp(target, 0, 100);
+      const diff = safeTarget - current;
 
-      if (Math.abs(diff) < 0.08) {
-        animatedRef.current = target;
-        setAnimated(target);
-        if (target < 100) {
+      if (Math.abs(diff) < 0.12) {
+        animatedRef.current = safeTarget;
+        setAnimated(safeTarget);
+
+        if (safeTarget < 100) {
           raf = window.requestAnimationFrame(tick);
         }
         return;
       }
 
-      const next = current + diff * 0.075;
+      const next = current + diff * 0.082;
       animatedRef.current = next;
       setAnimated(next);
       raf = window.requestAnimationFrame(tick);
@@ -96,36 +87,27 @@ function ProgressRail({
   visible: boolean;
 }) {
   const animatedProgress = useAnimatedProgress(progress, visible);
-
-  const segments = useMemo(() => SEGMENTS, []);
+  const activeCount = Math.round((animatedProgress / 100) * SEGMENTS.length);
 
   return (
-    <div className="w-[300px]">
-      <div className="flex items-center justify-center gap-[6px]">
-        {segments.map((segment, index) => {
-          const fill = getSegmentFill(index, animatedProgress);
+    <div className="w-full max-w-[332px]">
+      <div className="flex w-full items-center justify-between gap-[6px]">
+        {SEGMENTS.map((segment, index) => {
+          const isActive = index < activeCount;
 
           return (
-            <div
+            <span
               key={index}
-              className="relative shrink-0 overflow-hidden rounded-full bg-[var(--accent-2)]"
+              className="block shrink-0 rounded-full transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{
                 width: `${segment.width}px`,
-                height: segment.type === 'major' ? '4px' : '3px',
+                height: segment.kind === 'major' ? '4px' : '3px',
+                backgroundColor: isActive ? 'var(--accent-1)' : 'var(--accent-2)',
+                boxShadow: isActive
+                  ? '0 0 10px rgba(250,176,33,0.18)'
+                  : 'none',
               }}
-            >
-              <div
-                className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent-1)]"
-                style={{
-                  width: `${fill * 100}%`,
-                  transition: 'width 220ms cubic-bezier(0.22,1,0.36,1)',
-                  boxShadow:
-                    fill > 0
-                      ? '0 0 10px rgba(250,176,33,0.18)'
-                      : 'none',
-                }}
-              />
-            </div>
+            />
           );
         })}
       </div>
@@ -134,6 +116,7 @@ function ProgressRail({
         <span className="text-[13px] font-medium tracking-[-0.02em] text-[rgba(38,41,46,0.54)]">
           загрузка
         </span>
+
         <span className="tabular-nums text-[13px] font-medium tracking-[-0.02em] text-[rgba(38,41,46,0.54)]">
           {Math.round(animatedProgress)}%
         </span>
@@ -175,7 +158,7 @@ function CookieConsentCard({
       />
 
       <div
-        className="relative bg-[var(--accent-2)] text-[var(--accent-2-text)] shadow-[0_18px_42px_rgba(38,41,46,0.14)]"
+        className="relative bg-[var(--accent-2)] text-[var(--accent-2-text)]"
         style={{
           borderRadius: `${innerRadius}px`,
           padding: `${innerPadding}px`,
