@@ -179,7 +179,7 @@ function CookieConsentCard({
       >
         <div className="flex items-start gap-4">
           <Cookie
-            size={30}
+            size={34}
             strokeWidth={2}
             className="mt-[1px] shrink-0 text-[var(--accent-2-text)]"
           />
@@ -191,15 +191,15 @@ function CookieConsentCard({
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={onAccept}
-          disabled={!canAccept}
-          className="mt-5 inline-flex h-[52px] w-full items-center justify-center bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:cursor-not-allowed disabled:opacity-45"
-          style={{ borderRadius: `${buttonRadius}px` }}
-        >
-          Понятно
-        </button>
+<button
+  type="button"
+  onClick={onAccept}
+  disabled={!canAccept}
+  className="mt-5 inline-flex h-[52px] w-full items-center justify-center bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:shadow-[0_10px_22px_rgba(38,41,46,0.16)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+  style={{ borderRadius: `${buttonRadius}px` }}
+>
+  Понятно
+</button>
       </div>
     </div>
   );
