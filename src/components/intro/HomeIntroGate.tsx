@@ -7,8 +7,12 @@ import { preloadHomeAssets } from '@/lib/preload-home-assets';
 import { setIntroAccepted } from '@/lib/intro-storage';
 import { sitePath } from '@/lib/site-path';
 
-const MIN_LOADER_TIME_MS = 1400;
-const EXIT_ANIMATION_MS = 560;
+const MIN_LOADER_TIME_MS = 2200;
+const EXIT_ANIMATION_MS = 620;
+
+const LOGO_APPEAR_DELAY_MS = 120;
+const PROGRESS_APPEAR_DELAY_MS = 760;
+const COOKIE_APPEAR_DELAY_MS = 1480;
 
 export function HomeIntroGate() {
   const [progress, setProgress] = useState(0);
@@ -17,15 +21,31 @@ export function HomeIntroGate() {
   const [isExiting, setIsExiting] = useState(false);
   const [showHome, setShowHome] = useState(false);
 
+  const [showLogo, setShowLogo] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
+  const [showCookie, setShowCookie] = useState(false);
+
   const logoSrc = useMemo(
-    () => `${sitePath}/brand/footer/light/logo.png`,
+    () => `${sitePath}/brand/footer/dark/logo.png`,
     [],
   );
 
   useEffect(() => {
     let cancelled = false;
 
-    const timer = window.setTimeout(() => {
+    const logoTimer = window.setTimeout(() => {
+      if (!cancelled) setShowLogo(true);
+    }, LOGO_APPEAR_DELAY_MS);
+
+    const progressTimer = window.setTimeout(() => {
+      if (!cancelled) setShowProgress(true);
+    }, PROGRESS_APPEAR_DELAY_MS);
+
+    const cookieTimer = window.setTimeout(() => {
+      if (!cancelled) setShowCookie(true);
+    }, COOKIE_APPEAR_DELAY_MS);
+
+    const minTimer = window.setTimeout(() => {
       if (!cancelled) setMinTimeReady(true);
     }, MIN_LOADER_TIME_MS);
 
@@ -40,7 +60,10 @@ export function HomeIntroGate() {
 
     return () => {
       cancelled = true;
-      window.clearTimeout(timer);
+      window.clearTimeout(logoTimer);
+      window.clearTimeout(progressTimer);
+      window.clearTimeout(cookieTimer);
+      window.clearTimeout(minTimer);
     };
   }, []);
 
@@ -83,6 +106,9 @@ export function HomeIntroGate() {
         onAccept={handleAccept}
         isExiting={isExiting}
         logoSrc={logoSrc}
+        showLogo={showLogo}
+        showProgress={showProgress}
+        showCookie={showCookie}
       />
     );
   }
