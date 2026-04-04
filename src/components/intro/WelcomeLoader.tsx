@@ -15,20 +15,20 @@ type WelcomeLoaderProps = {
   showCookie?: boolean;
 };
 
-const SEGMENT_PATTERN = [
-  'major',
-  'minor',
-  'minor',
-  'minor',
-  'major',
-  'minor',
-  'minor',
-  'minor',
-  'major',
-  'minor',
-  'minor',
-  'minor',
-  'major',
+const SEGMENTS = [
+  { type: 'major', width: 44 },
+  { type: 'minor', width: 12 },
+  { type: 'minor', width: 12 },
+  { type: 'minor', width: 12 },
+  { type: 'major', width: 44 },
+  { type: 'minor', width: 12 },
+  { type: 'minor', width: 12 },
+  { type: 'minor', width: 12 },
+  { type: 'major', width: 44 },
+  { type: 'minor', width: 12 },
+  { type: 'minor', width: 12 },
+  { type: 'minor', width: 12 },
+  { type: 'major', width: 44 },
 ] as const;
 
 function clamp(value: number, min = 0, max = 1) {
@@ -36,7 +36,7 @@ function clamp(value: number, min = 0, max = 1) {
 }
 
 function getSegmentFill(index: number, progress: number) {
-  const total = SEGMENT_PATTERN.length;
+  const total = SEGMENTS.length;
   const start = (index / total) * 100;
   const end = ((index + 1) / total) * 100;
 
@@ -46,82 +46,85 @@ function getSegmentFill(index: number, progress: number) {
   return clamp((progress - start) / (end - start));
 }
 
-function ProgressCounter({ progress }: { progress: number }) {
-  const [displayed, setDisplayed] = useState(0);
-  const displayedRef = useRef(0);
+function useAnimatedProgress(target: number, enabled: boolean) {
+  const [animated, setAnimated] = useState(0);
+  const animatedRef = useRef(0);
 
   useEffect(() => {
+    if (!enabled) {
+      animatedRef.current = 0;
+      setAnimated(0);
+      return;
+    }
+
     let raf = 0;
 
-    const animate = () => {
-      const current = displayedRef.current;
-      const diff = progress - current;
+    const tick = () => {
+      const current = animatedRef.current;
+      const diff = target - current;
 
       if (Math.abs(diff) < 0.08) {
-        displayedRef.current = progress;
-        setDisplayed(progress);
+        animatedRef.current = target;
+        setAnimated(target);
+        if (target < 100) {
+          raf = window.requestAnimationFrame(tick);
+        }
         return;
       }
 
-      const next = current + diff * 0.09;
-      displayedRef.current = next;
-      setDisplayed(next);
-      raf = window.requestAnimationFrame(animate);
+      const next = current + diff * 0.075;
+      animatedRef.current = next;
+      setAnimated(next);
+      raf = window.requestAnimationFrame(tick);
     };
 
-    raf = window.requestAnimationFrame(animate);
+    raf = window.requestAnimationFrame(tick);
 
     return () => {
       if (raf) window.cancelAnimationFrame(raf);
     };
-  }, [progress]);
+  }, [target, enabled]);
 
-  return (
-    <span className="tabular-nums text-[13px] font-medium tracking-[-0.02em] text-[rgba(38,41,46,0.54)]">
-      {Math.round(displayed)}%
-    </span>
-  );
+  return animated;
 }
 
-function ProgressRail({ progress }: { progress: number }) {
-  const activeIndex = Math.min(
-    SEGMENT_PATTERN.length - 1,
-    Math.floor((progress / 100) * SEGMENT_PATTERN.length),
-  );
+function ProgressRail({
+  progress,
+  visible,
+}: {
+  progress: number;
+  visible: boolean;
+}) {
+  const animatedProgress = useAnimatedProgress(progress, visible);
+
+  const segments = useMemo(() => SEGMENTS, []);
 
   return (
-    <div className="w-full max-w-[332px]">
-      <div className="flex items-center gap-[6px]">
-        {SEGMENT_PATTERN.map((type, index) => {
-          const fill = getSegmentFill(index, progress);
-          const isActive = fill > 0;
-          const width = type === 'major' ? 42 : 14;
-          const height = type === 'major' ? 4 : 3;
+    <div className="w-[300px]">
+      <div className="flex items-center justify-center gap-[6px]">
+        {segments.map((segment, index) => {
+          const fill = getSegmentFill(index, animatedProgress);
 
           return (
             <div
               key={index}
-              className="intro-progress-segment"
+              className="relative shrink-0 overflow-hidden rounded-full bg-[var(--accent-2)]"
               style={{
-                width: `${width}px`,
-                height: `${height}px`,
+                width: `${segment.width}px`,
+                height: segment.type === 'major' ? '4px' : '3px',
               }}
             >
               <div
-                className="intro-progress-segment-fill"
+                className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent-1)]"
                 style={{
                   width: `${fill * 100}%`,
-                  opacity: isActive ? 1 : 0,
+                  transition: 'width 220ms cubic-bezier(0.22,1,0.36,1)',
+                  boxShadow:
+                    fill > 0
+                      ? '0 0 10px rgba(250,176,33,0.18)'
+                      : 'none',
                 }}
               />
-              {index === activeIndex && progress > 0 && progress < 100 ? (
-                <div
-                  className="intro-progress-segment-scan"
-                  style={{
-                    opacity: 1,
-                  }}
-                />
-              ) : null}
             </div>
           );
         })}
@@ -131,7 +134,9 @@ function ProgressRail({ progress }: { progress: number }) {
         <span className="text-[13px] font-medium tracking-[-0.02em] text-[rgba(38,41,46,0.54)]">
           загрузка
         </span>
-        <ProgressCounter progress={progress} />
+        <span className="tabular-nums text-[13px] font-medium tracking-[-0.02em] text-[rgba(38,41,46,0.54)]">
+          {Math.round(animatedProgress)}%
+        </span>
       </div>
     </div>
   );
@@ -147,8 +152,8 @@ function CookieConsentCard({
   onAccept: () => void;
 }) {
   const outerRadius = 24;
-  const borderThickness = 1;
-  const innerRadius = outerRadius - borderThickness;
+  const borderSize = 1;
+  const innerRadius = outerRadius - borderSize;
   const innerPadding = 18;
   const buttonRadius = innerRadius - innerPadding;
 
@@ -195,9 +200,7 @@ function CookieConsentCard({
           onClick={onAccept}
           disabled={!canAccept}
           className="mt-5 inline-flex h-[52px] w-full items-center justify-center bg-[var(--accent-1)] px-6 text-[15px] font-semibold tracking-[-0.02em] text-[#26292e] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:cursor-not-allowed disabled:opacity-45"
-          style={{
-            borderRadius: `${buttonRadius}px`,
-          }}
+          style={{ borderRadius: `${buttonRadius}px` }}
         >
           Понятно
         </button>
@@ -247,7 +250,7 @@ export function WelcomeLoader({
           }}
         >
           <div className="flex justify-center">
-            <ProgressRail progress={progress} />
+            <ProgressRail progress={progress} visible={showProgress} />
           </div>
         </div>
 
