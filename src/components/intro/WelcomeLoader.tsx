@@ -88,36 +88,25 @@ function ProgressRail({
 }) {
   const animatedProgress = useAnimatedProgress(progress, visible);
   const totalSegments = SEGMENTS.length;
-  const scaled = (animatedProgress / 100) * totalSegments;
-  const fullSegments = Math.floor(scaled);
-  const partialFill = scaled - fullSegments;
+  const activeCount = Math.round((animatedProgress / 100) * totalSegments);
 
   return (
     <div className="w-full max-w-[332px]">
       <div className="flex w-full items-center justify-between gap-[6px]">
         {SEGMENTS.map((segment, index) => {
-          let fill = 0;
-
-          if (index < fullSegments) fill = 1;
-          else if (index === fullSegments) fill = partialFill;
+          const isActive = index < activeCount;
 
           return (
             <span
               key={index}
-              className="relative block shrink-0 overflow-hidden rounded-full bg-[var(--accent-2)]"
+              className={`intro-progress-segment block shrink-0 rounded-full ${
+                isActive ? 'is-active' : 'is-idle'
+              }`}
               style={{
                 width: `${segment.width}px`,
                 height: segment.kind === 'major' ? '4px' : '3px',
               }}
-            >
-              <span
-                className="absolute inset-y-0 left-0 rounded-full bg-[var(--accent-1)] transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                style={{
-                  width: `${fill * 100}%`,
-                  boxShadow: fill > 0 ? '0 0 10px rgba(250,176,33,0.18)' : 'none',
-                }}
-              />
-            </span>
+            />
           );
         })}
       </div>
