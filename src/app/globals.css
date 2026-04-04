@@ -830,14 +830,14 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   background:
     linear-gradient(
       120deg,
-      rgba(250, 176, 33, 0.34) 0%,
-      rgba(250, 176, 33, 0.98) 16%,
+      rgba(250, 176, 33, 0.52) 0%,
+      rgba(250, 176, 33, 1) 16%,
       rgba(255, 227, 153, 1) 28%,
-      rgba(250, 176, 33, 0.4) 44%,
-      rgba(250, 176, 33, 0.32) 58%,
-      rgba(250, 176, 33, 0.96) 76%,
+      rgba(250, 176, 33, 0.56) 44%,
+      rgba(250, 176, 33, 0.46) 58%,
+      rgba(250, 176, 33, 1) 76%,
       rgba(255, 227, 153, 1) 88%,
-      rgba(250, 176, 33, 0.34) 100%
+      rgba(250, 176, 33, 0.52) 100%
     );
   background-size: 220% 100%;
   background-position: 0% 50%;
@@ -851,8 +851,8 @@ html[data-theme='dark'] .hero-card-tilt:hover {
   mask-composite: exclude;
   animation: introCookieBorderFlow 4.8s linear infinite;
   filter:
-    drop-shadow(0 0 10px rgba(250, 176, 33, 0.16))
-    drop-shadow(0 0 20px rgba(250, 176, 33, 0.08));
+    drop-shadow(0 0 12px rgba(250, 176, 33, 0.22))
+    drop-shadow(0 0 24px rgba(250, 176, 33, 0.12));
   pointer-events: none;
 }
 
